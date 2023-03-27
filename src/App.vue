@@ -1,23 +1,81 @@
 <script setup>
+import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+
 import HelloWorld from './components/HelloWorld.vue'
+
+// const date = new Date()
+// const previous = date.setMonth(current.getMonth() - 1);
+
+var daten = ref([])
+// define types of payment
+const ids= ['bitcoin', 'ethereum']
+
+// define API urls that (should :/) return the data requested
+const endpoints = {
+    bitcoin: {
+        price: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
+        history: 'https://api.coingecko.com/api/v3/coins/bitcoin/history?',    // ... will be patched in getCurrentPrices()
+    },
+    ethereum: {
+        price: 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=eur',
+        history: 'https://api.coingecko.com/api/v3/coins/ethereum/history?',
+    }
+}
+
+/*
+    get the current date and reformat it to match coinGeckos API specs
+    ==> format: 'dd-mm-yyyy'
+
+    @return String
+*/    
+function getCurrentDate() {
+    const date = new Date()
+    return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`
+}    
+
+function getCurrentPrices() {
+// const currencies = async () => {
+//     const response = await fetch('../public/coinGecko.json')
+//     const data = await response.json()
+//     data.filter(date => date.id === 'bitcoin' || date.id === 'ethereum')
+// }
+// console.log(currencies)
+
+    const today = getCurrentDate()
+
+    for (let id of ids) {
+        endpoints[id].history += `date=${today}`
+
+        try {
+            fetch(endpoints[id].price)
+                .then(response => response.json)
+                .then(data => {
+                    daten.value.push(data)
+                    console.log(daten.value)
+                })
+        } catch(error) { console.log(error) }
+    }
+}
+getCurrentPrices()
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <header>
+        <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+        <div class="wrapper">
+            <HelloWorld msg="You did it!" />
 
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
+            <nav>
+                <RouterLink to="/">Home</RouterLink>
+                <RouterLink to="/about">About</RouterLink>
+                <RouterLink to="/vuetify">Vuetify</RouterLink>
+            </nav>
+        </div>
+    </header>
 
-  <RouterView />
+    <RouterView />
 </template>
 
 <style scoped>
