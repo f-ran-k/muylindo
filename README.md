@@ -1,3 +1,3 @@
-# vue-mastery
+# Sample
 
 [Link to GitHub](https://github.com)
