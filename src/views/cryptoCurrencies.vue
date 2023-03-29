@@ -1,119 +1,208 @@
 <template>
     <v-app theme="dark">
         <v-app-bar elevated>
-            <v-app-bar-title>Crypto currency</v-app-bar-title>
+            <v-app-bar-title class="small-caps text-h5">Crypto currency</v-app-bar-title>
 
             <template v-slot:prepend>
-                <img alt="Crypto" src="../components/icons/IconBitcoin.svg" width="40" height="40" />
+                <img alt="Crypto" src="../assets/icons/IconBitcoin.svg" width="40" height="40" />
             </template>
-            {{ prices }}
         </v-app-bar>
 
         <v-main>
+            <v-navigation-drawer width="400">
+                <v-list>
+                    <v-list-item title="Controls" class="small-caps bg-grey"></v-list-item>
+                </v-list>
+
+                <v-divider class="mb-4"></v-divider>
+
+                <span class="small-caps ml-4">Select a currency</span>
+
+                <v-row class="ml-4">
+                    <v-col cols="6">
+                        <v-switch
+                            v-model="states.bitcoin"
+                            label="BTC"
+                            color="purple-accent-2"
+                        >
+                        </v-switch>
+                    </v-col>
+
+                    <v-col cols="6">
+                        <v-switch
+                            v-model="states.ethereum"
+                            label="ETH"
+                            color="blue"
+                        >
+                        </v-switch>
+                    </v-col>
+                </v-row>
+                
+                <v-divider class="mb-8"></v-divider>
+
+                <span class="small-caps ml-4">Select a time period</span>
+
+                <v-row class="ml-4">
+                    <v-col cols="6">
+                        <v-switch
+                            v-model="states.week"
+                            label="Last week"
+                            color="cyan"
+                        >
+                        </v-switch>
+                    </v-col>
+
+                    <v-col cols="6">
+                        <v-switch
+                            v-model="states.month"
+                            label="Last month"
+                            color="cyan"
+                            >
+                        </v-switch>
+                    </v-col>
+
+                    <v-col cols="6">
+                        <v-switch
+                            v-model="states.any"
+                            label="Any time"
+                            color="cyan"
+                        >
+                        </v-switch>
+                    </v-col>
+                </v-row>
+
+                <v-divider class="mb-8"></v-divider>
+
+                <span class="small-caps ml-4">Price History</span>
+
+                <v-row class="ml-4">
+                    <v-col cols="6">
+                        <v-switch
+                            v-model="states.history"
+                            :label="states.history ? 'Hide' : 'Show'"
+                            color="blue-grey"
+                        >
+                        </v-switch>
+                    </v-col>
+                </v-row>
+
+                <v-divider class="mb-8"></v-divider>
+
+                <span class="small-caps ml-4">Price Chart</span>
+
+                <v-row class="ml-4">
+                    <v-col cols="6">
+                        <v-switch
+                            v-model="states.chart"
+                            :label="states.chart ? 'Hide' : 'Show'"
+                            color="blue-grey"
+                        >
+                        </v-switch>
+                    </v-col>
+                </v-row>
+            </v-navigation-drawer>
+
             <v-container fluid>
-                <v-row justify="space-around">
-                    <v-navigation-drawer>
-                        <v-list>
-                            <v-list-item title="Menu"></v-list-item>
-                        </v-list>
+                <v-row v-if="states.bitcoin || states.ethereum" justify="space-around">
+                    <v-card width="600" theme="dark" class="mt-8">
+                        <v-card-title class="small-caps ma-4">
+                            Currency courses (in Eur)
+                        </v-card-title>
 
                         <v-divider></v-divider>
 
-                        <v-radio-group inline label="Select a currency" class="ma-4">
-                            <v-radio label="Bitcoin" value="bitcoin"></v-radio>
-                            <v-radio label="Ethereum" value="ethereum"></v-radio>
-                        </v-radio-group>
-
-                        <v-switch class="ml-4" label="Bitcoin"></v-switch>
-                        <v-switch class="ml-4" label="Ethereum"></v-switch>
-                    </v-navigation-drawer>
-
-                    <v-card width="400" height="250" theme="dark" class="mt-8">
-                        <div class="font-weight-bold ma-8">
-                            TODAY'S COURSES (IN EUR)
-                        </div>
-
-                        <v-btn
+                        <v-btn v-if="states.bitcoin"
                             block
-                            class="text-none text-black mb-4"
-                            color="red-accent-2"
+                            class="text-none text-black my-4"
+                            color="purple-accent-2"
                             size="x-large"
                             variant="flat"
                             >
                             <template v-slot:prepend>
-                                <img alt="Bitcoin" src="../components/icons/IconBitcoin.svg" width="40" height="40" />
+                                <img alt="Bitcoin" src="../assets/icons/IconBitcoin.svg" width="40" height="40" />
                             </template>
-                            <!-- Bitcoin (BTC) @ {{ prices.bitcoin.bitcoin.eur }} -->
-                            Bitcoin (BTC)
+
+                            <span class="small-caps">Bitcoin (BTC)</span>
                         </v-btn>
 
-                        <v-btn
+                        <v-table v-if="states.bitcoin"
+                            bordered
+                            fixed-header
+                            height="120px"
+                        >
+                            <thead>
+                                <tr class="small-caps">
+                                    <th class="text-left">Today</th>
+                                    <th v-if="states.week" class="text-left">Last week</th>
+                                    <th v-if="states.month" class="text-left">Last month</th>
+                                    <th v-if="states.any" class="text-left">At {{ getPastDate() }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>{{ prices.bitcoin.bitcoin.eur }}</td>
+                                    <td v-if="states.week">Week</td>
+                                    <td v-if="states.month">Month</td>
+                                    <td v-if="states.any">--Upcoming--</td>
+                                </tr>
+                            </tbody>
+                        </v-table>
+
+                        <v-btn v-if="states.ethereum"
                             block
-                            class="text-none text-black"
-                            color="blue-accent-2"
+                            class="text-none text-black my-4"
+                            color="blue"
                             size="x-large"
                             variant="flat"
                             >
                             <template v-slot:prepend>
-                                <img alt="Ethereum" src="../components/icons/IconEthereum.svg" width="40" height="40" />
+                                <img alt="Ethereum" src="../assets/icons/IconEthereum.svg" width="40" height="45" />
                             </template>
-                            <!-- Ethereum (ETH) @ {{ prices.ethereum.ethereum.eur }} -->
                             Ethereum (ETH)
                         </v-btn>
 
-                        <!-- <v-card-text>
-                            <v-timeline density="compact" align="start">
-                                <v-timeline-item
-                                    v-for="message in messages"
-                                    :key="message.time"
-                                    :dot-color="message.color"
-                                    size="x-small"
-                                    >
-                                    <div class="mb-4">
-                                        <div class="font-weight-normal">
-                                            <strong>{{ message.from }}</strong> @{{ message.time }}
-                                        </div>
-                
-                                        <div>{{ message.message }}</div>
-                                    </div>
-                                </v-timeline-item>
-                            </v-timeline>
-                        </v-card-text> -->
+                        <v-table v-if="states.ethereum"
+                            bordered
+                            fixed-header
+                            height="120px"
+                        >
+                            <thead>
+                                <tr class="small-caps">
+                                    <th class="text-left">Today</th>
+                                    <th v-if="states.week" class="text-left">Last week</th>
+                                    <th v-if="states.month" class="text-left">Last month</th>
+                                    <th v-if="states.any" class="text-left">At {{ getPastDate() }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>{{ prices.ethereum.ethereum.eur }}</td>
+                                    <td v-if="states.week">Week</td>
+                                    <td v-if="states.month">Month</td>
+                                    <td v-if="states.any">--Upcoming--</td>
+                                </tr>
+                            </tbody>
+                        </v-table>
                     </v-card>
                 </v-row>
             </v-container>
         </v-main>
 
-        <v-footer app>
-            <img alt="Vue logo" src="../components/icons/IconLogo.svg" width="40" height="40" />
+        <v-footer app class="small-caps">Build with
+            <img alt="Vue logo" src="../assets/icons/IconVueLogo.svg" width="40" height="40" />+&nbsp;
+            <img alt="Vuetify logo" src="../assets/icons/IconVuetifyLogo.svg" width="40" height="40" />
         </v-footer>
     </v-app>
 </template>
 
 <script>
-import historyBitcoin from '../assets/history_bitcoin.json'
-import historyEthereum from '../assets/history_ethereum.json'
-
 export default {
     name: 'CryptoCurrencies',
     data() {
         return {
-            messages: [
-        {
-          from: 'You',
-          message: `Sure, I'll see you later.`,
-          time: '10:42am',
-          color: 'deep-purple-lighten-1',
-        },
-        {
-          from: 'You',
-          message: 'Did you still want to grab lunch today?',
-          time: '9:47am',
-          color: 'green',
-        },
-      ],
             date: new Date(),
-            daysPerMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
             endpoints: {
                 bitcoin: {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
@@ -124,54 +213,73 @@ export default {
                     history: 'https://api.coingecko.com/api/v3/coins/ethereum/history?',
                 }
             },
-            history: {
-                bitcoin: historyBitcoin,
-                ethereum: historyEthereum,
-            },
-            ids: ['bitcoin', 'ethereum'],
             prices: {},
+            states: {
+                any: false,
+                bitcoin: true,
+                chart: true,
+                ethereum: true,
+                history: false,
+                month: false,
+                week: false
+            }
         }
     },
     methods: {
         /*
-        get the current date and reformat it to match coinGeckos API specs (format: 'dd-mm-yyyy')
-        
-            @return String
+            get the date | past date and reformat it to match coinGeckos API specs (format: 'dd-mm-yyyy')
+
+            @return <String>
         */
-        getCurrentDate() {
-            return `${this.date.getDate()}-${this.date.getMonth()}-${this.date.getFullYear()}`
-        },
-        // const previous = currentDate.setMonth(current.getMonth() - 1);
-        getLastWeek() {
+        getPastDate(period = 0) {
             const currentDate = new Date()
-            // change date to 7 days in the past
-            const oneWeekAgo = currentDate.getDate() - 7
-            currentDate.setDate(oneWeekAgo)
+            // change date to [period] days in the past
+            if (period !== 0) currentDate.setDate(currentDate.getDate() - period)
 
-            return currentDate
+           return `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`
         },
-        getCurrentPrices() {
-            const today = this.getCurrentDate()
+        /*
+            define URL to get data from and fetch it from coinGecko
 
-            for (let id of this.ids) {
-                this.endpoints[id].history += `date=${today}`
+            @param period <Integer>
+            @param id <String>
+            */
+        getPrices(period = 0, id = 'bitcoin') {
+            const date = this.getPastDate(period)
 
-                fetch(this.endpoints[id].price)
-                    .then((response) => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error: ${response.status}`)
-                        }
-                        return response.json()
-                    })
-                    .then((data) => {
-                        this.prices[id] = data
-                    })
-                    .catch((err) => console.error(`Server error: ${err.message}`));
-            }
+            const apiUrl = period === 0
+                ? this.endpoints[id].price
+                : this.endpoints[id].history = `${this.endpoints[id].history}date=${date}`
+
+            console.log(apiUrl)
+
+            fetch(apiUrl)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error: ${response.status}`)
+                    }
+                    return response.json()
+                })
+                .then((data) => {
+                    this.prices[id] = data
+                })
+                .catch((err) => console.error(`Server error: ${err.message}`))
+
         },
+        init() {
+            this.getPrices(0, 'bitcoin')
+            this.getPrices(0, 'ethereum')
+        }
     },
     mounted() {
-        this.getCurrentPrices()
+        this.init()
     }
 }
 </script>
+
+<style scoped>
+.small-caps {
+    font-variant: small-caps;
+    font-weight: bold;
+}
+</style>
