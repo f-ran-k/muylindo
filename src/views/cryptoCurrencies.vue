@@ -1,12 +1,6 @@
 <template>
     <v-app theme="dark">
-        <v-app-bar elevated>
-            <v-app-bar-title class="small-caps text-h5">Crypto currency</v-app-bar-title>
-
-            <template v-slot:prepend>
-                <img alt="Crypto" src="../assets/icons/IconBitcoin.svg" width="40" height="40" />
-            </template>
-        </v-app-bar>
+        <HeaderComponent />
 
         <v-main>
             <v-navigation-drawer width="400">
@@ -37,7 +31,7 @@
                         </v-switch>
                     </v-col>
                 </v-row>
-                
+
                 <v-divider class="mb-8"></v-divider>
 
                 <span class="small-caps ml-4">Select a time period</span>
@@ -48,6 +42,7 @@
                             v-model="states.week"
                             label="Last week"
                             color="cyan"
+                            @click="getPrices(7, 'bitcoin'); getPrices(7, 'ethereum')"
                         >
                         </v-switch>
                     </v-col>
@@ -57,6 +52,7 @@
                             v-model="states.month"
                             label="Last month"
                             color="cyan"
+                            @click="getPrices(7, 'bitcoin'); getPrices(30, 'ethereum')"
                             >
                         </v-switch>
                     </v-col>
@@ -141,9 +137,9 @@
 
                             <tbody>
                                 <tr>
-                                    <td>{{ prices.bitcoin.bitcoin.eur }}</td>
-                                    <td v-if="states.week">Week</td>
-                                    <td v-if="states.month">Month</td>
+                                    <td>{{ prices.bitcoin }}</td>
+                                    <td v-if="states.week">{{ pricesLastWeek.bitcoin }}</td>
+                                    <td v-if="states.month">{{ pricesLastMonth.bitcoin }}</td>
                                     <td v-if="states.any">--Upcoming--</td>
                                 </tr>
                             </tbody>
@@ -178,9 +174,9 @@
 
                             <tbody>
                                 <tr>
-                                    <td>{{ prices.ethereum.ethereum.eur }}</td>
-                                    <td v-if="states.week">Week</td>
-                                    <td v-if="states.month">Month</td>
+                                    <td>{{ prices.ethereum }}</td>
+                                    <td v-if="states.week">{{ pricesLastWeek.ethereum }}</td>
+                                    <td v-if="states.month">{{ pricesLastMonth.ethereum }}</td>
                                     <td v-if="states.any">--Upcoming--</td>
                                 </tr>
                             </tbody>
@@ -190,16 +186,20 @@
             </v-container>
         </v-main>
 
-        <v-footer app class="small-caps">Build with
-            <img alt="Vue logo" src="../assets/icons/IconVueLogo.svg" width="40" height="40" />+&nbsp;
-            <img alt="Vuetify logo" src="../assets/icons/IconVuetifyLogo.svg" width="40" height="40" />
-        </v-footer>
+        <FooterComponent />
     </v-app>
 </template>
 
 <script>
+import HeaderComponent from '../components/HeaderComponent.vue'
+import FooterComponent from '../components/FooterComponent.vue'
+
 export default {
     name: 'CryptoCurrencies',
+    components: {
+        HeaderComponent,
+        FooterComponent
+    },
     data() {
         return {
             date: new Date(),
@@ -214,6 +214,8 @@ export default {
                 }
             },
             prices: {},
+            pricesLastMonth: {},
+            pricesLastWeek: {},
             states: {
                 any: false,
                 bitcoin: true,
@@ -227,7 +229,7 @@ export default {
     },
     methods: {
         /*
-            get the date | past date and reformat it to match coinGeckos API specs (format: 'dd-mm-yyyy')
+            get the (past) date and reformat it to match coinGeckos API specs (format: 'dd-mm-yyyy')
 
             @return <String>
         */
@@ -251,8 +253,6 @@ export default {
                 ? this.endpoints[id].price
                 : this.endpoints[id].history = `${this.endpoints[id].history}date=${date}`
 
-            console.log(apiUrl)
-
             fetch(apiUrl)
                 .then((response) => {
                     if (!response.ok) {
@@ -261,10 +261,31 @@ export default {
                     return response.json()
                 })
                 .then((data) => {
-                    this.prices[id] = data
+                    return data
+                })
+                .then((result) => {
+                    if (period === 0) {
+                        const { bitcoin, ethereum } = result
+                        console.log(bitcoin, ethereum)
+
+                        this.prices[id] = id === 'bitcoin'
+                            ? this.prices[id] = bitcoin
+                            : this.prices[id] = ethereum
+                    } else {
+                        const { market_data } = result
+                        const { current_price } = market_data
+                        const { eur } = current_price
+
+                        period === 7
+                            ? this.pricesLastWeek[id] = id === 'bitcoin'
+                                ? this.pricesLastWeek[id] = eur
+                                : this.pricesLastWeek[id] = eur
+                            : this.pricesLastMonth[id] = id === 'bitcoin'
+                                ? this.pricesLastMonth[id] = eur
+                                : this.pricesLastMonth[id] = eur
+                    }
                 })
                 .catch((err) => console.error(`Server error: ${err.message}`))
-
         },
         init() {
             this.getPrices(0, 'bitcoin')
@@ -277,7 +298,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .small-caps {
     font-variant: small-caps;
     font-weight: bold;
