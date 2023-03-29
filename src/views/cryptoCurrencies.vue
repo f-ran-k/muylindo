@@ -1,6 +1,6 @@
 <template>
     <v-app theme="dark">
-        <HeaderComponent />
+        <ComponentHeader />
 
         <v-main>
             <v-navigation-drawer width="400">
@@ -34,7 +34,7 @@
 
                 <v-divider class="mb-8"></v-divider>
 
-                <span class="small-caps ml-4">Select a time period</span>
+                <span class="small-caps ml-4">Select a period</span>
 
                 <v-row class="ml-4">
                     <v-col cols="6">
@@ -52,23 +52,36 @@
                             v-model="states.month"
                             label="Last month"
                             color="cyan"
-                            @click="getPrices(7, 'bitcoin'); getPrices(30, 'ethereum')"
+                            @click="getPrices(30, 'bitcoin'); getPrices(30, 'ethereum')"
                             >
-                        </v-switch>
-                    </v-col>
-
-                    <v-col cols="6">
-                        <v-switch
-                            v-model="states.any"
-                            label="Any time"
-                            color="cyan"
-                        >
                         </v-switch>
                     </v-col>
                 </v-row>
 
-                <v-divider class="mb-8"></v-divider>
+                <span class="small-caps ml-4">... by date</span>
 
+                <v-form @submit.prevent="console.log(date)">
+                    <v-container>
+                        <v-row>
+                            <v-col
+                                cols="12"
+                                md="12"
+                            >
+                                <v-text-field
+                                    v-model="date"
+                                    :counter="10"
+                                    label=""
+                                    required
+                                    placeholder="e.g. 14-02-2023"
+                                >
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-form>
+            
+            <v-divider class="mb-8"></v-divider>
+            
                 <span class="small-caps ml-4">Price History</span>
 
                 <v-row class="ml-4">
@@ -138,9 +151,9 @@
                             <tbody>
                                 <tr>
                                     <td>{{ prices.bitcoin }}</td>
-                                    <td v-if="states.week">{{ pricesLastWeek.bitcoin }}</td>
-                                    <td v-if="states.month">{{ pricesLastMonth.bitcoin }}</td>
-                                    <td v-if="states.any">--Upcoming--</td>
+                                    <td v-if="states.week">{{ prices.bitcoin.week }}</td>
+                                    <td v-if="states.month">{{ prices.bitcoin.month }}</td>
+                                    <td v-if="states.any">Upcoming</td>
                                 </tr>
                             </tbody>
                         </v-table>
@@ -175,9 +188,9 @@
                             <tbody>
                                 <tr>
                                     <td>{{ prices.ethereum }}</td>
-                                    <td v-if="states.week">{{ pricesLastWeek.ethereum }}</td>
-                                    <td v-if="states.month">{{ pricesLastMonth.ethereum }}</td>
-                                    <td v-if="states.any">--Upcoming--</td>
+                                    <td v-if="states.week">{{ prices.ethereum.week }}</td>
+                                    <td v-if="states.month">{{ prices.ethereum.month }}</td>
+                                    <td v-if="states.any">Upcoming</td>
                                 </tr>
                             </tbody>
                         </v-table>
@@ -186,23 +199,23 @@
             </v-container>
         </v-main>
 
-        <FooterComponent />
+        <ComponentFooter />
     </v-app>
 </template>
 
 <script>
-import HeaderComponent from '../components/HeaderComponent.vue'
-import FooterComponent from '../components/FooterComponent.vue'
+import ComponentHeader from '../components/ComponentHeader.vue'
+import ComponentFooter from '../components/ComponentFooter.vue'
 
 export default {
     name: 'CryptoCurrencies',
     components: {
-        HeaderComponent,
-        FooterComponent
+        ComponentHeader,
+        ComponentFooter
     },
     data() {
         return {
-            date: new Date(),
+            date: '',
             endpoints: {
                 bitcoin: {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
@@ -214,12 +227,10 @@ export default {
                 }
             },
             prices: {},
-            pricesLastMonth: {},
-            pricesLastWeek: {},
             states: {
                 any: false,
                 bitcoin: true,
-                chart: true,
+                chart: false,
                 ethereum: true,
                 history: false,
                 month: false,
@@ -261,28 +272,21 @@ export default {
                     return response.json()
                 })
                 .then((data) => {
-                    return data
-                })
-                .then((result) => {
                     if (period === 0) {
-                        const { bitcoin, ethereum } = result
-                        console.log(bitcoin, ethereum)
+                        const { bitcoin, ethereum } = data
+                        console.log(data)
 
-                        this.prices[id] = id === 'bitcoin'
-                            ? this.prices[id] = bitcoin
-                            : this.prices[id] = ethereum
+                        this.prices[id]['current'] = id === 'bitcoin'
+                            ? bitcoin
+                            : ethereum
                     } else {
-                        const { market_data } = result
+                        const { market_data } = data
                         const { current_price } = market_data
                         const { eur } = current_price
-
+    
                         period === 7
-                            ? this.pricesLastWeek[id] = id === 'bitcoin'
-                                ? this.pricesLastWeek[id] = eur
-                                : this.pricesLastWeek[id] = eur
-                            : this.pricesLastMonth[id] = id === 'bitcoin'
-                                ? this.pricesLastMonth[id] = eur
-                                : this.pricesLastMonth[id] = eur
+                            ? this.prices[id]['week'] = eur
+                            : this.prices[id]['month'] = eur
                     }
                 })
                 .catch((err) => console.error(`Server error: ${err.message}`))
@@ -290,6 +294,11 @@ export default {
         init() {
             this.getPrices(0, 'bitcoin')
             this.getPrices(0, 'ethereum')
+        }
+    },
+    computed: {
+        weekAgo() {
+            return Math.round((this.prices.bitcoin.week / 100))
         }
     },
     mounted() {
