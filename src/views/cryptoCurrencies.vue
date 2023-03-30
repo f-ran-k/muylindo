@@ -76,7 +76,7 @@
                                 cols="12"
                                 md="12"
                             >
-                            <input id="datetime" type="date" value="2023-03-14" />
+                            <input id="datetime" type="date" value="2023-01-01" />
 
                             <v-btn
                                 inline
@@ -122,6 +122,7 @@
                                 color="grey"
                                 size="small"
                                 variant="flat"
+                                @click="getPrices('bitcoin', 100, getTimeRange()); getPrices('ethereum', 100, getTimeRange())"
                                 >Send
                             </v-btn>
                             </v-col>
@@ -249,7 +250,7 @@
                                     <td>{{ prices.ethereum.current }} €</td>
 
                                     <td v-if="states.week">
-                                        {{ percentage = getPercentage(prices.ethereum.current, prices.ethereum.week) }} %
+                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.week) }} %
                                         <v-chip label>
                                             <template v-slot:append>
                                                 <img alt="" :src="iconPaths.up" width="32" height="32" />
@@ -330,12 +331,12 @@ export default {
                 bitcoin: {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
                     history: 'https://api.coingecko.com/api/v3/coins/bitcoin/history?',
-                    range: 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=eur&from=1675781722&to=1680191740',
+                    range: 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=eur&',
                 },
                 ethereum: {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=eur',
                     history: 'https://api.coingecko.com/api/v3/coins/ethereum/history?',
-                    range: 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&from=1675781722&to=1680191740',
+                    range: 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&',
                 }
             },
             iconPaths: {
@@ -387,6 +388,15 @@ export default {
                 : this.endpoints[id].history = `${this.endpoints[id].history.replace(/date=.*$/, '')}date=${date}`
         },
         /*
+            @return <Array>
+        */
+        getTimeRange() {
+            const currentDate = new Date().getTime() / 1000
+            const pastDate = new Date(document.getElementById('upto').value).getTime() / 1000
+
+            return [Math.floor(currentDate), Math.floor(pastDate)]
+        },
+        /*
             get the date and reformat it to match coinGecko's API specs (format: 'dd-mm-yyyy')
 
             @param period <Integer>
@@ -419,10 +429,16 @@ export default {
             fetch data from coinGecko
 
             @param id <String> :: denotes the currency; e.g. bitcoin
-            @param period <Integer>
+            @param period <Integer> :: past time; e.g. 0 === current | 7 === last week | 30 === last month
         */
-        getPrices(id = 'bitcoin', period = 0) {
-            const apiUrl = this.getApiUrl(id, period)
+        getPrices(id = 'bitcoin', period = 0, range = []) {
+            let apiUrl = this.getApiUrl(id, period)
+
+            if (range.length) {
+                const [to, from] = range
+
+                apiUrl =  this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
+            }
 
             fetch(apiUrl)
                 .then((response) => {
@@ -431,11 +447,17 @@ export default {
                     }
                     return response.json()
                 })
-                .then((data ) => {
+                .then((data) => {
                     const currency = id === 'bitcoin'
                         ? 'bitcoin'
                         : 'ethereum'
 
+                    if (range.length) {
+                        const { prices } = data
+                        this.prices[currency].history = prices
+                        console.log(prices)
+                        return
+                    }
                     if (period === 0) {
                         if (id === 'bitcoin') {
                             const { bitcoin } = data
