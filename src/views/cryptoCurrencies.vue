@@ -298,7 +298,7 @@
 
                         <tbody>
                             <tr
-                                v-for="n in 20"
+                                v-for="n in prices.bitcoin.history"
                                 :key="n"
                                 >
                                 <td>{{ n }}</td>
