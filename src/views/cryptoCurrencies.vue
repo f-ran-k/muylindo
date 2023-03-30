@@ -301,8 +301,8 @@
                                 v-for="n in prices.bitcoin.history"
                                 :key="n"
                                 >
-                                <td>{{ n }}</td>
-                                <td>A</td>
+                                <td>{{ n[0] }}</td>
+                                <td>{{ n[1] }}</td>
                                 <td>B</td>
                             </tr>
                         </tbody>
@@ -519,6 +519,9 @@ export default {
 </script>
 
 <style>
+.gradient {
+    background-image: linear-gradient(to right, purple , blue);
+}
 .small-caps {
     font-variant: small-caps;
     font-weight: bold;
