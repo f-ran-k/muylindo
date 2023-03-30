@@ -258,8 +258,7 @@
                     
                     <v-table v-if="states.history"
                         fixed-header
-                        height="300px"
-                        width="600px"
+                        height="580px"
                         class="mt-8"
                     >
                         <thead>
