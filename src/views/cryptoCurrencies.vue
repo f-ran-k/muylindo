@@ -107,6 +107,29 @@
                     </v-col>
                 </v-row>
 
+                <v-form @submit.prevent>
+                    <v-container v-if="states.history">
+                        <v-row>
+                            <v-col
+                                cols="12"
+                                md="12"
+                            >
+                            <input id="upto" type="date" value="2023-03-01" />
+
+                            <v-btn
+                                inline
+                                class="small-caps text-white ml-4"
+                                color="grey"
+                                size="small"
+                                variant="flat"
+                                >Send
+                            </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-form>
+
+
                 <v-divider class="mb-8"></v-divider>
 
                 <span class="small-caps ml-4">Price Chart</span>
@@ -263,6 +286,9 @@
                     >
                         <thead>
                             <tr>
+                                <th colspan="3" class="text-center text-h6 small-caps">Courses up to {{ getPastDate(getDayDifference()) }}</th>
+                            </tr>
+                            <tr>
                                 <th class="text-left small-caps">Date</th>
                                 <th class="text-left small-caps">Bitcoin</th>
                                 <th class="text-left small-caps">Ethereum</th>
@@ -304,10 +330,12 @@ export default {
                 bitcoin: {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
                     history: 'https://api.coingecko.com/api/v3/coins/bitcoin/history?',
+                    range: 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=eur&from=1675781722&to=1680191740',
                 },
                 ethereum: {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=eur',
                     history: 'https://api.coingecko.com/api/v3/coins/ethereum/history?',
+                    range: 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&from=1675781722&to=1680191740',
                 }
             },
             iconPaths: {
@@ -319,13 +347,15 @@ export default {
                     current: null,
                     week: null,
                     month: null,
-                    anytime: null
+                    anytime: null,
+                    history: null
                 },
                 ethereum: {
                     current: null,
                     week: null,
                     month: null,
-                    anytime: null
+                    anytime: null,
+                    history: null
                 },
             },
             states: {
@@ -377,8 +407,6 @@ export default {
         */
         getDayDifference() {
             const date = document.getElementById('datetime').value
-                ? document.getElementById('datetime').value
-                : document.getElementById('datetime').defaultValue
 
             const currentDate = new Date()
             const pastDate = new Date(date)
@@ -395,7 +423,6 @@ export default {
         */
         getPrices(id = 'bitcoin', period = 0) {
             const apiUrl = this.getApiUrl(id, period)
-            // https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=eur&from=1675781722&to=1680191740
 
             fetch(apiUrl)
                 .then((response) => {
