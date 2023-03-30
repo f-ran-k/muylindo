@@ -255,6 +255,32 @@
                             </tbody>
                         </v-table>
                     </v-card>
+                    
+                    <v-table v-if="states.history"
+                        fixed-header
+                        height="300px"
+                        width="600px"
+                        class="mt-8"
+                    >
+                        <thead>
+                            <tr>
+                                <th class="text-left small-caps">Date</th>
+                                <th class="text-left small-caps">Bitcoin</th>
+                                <th class="text-left small-caps">Ethereum</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr
+                                v-for="n in 20"
+                                :key="n"
+                                >
+                                <td>{{ n }}</td>
+                                <td>A</td>
+                                <td>B</td>
+                            </tr>
+                        </tbody>
+                    </v-table>
                 </v-row>
             </v-container>
         </v-main>
@@ -370,6 +396,7 @@ export default {
         */
         getPrices(id = 'bitcoin', period = 0) {
             const apiUrl = this.getApiUrl(id, period)
+            // https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=eur&from=1675781722&to=1680191740
 
             fetch(apiUrl)
                 .then((response) => {
