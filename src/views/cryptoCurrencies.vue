@@ -297,7 +297,18 @@
                             </tr>
                             <tr>
                                 <th class="text-left small-caps">Date</th>
-                                <th class="text-left small-caps">Bitcoin</th>
+                                <th class="text-left small-caps">Bitcoin
+                                    <v-chip
+                                        title="Reverse"
+                                        label
+                                        class="ml-2"
+                                        @click="prices.bitcoin.history.reverse()"
+                                        >
+                                        <template v-slot:prepend>
+                                            <img alt="Reverse" src="../assets/icons/IconReverse.svg" width="32" height="32" />
+                                        </template>
+                                    </v-chip>
+                                </th>
                             </tr>
                         </thead>
 
@@ -305,6 +316,7 @@
                             <tr
                                 v-for="n in prices.bitcoin.history"
                                 :key="n"
+                                class="text-center"
                                 >
                                 <td>{{ getDateFormat(n[0]) }}</td>
                                 <td>{{ +(n[1]).toFixed(2) }} €</td>
@@ -329,7 +341,18 @@
                             </tr>
                             <tr>
                                 <th class="text-left small-caps">Date</th>
-                                <th class="text-left small-caps">Ethereum</th>
+                                <th class="text-left small-caps">Ethereum
+                                    <v-chip
+                                        title="Reverse"
+                                        label
+                                        class="ml-2 bg-light"
+                                        @click="prices.ethereum.history.reverse()"
+                                        >
+                                        <template v-slot:prepend>
+                                            <img alt="Reverse" src="../assets/icons/IconReverse.svg" width="32" height="32" />
+                                        </template>
+                                    </v-chip>
+                                </th>
                             </tr>
                         </thead>
 
@@ -337,6 +360,7 @@
                             <tr
                                 v-for="n in prices.ethereum.history"
                                 :key="n"
+                                class="text-center"
                                 >
                                 <td>{{ getDateFormat(n[0]) }}</td>
                                 <td>{{ +(n[1]).toFixed(2) }} €</td>
