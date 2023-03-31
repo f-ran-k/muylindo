@@ -280,14 +280,14 @@
                         </v-table>
                     </v-card>
 
-                    <v-table v-if="states.history"
+                    <v-table v-if="states.history && states.bitcoin"
                         fixed-header
                         height="580px"
                         class="mt-8"
                     >
                         <thead>
                             <tr>
-                                <th colspan="2" class="text-center text-h6 small-caps">Price History
+                                <th colspan="3" class="text-center text-h6 small-caps">Price History
                                     <v-btn>
                                         <template v-slot:prepend>
                                             <img alt="Ethereum" src="../assets/icons/IconBitcoin.svg" width="32" height="32" />
@@ -297,6 +297,7 @@
                             </tr>
                             <tr>
                                 <th class="text-left small-caps">Date</th>
+                                <th class="text-left small-caps">Time</th>
                                 <th class="text-left small-caps">Bitcoin
                                     <v-chip
                                         title="Reverse"
@@ -319,19 +320,20 @@
                                 class="text-center"
                                 >
                                 <td>{{ getDateFormat(n[0]) }}</td>
+                                <td>{{ getTime(n[0]) }}</td>
                                 <td>{{ +(n[1]).toFixed(2) }} €</td>
                             </tr>
                         </tbody>
                     </v-table>
 
-                    <v-table v-if="states.history"
+                    <v-table v-if="states.history && states.ethereum"
                         fixed-header
                         height="580px"
                         class="mt-8"
                     >
                         <thead>
                             <tr>
-                                <th colspan="2" class="text-center text-h6 small-caps">Price History
+                                <th colspan="3" class="text-center text-h6 small-caps">Price History
                                     <v-btn>
                                         <template v-slot:prepend>
                                             <img alt="Ethereum" src="../assets/icons/IconEthereum.svg" width="32" height="32" />
@@ -341,6 +343,7 @@
                             </tr>
                             <tr>
                                 <th class="text-left small-caps">Date</th>
+                                <th class="text-left small-caps">Time</th>
                                 <th class="text-left small-caps">Ethereum
                                     <v-chip
                                         title="Reverse"
@@ -363,6 +366,7 @@
                                 class="text-center"
                                 >
                                 <td>{{ getDateFormat(n[0]) }}</td>
+                                <td>{{ getTime(n[0]) }}</td>
                                 <td>{{ +(n[1]).toFixed(2) }} €</td>
                             </tr>
                         </tbody>
@@ -447,6 +451,12 @@ export default {
                 ? this.endpoints[id].price
                 // it's necessary to replace the date portion here, otherwise the date gets appended everytime the function is called
                 : this.endpoints[id].history = `${this.endpoints[id].history.replace(/date=.*$/, '')}date=${date}`
+        },
+        /*
+            @return <String>
+        */
+        getTime(timestamp) {
+            return new Date(timestamp).toTimeString().slice(0, 8)
         },
         /*
             @return <String>
