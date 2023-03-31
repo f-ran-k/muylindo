@@ -287,7 +287,7 @@
                     >
                         <thead>
                             <tr>
-                                <th colspan="3" class="text-center text-h6 small-caps">Price History
+                                <th colspan="3" class="text-center text-h6 small-caps">Price History BTC
                                     <v-btn>
                                         <template v-slot:prepend>
                                             <img alt="Ethereum" src="../assets/icons/IconBitcoin.svg" width="32" height="32" />
@@ -298,7 +298,7 @@
                             <tr>
                                 <th class="text-left small-caps">Date</th>
                                 <th class="text-left small-caps">Time</th>
-                                <th class="text-left small-caps">Bitcoin
+                                <th class="text-left small-caps">Course
                                     <v-chip
                                         title="Reverse"
                                         label
@@ -333,7 +333,7 @@
                     >
                         <thead>
                             <tr>
-                                <th colspan="3" class="text-center text-h6 small-caps">Price History
+                                <th colspan="3" class="text-center text-h6 small-caps">Price History ETH
                                     <v-btn>
                                         <template v-slot:prepend>
                                             <img alt="Ethereum" src="../assets/icons/IconEthereum.svg" width="32" height="32" />
@@ -344,7 +344,7 @@
                             <tr>
                                 <th class="text-left small-caps">Date</th>
                                 <th class="text-left small-caps">Time</th>
-                                <th class="text-left small-caps">Ethereum
+                                <th class="text-left small-caps">Course
                                     <v-chip
                                         title="Reverse"
                                         label
