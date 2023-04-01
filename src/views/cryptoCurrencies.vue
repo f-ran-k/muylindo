@@ -545,12 +545,14 @@ export default {
                         ? 'bitcoin'
                         : 'ethereum'
 
+                    // get price history bulk data
                     if (range.length) {
                         const { prices } = data
                         this.prices[currency].history = prices.slice(0, 20)
 
                         return
                     }
+                    // ... otherwise get current / today's course
                     if (period === 0) {
                         if (id === 'bitcoin') {
                             const { bitcoin } = data
@@ -565,6 +567,7 @@ export default {
                             this.prices[currency].current = Math.round(eur)
                         }
                     }
+                    // get past courses according to the period given
                     else {
                         const { market_data } = data
                         const { current_price } = market_data
@@ -585,12 +588,12 @@ export default {
                 .catch((err) => console.error(`Server error: ${err.message}`))
         },
         /*
-            calculate the ratio between the current priceand the past one
+            calculate the ratio between the current price and the past one
 
             @param currentprice <Float>
             @param pastPrice <Float>
-            @param pastPrice <String>
-            @param pastPrice <String>
+            @param id <String>
+            @param period <String>
 
             @return <String>
         */
