@@ -593,15 +593,15 @@ export default {
             @param currentprice <Float>
             @param pastPrice <Float>
             @param id <String>
-            @param period <String>
+            @param periodName <String>
 
             @return <String>
         */
-        getPercentage(currentPrice, pastPrice, id, period) {
+        getPercentage(currentPrice, pastPrice, id, periodName) {
             // the prepended '+' gets rid of trailing zeros; e.g. 1.50 ==> 1.5
             const percent = +((currentPrice / pastPrice * 100) - 100).toFixed(2)
 
-            this.percentageState[id][period] = percent > 0 ? true : false
+            this.percentageState[id][periodName] = percent > 0 ? true : false
 
             return percent
         },
@@ -621,9 +621,6 @@ export default {
 </script>
 
 <style>
-.gradient {
-    background-image: linear-gradient(to right, purple , blue);
-}
 .small-caps {
     font-variant: small-caps;
     font-weight: bold;
