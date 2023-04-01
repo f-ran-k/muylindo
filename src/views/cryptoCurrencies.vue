@@ -454,15 +454,21 @@ export default {
 
             @param id <String>
             @param period <Integer>
+            @param range <Array>
 
             @return <String>
         */
-        getApiUrl(id = 'bitcoin', period = 0) {
+        getApiUrl(id = 'bitcoin', period = 0, range = []) {
+            if (range.length) {
+                const [to, from] = range
+                // replace url end to prevent appending the params everytime the function is called
+                return this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
+            }
+
             const date = this.getPastDate(period)
 
             return period === 0
                 ? this.endpoints[id].price
-                // it's necessary to replace the date portion here, otherwise the date gets appended everytime the function is called
                 : this.endpoints[id].history = `${this.endpoints[id].history.replace(/date=.*$/, '')}date=${date}`
         },
         /*
@@ -522,15 +528,10 @@ export default {
 
             @param id <String> :: denotes the currency; e.g. bitcoin
             @param period <Integer> :: past time; e.g. 0 === current | 7 === last week | 30 === last month
+            @param range <Array>
         */
         getPrices(id = 'bitcoin', period = 0, range = []) {
-            let apiUrl = this.getApiUrl(id, period)
-
-            if (range.length) {
-                const [to, from] = range
-
-                apiUrl = this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
-            }
+            const apiUrl = this.getApiUrl(id, period, range)
 
             fetch(apiUrl)
                 .then((response) => {
