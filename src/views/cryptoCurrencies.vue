@@ -148,8 +148,9 @@
             </v-navigation-drawer>
 
             <v-container fluid>
-                <v-row v-if="states.bitcoin || states.ethereum" justify="space-around">
-                    <v-card width="600" theme="dark" class="mt-8">
+                <v-row justify="space-around">
+                    <v-card  v-if="states.bitcoin || states.ethereum"
+                        class="mt-8" width="600">
                         <v-card-title class="small-caps ma-4">
                             Currency courses
                         </v-card-title>
@@ -164,7 +165,7 @@
                             variant="flat"
                             >
                             <template v-slot:prepend>
-                                <img alt="Bitcoin" src="../assets/icons/IconBitcoin.svg" width="40" height="40" />
+                                <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
                             </template>
 
                             <span class="small-caps">Bitcoin (BTC)</span>
@@ -190,27 +191,27 @@
 
                                     <td v-if="states.week">
                                         {{ getPercentage(prices.bitcoin.current, prices.bitcoin.week, 'bitcoin', 'week') }} %
-                                        <v-chip label>
+                                        <v-chip class="bg-grey mx-2" label>
                                             <template v-slot:append>
-                                                <img alt="" :src="percentageState.bitcoin.week ? iconPaths.up : iconPaths.down" width="32" height="32" />
+                                                <img alt="" :src="percentageState.bitcoin.week ? iconPath.up : iconPath.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
 
                                     <td v-if="states.month">
                                         {{ getPercentage(prices.bitcoin.current, prices.bitcoin.month, 'bitcoin', 'month') }} %
-                                        <v-chip label>
+                                        <v-chip class="bg-grey mx-2" label>
                                             <template v-slot:append>
-                                                <img alt="" :src="percentageState.bitcoin.month ? iconPaths.up : iconPaths.down" width="32" height="32" />
+                                                <img alt="" :src="percentageState.bitcoin.month ? iconPath.up : iconPath.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
 
                                     <td v-if="states.anytime">
                                         {{ getPercentage(prices.bitcoin.current, prices.bitcoin.anytime, 'bitcoin', 'anytime') }} %
-                                        <v-chip label>
+                                        <v-chip class="bg-grey mx-2" label>
                                             <template v-slot:append>
-                                                <img alt="" :src="percentageState.bitcoin.anytime ? iconPaths.up : iconPaths.down" width="32" height="32" />
+                                                <img alt="" :src="percentageState.bitcoin.anytime ? iconPath.up : iconPath.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
@@ -226,7 +227,7 @@
                             variant="flat"
                             >
                             <template v-slot:prepend>
-                                <img alt="Ethereum" src="../assets/icons/IconEthereum.svg" width="40" height="40" />
+                                <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
                             </template>
                             Ethereum (ETH)
                         </v-btn>
@@ -251,27 +252,27 @@
 
                                     <td v-if="states.week">
                                         {{ getPercentage(prices.ethereum.current, prices.ethereum.week, 'ethereum', 'week') }} %
-                                        <v-chip label>
+                                        <v-chip class="bg-grey mx-2" label>
                                             <template v-slot:append>
-                                                <img alt="" :src="percentageState.ethereum.week ? iconPaths.up : iconPaths.down" width="32" height="32" />
+                                                <img alt="" :src="percentageState.ethereum.week ? iconPath.up : iconPath.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
 
                                     <td v-if="states.month">
                                         {{ getPercentage(prices.ethereum.current, prices.ethereum.month, 'ethereum', 'month') }} %
-                                        <v-chip label>
+                                        <v-chip class="bg-grey mx-2" label>
                                             <template v-slot:append>
-                                                <img alt="" :src="percentageState.ethereum.month ? iconPaths.up : iconPaths.down" width="32" height="32" />
+                                                <img alt="" :src="percentageState.ethereum.month ? iconPath.up : iconPath.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
 
                                     <td v-if="states.anytime">
                                         {{ getPercentage(prices.ethereum.current, prices.ethereum.anytime, 'ethereum', 'anytime') }} %
-                                        <v-chip label>
+                                        <v-chip class="bg-grey mx-2" label>
                                             <template v-slot:append>
-                                                <img alt="" :src="percentageState.ethereum.anytime ? iconPaths.up : iconPaths.down" width="32" height="32" />
+                                                <img alt="" :src="percentageState.ethereum.anytime ? iconPath.up : iconPath.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
@@ -287,10 +288,10 @@
                     >
                         <thead>
                             <tr>
-                                <th colspan="3" class="text-center text-h6 small-caps">Price History BTC
-                                    <v-btn>
+                                <th colspan="3" class="text-center text-h6 small-caps">Price History
+                                    <v-btn class="mx-2">
                                         <template v-slot:prepend>
-                                            <img alt="Ethereum" src="../assets/icons/IconBitcoin.svg" width="32" height="32" />
+                                            <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
@@ -302,11 +303,11 @@
                                     <v-chip
                                         title="Reverse"
                                         label
-                                        class="ml-2"
+                                        class="mx-2 bg-grey"
                                         @click="prices.bitcoin.history.reverse()"
                                         >
                                         <template v-slot:prepend>
-                                            <img alt="Reverse" src="../assets/icons/IconReverse.svg" width="32" height="32" />
+                                            <img alt="Reverse" src="@/assets/icons/IconReverse.svg" width="32" height="32" />
                                         </template>
                                     </v-chip>
                                 </th>
@@ -333,10 +334,10 @@
                     >
                         <thead>
                             <tr>
-                                <th colspan="3" class="text-center text-h6 small-caps">Price History ETH
-                                    <v-btn>
+                                <th colspan="3" class="text-center text-h6 small-caps">Price History
+                                    <v-btn class="mx-2">
                                         <template v-slot:prepend>
-                                            <img alt="Ethereum" src="../assets/icons/IconEthereum.svg" width="32" height="32" />
+                                            <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
@@ -348,11 +349,11 @@
                                     <v-chip
                                         title="Reverse"
                                         label
-                                        class="ml-2 bg-light"
+                                        class="mx-2 bg-grey"
                                         @click="prices.ethereum.history.reverse()"
                                         >
                                         <template v-slot:prepend>
-                                            <img alt="Reverse" src="../assets/icons/IconReverse.svg" width="32" height="32" />
+                                            <img alt="Reverse" src="@/assets/icons/IconReverse.svg" width="32" height="32" />
                                         </template>
                                     </v-chip>
                                 </th>
@@ -404,9 +405,9 @@ export default {
                     range: 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&',
                 }
             },
-            iconPaths: {
-                up: '/src/assets/icons/IconUpArrow.svg',
-                down: '/src/assets/icons/IconDownArrow.svg'
+            iconPath: {
+                up: 'src/assets/icons/IconArrowUp.svg',
+                down: 'src/assets/icons/IconArrowDown.svg'
             },
             percentageState: {
                 bitcoin: {
