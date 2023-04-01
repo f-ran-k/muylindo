@@ -381,8 +381,8 @@
 </template>
 
 <script>
-import ComponentHeader from '../components/ComponentHeader.vue'
-import ComponentFooter from '../components/ComponentFooter.vue'
+import ComponentHeader from '@/components/ComponentHeader.vue'
+import ComponentFooter from '@/components/ComponentFooter.vue'
 
 export default {
     name: 'CryptoCurrencies',
