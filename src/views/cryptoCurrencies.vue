@@ -189,28 +189,28 @@
                                     <td>{{ prices.bitcoin.current }} €</td>
 
                                     <td v-if="states.week">
-                                        {{ getPercentage(prices.bitcoin.current, prices.bitcoin.week) }} %
+                                        {{ getPercentage(prices.bitcoin.current, prices.bitcoin.week, 'bitcoin', 'week') }} %
                                         <v-chip label>
                                             <template v-slot:append>
-                                                <img alt="" :src="iconPaths.up" width="32" height="32" />
+                                                <img alt="" :src="percentageState.bitcoin.week ? iconPaths.up : iconPaths.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
 
                                     <td v-if="states.month">
-                                        {{ getPercentage(prices.bitcoin.current, prices.bitcoin.month) }} %
+                                        {{ getPercentage(prices.bitcoin.current, prices.bitcoin.month, 'bitcoin', 'month') }} %
                                         <v-chip label>
                                             <template v-slot:append>
-                                                <img alt="" :src="iconPaths.up" width="32" height="32" />
+                                                <img alt="" :src="percentageState.bitcoin.month ? iconPaths.up : iconPaths.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
 
                                     <td v-if="states.anytime">
-                                        {{ getPercentage(prices.bitcoin.current, prices.bitcoin.anytime) }} %
+                                        {{ getPercentage(prices.bitcoin.current, prices.bitcoin.anytime, 'bitcoin', 'anytime') }} %
                                         <v-chip label>
                                             <template v-slot:append>
-                                                <img alt="" :src="iconPaths.up" width="32" height="32" />
+                                                <img alt="" :src="percentageState.bitcoin.anytime ? iconPaths.up : iconPaths.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
@@ -250,28 +250,28 @@
                                     <td>{{ prices.ethereum.current }} €</td>
 
                                     <td v-if="states.week">
-                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.week) }} %
+                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.week, 'ethereum', 'week') }} %
                                         <v-chip label>
                                             <template v-slot:append>
-                                                <img alt="" :src="iconPaths.up" width="32" height="32" />
+                                                <img alt="" :src="percentageState.ethereum.week ? iconPaths.up : iconPaths.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
 
                                     <td v-if="states.month">
-                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.month) }} %
+                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.month, 'ethereum', 'month') }} %
                                         <v-chip label>
                                             <template v-slot:append>
-                                                <img alt="" :src="iconPaths.up" width="32" height="32" />
+                                                <img alt="" :src="percentageState.ethereum.month ? iconPaths.up : iconPaths.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
 
                                     <td v-if="states.anytime">
-                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.anytime) }} %
+                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.anytime, 'ethereum', 'anytime') }} %
                                         <v-chip label>
                                             <template v-slot:append>
-                                                <img alt="" :src="iconPaths.up" width="32" height="32" />
+                                                <img alt="" :src="percentageState.ethereum.anytime ? iconPaths.up : iconPaths.down" width="32" height="32" />
                                             </template>
                                         </v-chip>
                                     </td>
@@ -407,6 +407,19 @@ export default {
             iconPaths: {
                 up: '/src/assets/icons/IconUpArrow.svg',
                 down: '/src/assets/icons/IconDownArrow.svg'
+            },
+            percentageState: {
+                bitcoin: {
+                    week: null,
+                    month: null,
+                    anytime: null,
+                },
+                ethereum: {
+                    week: null,
+                    month: null,
+                    anytime: null,
+                },
+
             },
             prices: {
                 bitcoin: {
@@ -575,12 +588,18 @@ export default {
 
             @param currentprice <Float>
             @param pastPrice <Float>
+            @param pastPrice <String>
+            @param pastPrice <String>
 
             @return <String>
         */
-        getPercentage(currentPrice, pastPrice) {
+        getPercentage(currentPrice, pastPrice, id, period) {
             // the prepended '+' gets rid of trailing zeros; e.g. 1.50 ==> 1.5
-            return +((currentPrice / pastPrice * 100) - 100).toFixed(2)
+            const percent = +((currentPrice / pastPrice * 100) - 100).toFixed(2)
+
+            this.percentageState[id][period] = percent > 0 ? true : false
+
+            return percent
         },
         init() {
             const periods = [0, 7, 30]
