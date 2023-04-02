@@ -181,7 +181,7 @@
                                     <th class="text-left">Today</th>
                                     <th v-if="states.week" class="text-left">Change (week)</th>
                                     <th v-if="states.month" class="text-left">Change (month)</th>
-                                    <th v-if="states.anytime" class="text-left">Change ({{ getPastDate(getDayDifference()) }})</th>
+                                    <th v-if="states.anytime" class="text-left">Change ({{ getDateFormat(getDayDifference()) }})</th>
                                 </tr>
                             </thead>
 
@@ -230,7 +230,7 @@
                                     <th class="text-left">Today</th>
                                     <th v-if="states.week" class="text-left">Change (week)</th>
                                     <th v-if="states.month" class="text-left">Change (month)</th>
-                                    <th v-if="states.anytime" class="text-left">Change ({{ getPastDate(getDayDifference()) }})</th>
+                                    <th v-if="states.anytime" class="text-left">Change ({{ getDateFormat(getDayDifference()) }})</th>
                                 </tr>
                             </thead>
 
@@ -296,7 +296,7 @@
                                 :key="n"
                                 class="text-center"
                                 >
-                                <td>{{ getDateFormat(n[0]) }}</td>
+                                <td>{{ getDateFormat(0, n[0]) }}</td>
                                 <td>{{ getTime(n[0]) }}</td>
                                 <td>{{ +(n[1]).toFixed(2) }} €</td>
                             </tr>
@@ -342,7 +342,7 @@
                                 :key="n"
                                 class="text-center"
                                 >
-                                <td>{{ getDateFormat(n[0]) }}</td>
+                                <td>{{ getDateFormat(0, n[0]) }}</td>
                                 <td>{{ getTime(n[0]) }}</td>
                                 <td>{{ +(n[1]).toFixed(2) }} €</td>
                             </tr>
@@ -426,36 +426,46 @@ export default {
                 return this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
             }
 
-            const date = this.getPastDate(period)
+            const date = this.getDateFormat(period, false, true)
 
             return period === 0
                 ? this.endpoints[id].price
                 : this.endpoints[id].history = `${this.endpoints[id].history.replace(/date=.*$/, '')}date=${date}`
         },
         /*
-            get the date and reformat it to match coinGecko's API specs (format: 'DD-MM-YYYY')
+            get the date and reformat it to comply with coinGecko's API specs (format: 'DD-MM-YYYY')
 
             @param period <Integer>
+            @param seconds <Integer>
+            @param url <Boolean>
 
             @return <String>
         */
-        getPastDate(period = 0) {
-            const currentDate = new Date()
-            // change date to [period] days in the past
-            if (period !== 0) currentDate.setDate(currentDate.getDate() - period)
+        getDateFormat(period = 0, seconds = false, url = false) {
+            const date = seconds
+                ? new Date(seconds)
+                : new Date()
 
-            return `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`
+            if (period !== 0) date.setDate(date.getDate() - period)
+
+            return url
+                ? `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+                : `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
         },
         /*
-            reformat the date to comply with CoinGecko's API specs; => DD/MM/YYYY
-            @param seconds <Integer>
+            calculate the time difference of two dates in milliseconds => days
 
-            @return <String>
+            @return <Integer>
         */
-        getDateFormat(seconds) {
-            const date = new Date(seconds)
+        getDayDifference() {
+            const date = document.getElementById('datetime').value
 
-            return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+            const currentDate = new Date()
+            const pastDate = new Date(date)
+
+            const differenceTime = currentDate.getTime() - pastDate.getTime()
+            // calculate the number of days ==> ms * sec * min * h
+            return Math.round(differenceTime / (1000 * 60 * 60 * 24) - 1)
         },
         /*
             extract the time portion from the date, e.g. 09:22:35
@@ -476,21 +486,6 @@ export default {
             const pastDate = new Date(document.getElementById('upto').value).getTime() / 1000
 
             return [Math.floor(currentDate), Math.floor(pastDate)]
-        },
-        /*
-            calculate the time difference of two dates in milliseconds => days
-
-            @return <Integer>
-        */
-        getDayDifference() {
-            const date = document.getElementById('datetime').value
-
-            const currentDate = new Date()
-            const pastDate = new Date(date)
-
-            const differenceTime = currentDate.getTime() - pastDate.getTime()
-            // calculate the number of days ==> ms * sec * min * h
-            return Math.round(differenceTime / (1000 * 60 * 60 * 24) - 1)
         },
         /*
             calculate the ratio between the current price and the past one
