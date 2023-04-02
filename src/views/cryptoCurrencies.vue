@@ -411,47 +411,28 @@ export default {
             },
             percentageState: {
                 bitcoin: {
-                    week: null,
-                    month: null,
-                    anytime: null,
+                    week: null, month: null, anytime: null,
                 },
                 ethereum: {
-                    week: null,
-                    month: null,
-                    anytime: null,
+                    week: null, month: null, anytime: null,
                 },
-
             },
             prices: {
                 bitcoin: {
-                    current: null,
-                    week: null,
-                    month: null,
-                    anytime: null,
-                    history: null
+                    current: null, week: null, month: null, anytime: null, history: null,
                 },
                 ethereum: {
-                    current: null,
-                    week: null,
-                    month: null,
-                    anytime: null,
-                    history: null
+                    current: null, week: null, month: null, anytime: null, history: null,
                 },
             },
             states: {
-                anytime: false,
-                bitcoin: true,
-                chart: false,
-                ethereum: true,
-                history: false,
-                month: true,
-                week: true
+                bitcoin: true, ethereum: true, week: true, month: true, anytime: false, history: false, chart: false,
             }
         }
     },
     methods: {
         /*
-            compose API URL to fetch data from
+            compose API URL
 
             @param id <String>
             @param period <Integer>
@@ -460,7 +441,7 @@ export default {
             @return <String>
         */
         getApiUrl(id = 'bitcoin', period = 0, range = []) {
-            if (range.length) {
+            if (Array.isArray(range) && range.length) {
                 const [to, from] = range
                 // replace url end to prevent appending the params everytime the function is called
                 return this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
@@ -473,30 +454,7 @@ export default {
                 : this.endpoints[id].history = `${this.endpoints[id].history.replace(/date=.*$/, '')}date=${date}`
         },
         /*
-            @return <String>
-        */
-        getTime(timestamp) {
-            return new Date(timestamp).toTimeString().slice(0, 8)
-        },
-        /*
-            @return <String>
-        */
-        getDateFormat(seconds) {
-            const date = new Date(seconds)
-
-            return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-        },
-        /*
-            @return <Array>
-        */
-        getTimeRange() {
-            const currentDate = new Date().getTime() / 1000
-            const pastDate = new Date(document.getElementById('upto').value).getTime() / 1000
-
-            return [Math.floor(currentDate), Math.floor(pastDate)]
-        },
-        /*
-            get the date and reformat it to match coinGecko's API specs (format: 'dd-mm-yyyy')
+            get the date and reformat it to match coinGecko's API specs (format: 'DD-MM-YYYY')
 
             @param period <Integer>
 
@@ -510,7 +468,38 @@ export default {
             return `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`
         },
         /*
-            calculate the time difference of two dates in milliseconds
+            reformat the date to comply with CoinGecko's API specs; => DD/MM/YYYY
+            @param seconds <Integer>
+
+            @return <String>
+        */
+        getDateFormat(seconds) {
+            const date = new Date(seconds)
+
+            return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+        },
+        /*
+            extract the time portion from the date, e.g. 09:22:35
+
+            @return <String>
+        */
+        getTime(timestamp) {
+            return new Date(timestamp).toTimeString().slice(0, 8)
+        },
+        /*
+            get time in seconds
+            defines the "range boundaries" (from, to) to assemble the endpoint
+
+            @return <Array>
+        */
+        getTimeRange() {
+            const currentDate = new Date().getTime() / 1000
+            const pastDate = new Date(document.getElementById('upto').value).getTime() / 1000
+
+            return [Math.floor(currentDate), Math.floor(pastDate)]
+        },
+        /*
+            calculate the time difference of two dates in milliseconds => days
 
             @return <Integer>
         */
@@ -523,6 +512,24 @@ export default {
             const differenceTime = currentDate.getTime() - pastDate.getTime()
             // calculate the number of days ==> ms * sec * min * h
             return Math.round(differenceTime / (1000 * 60 * 60 * 24) - 1)
+        },
+        /*
+            calculate the ratio between the current price and the past one
+
+            @param currentprice <Float>
+            @param pastPrice <Float>
+            @param id <String>
+            @param period <String>
+
+            @return <String>
+        */
+        getPercentage(currentPrice, pastPrice, id, period) {
+            // the prepended '+' gets rid of trailing zeros; e.g. 1.50 ==> 1.5
+            const percent = +((currentPrice / pastPrice * 100) - 100).toFixed(2)
+
+            this.percentageState[id][period] = percent > 0 ? true : false
+
+            return percent
         },
         /*
             fetch data from coinGecko
@@ -587,24 +594,6 @@ export default {
                     }
                 })
                 .catch((err) => console.error(`Server error: ${err.message}`))
-        },
-        /*
-            calculate the ratio between the current price and the past one
-
-            @param currentprice <Float>
-            @param pastPrice <Float>
-            @param id <String>
-            @param periodName <String>
-
-            @return <String>
-        */
-        getPercentage(currentPrice, pastPrice, id, periodName) {
-            // the prepended '+' gets rid of trailing zeros; e.g. 1.50 ==> 1.5
-            const percent = +((currentPrice / pastPrice * 100) - 100).toFixed(2)
-
-            this.percentageState[id][periodName] = percent > 0 ? true : false
-
-            return percent
         },
         init() {
             const periods = [0, 7, 30]
