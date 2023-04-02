@@ -441,13 +441,14 @@ export default {
 
             @return <String>
         */
-        getDateFormat(period = 0, seconds = false, url = false) {
+        getDateFormat(period = 0, seconds = 0, url = false) {
             const date = seconds
                 ? new Date(seconds)
                 : new Date()
 
             if (period !== 0) date.setDate(date.getDate() - period)
 
+            // if <url> ist set, the format has to comply with the API specs
             return url
                 ? `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
                 : `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
