@@ -63,7 +63,7 @@
                         <v-switch
                             v-model="states.anytime"
                             :label="states.anytime ? 'Hide' : 'Show'"
-                            color="blue-grey"
+                            color="cyan"
                         >
                         </v-switch>
                     </v-col>
@@ -264,22 +264,26 @@
                     >
                         <thead>
                             <tr>
-                                <th colspan="3" class="text-center text-h6 small-caps">Price History
+                                <th>
                                     <v-btn class="mx-2">
                                         <template v-slot:prepend>
                                             <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
+
+                                <th colspan="2" class="text-left text-h6 small-caps">Price History</th>
                             </tr>
+
                             <tr>
                                 <th class="text-left small-caps">Date</th>
                                 <th class="text-left small-caps">Time</th>
                                 <th class="text-left small-caps">Course
                                     <v-chip
+                                        v-if="prices.bitcoin.history"
                                         title="Reverse"
                                         label
-                                        class="mx-2 bg-grey"
+                                        class="mx-2 bg-purple-accent-2"
                                         @click="prices.bitcoin.history.reverse()"
                                         >
                                         <template v-slot:prepend>
@@ -294,7 +298,7 @@
                             <tr
                                 v-for="n in prices.bitcoin.history"
                                 :key="n"
-                                class="text-center"
+                                class="text-left"
                                 >
                                 <td>{{ getDateFormat(0, n[0]) }}</td>
                                 <td>{{ getTime(n[0]) }}</td>
@@ -308,24 +312,26 @@
                         height="580px"
                         class="mt-8"
                     >
-                        <thead>
+                    <thead>
                             <tr>
-                                <th colspan="3" class="text-center text-h6 small-caps">Price History
+                                <th>
                                     <v-btn class="mx-2">
                                         <template v-slot:prepend>
-                                            <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
+                                            <img alt="Bitcoin" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
-                            </tr>
-                            <tr>
+
+                                <th colspan="2" class="text-left text-h6 small-caps">Price History</th>
+                            </tr>                            <tr>
                                 <th class="text-left small-caps">Date</th>
                                 <th class="text-left small-caps">Time</th>
                                 <th class="text-left small-caps">Course
                                     <v-chip
+                                        v-if="prices.ethereum.history"
                                         title="Reverse"
                                         label
-                                        class="mx-2 bg-grey"
+                                        class="mx-2 bg-blue"
                                         @click="prices.ethereum.history.reverse()"
                                         >
                                         <template v-slot:prepend>
