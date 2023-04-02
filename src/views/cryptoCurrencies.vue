@@ -191,29 +191,17 @@
 
                                     <td v-if="states.week">
                                         {{ getPercentage(prices.bitcoin.current, prices.bitcoin.week, 'bitcoin', 'week') }} %
-                                        <v-chip class="bg-grey mx-2" label>
-                                            <template v-slot:append>
-                                                <img alt="" :src="percentageState.bitcoin.week ? iconPath.up : iconPath.down" width="32" height="32" />
-                                            </template>
-                                        </v-chip>
+                                        <span :class="[dot.name, dot.margin, !percentageState.bitcoin.week ? dot.color.red : dot.color.green]"></span>
                                     </td>
 
                                     <td v-if="states.month">
                                         {{ getPercentage(prices.bitcoin.current, prices.bitcoin.month, 'bitcoin', 'month') }} %
-                                        <v-chip class="bg-grey mx-2" label>
-                                            <template v-slot:append>
-                                                <img alt="" :src="percentageState.bitcoin.month ? iconPath.up : iconPath.down" width="32" height="32" />
-                                            </template>
-                                        </v-chip>
+                                        <span :class="[dot.name, dot.margin, !percentageState.bitcoin.month ? dot.color.red : dot.color.green]"></span>
                                     </td>
 
                                     <td v-if="states.anytime">
                                         {{ getPercentage(prices.bitcoin.current, prices.bitcoin.anytime, 'bitcoin', 'anytime') }} %
-                                        <v-chip class="bg-grey mx-2" label>
-                                            <template v-slot:append>
-                                                <img alt="" :src="percentageState.bitcoin.anytime ? iconPath.up : iconPath.down" width="32" height="32" />
-                                            </template>
-                                        </v-chip>
+                                        <span :class="[dot.name, dot.margin, !percentageState.bitcoin.anytime ? dot.color.red : dot.color.green]"></span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -252,29 +240,17 @@
 
                                     <td v-if="states.week">
                                         {{ getPercentage(prices.ethereum.current, prices.ethereum.week, 'ethereum', 'week') }} %
-                                        <v-chip class="bg-grey mx-2" label>
-                                            <template v-slot:append>
-                                                <img alt="" :src="percentageState.ethereum.week ? iconPath.up : iconPath.down" width="32" height="32" />
-                                            </template>
-                                        </v-chip>
+                                        <span :class="[dot.name, dot.margin, !percentageState.ethereum.week ? dot.color.red : dot.color.green]"></span>
                                     </td>
 
                                     <td v-if="states.month">
                                         {{ getPercentage(prices.ethereum.current, prices.ethereum.month, 'ethereum', 'month') }} %
-                                        <v-chip class="bg-grey mx-2" label>
-                                            <template v-slot:append>
-                                                <img alt="" :src="percentageState.ethereum.month ? iconPath.up : iconPath.down" width="32" height="32" />
-                                            </template>
-                                        </v-chip>
+                                        <span :class="[dot.name, dot.margin, !percentageState.ethereum.month ? dot.color.red : dot.color.green]"></span>
                                     </td>
 
                                     <td v-if="states.anytime">
                                         {{ getPercentage(prices.ethereum.current, prices.ethereum.anytime, 'ethereum', 'anytime') }} %
-                                        <v-chip class="bg-grey mx-2" label>
-                                            <template v-slot:append>
-                                                <img alt="" :src="percentageState.ethereum.anytime ? iconPath.up : iconPath.down" width="32" height="32" />
-                                            </template>
-                                        </v-chip>
+                                        <span :class="[dot.name, dot.margin, !percentageState.ethereum.anytime ? dot.color.red : dot.color.green]"></span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -393,6 +369,13 @@ export default {
     },
     data() {
         return {
+            dot: {
+                name: 'dot',
+                margin: 'ml-2',
+                color: {
+                    red: 'bg-red', green: 'bg-green',
+                },
+            },
             endpoints: {
                 bitcoin: {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
@@ -403,11 +386,7 @@ export default {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=eur',
                     history: 'https://api.coingecko.com/api/v3/coins/ethereum/history?',
                     range: 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&',
-                }
-            },
-            iconPath: {
-                up: 'src/assets/icons/IconArrowUp.svg',
-                down: 'src/assets/icons/IconArrowDown.svg'
+                },
             },
             percentageState: {
                 bitcoin: {
@@ -427,7 +406,7 @@ export default {
             },
             states: {
                 bitcoin: true, ethereum: true, week: true, month: true, anytime: false, history: false, chart: false,
-            }
+            },
         }
     },
     methods: {
@@ -549,33 +528,29 @@ export default {
                     return response.json()
                 })
                 .then((data) => {
-                    const currency = id === 'bitcoin'
-                        ? 'bitcoin'
-                        : 'ethereum'
-
                     // get price history bulk data
                     if (range.length) {
                         const { prices } = data
-                        this.prices[currency].history = prices.slice(0, 20)
+                        this.prices[id].history = prices.slice(0, 20)
 
                         return
                     }
-                    // ... otherwise get current / today's course
+                    // ... otherwise get a single course; either the current course (today)
                     if (period === 0) {
                         if (id === 'bitcoin') {
                             const { bitcoin } = data
                             const { eur } = bitcoin
 
-                            this.prices[currency].current = Math.round(eur)
+                            this.prices[id].current = Math.round(eur)
                         }
                         else {
                             const { ethereum } = data
                             const { eur } = ethereum
 
-                            this.prices[currency].current = Math.round(eur)
+                            this.prices[id].current = Math.round(eur)
                         }
                     }
-                    // get past courses according to the period given
+                    // ...or the past course according to the period given
                     else {
                         const { market_data } = data
                         const { current_price } = market_data
@@ -583,13 +558,13 @@ export default {
 
                         switch (period) {
                             case 7:
-                                this.prices[currency].week = Math.round(eur)
+                                this.prices[id].week = Math.round(eur)
                             break
                             case 30:
-                                this.prices[currency].month = Math.round(eur)
+                                this.prices[id].month = Math.round(eur)
                             break
                             default:
-                                this.prices[currency].anytime = Math.round(eur)
+                                this.prices[id].anytime = Math.round(eur)
                         }
                     }
                 })
@@ -611,6 +586,12 @@ export default {
 </script>
 
 <style>
+.dot {
+    display: inline-block;
+    border-radius: 50%;
+    height: 16px;
+    width: 16px;
+}
 .small-caps {
     font-variant: small-caps;
     font-weight: bold;
