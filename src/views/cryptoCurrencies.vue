@@ -160,7 +160,7 @@
 <!-- Single courses BTC -->
                     <v-card v-if="states.bitcoin || states.ethereum"
                         class="ma-8" height="auto" width="auto">
-                        <v-card-title class="small-caps ma-4">
+                        <v-card-title class="small-caps bg-grey">
                             Currency courses
                         </v-card-title>
 
@@ -168,7 +168,7 @@
 
                         <v-btn v-if="states.bitcoin"
                             block
-                            class="text-none text-black my-4"
+                            class="text-none text-black"
                             color="purple"
                             size="x-large"
                             variant="flat"
@@ -272,20 +272,20 @@
 <!-- Price history BTC -->
                     <v-table v-if="states.history && prices.bitcoin.history"
                         fixed-header
-                        height="630px"
+                        height="600px"
                         class="mt-8"
                     >
                         <thead>
                             <tr>
-                                <th>
-                                    <v-btn class="mx-2">
+                                <th class="bg-grey">
+                                    <v-btn class="mx-2 bg-grey" elevation="0">
                                         <template v-slot:prepend>
                                             <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
 
-                                <th colspan="2" class="text-left text-h6 small-caps">Price History</th>
+                                <th colspan="2" class="text-left text-h6 small-caps bg-grey">Price History</th>
                             </tr>
 
                             <tr>
@@ -324,21 +324,23 @@
 <!-- Price history ETH -->
                     <v-table v-if="states.history && prices.ethereum.history"
                         fixed-header
-                        height="630px"
+                        height="600px"
                         class="mt-8"
                     >
-                    <thead>
+                        <thead>
                             <tr>
-                                <th>
-                                    <v-btn class="mx-2">
+                                <th class="bg-grey">
+                                    <v-btn class="mx-2 bg-grey" elevation="0">
                                         <template v-slot:prepend>
                                             <img alt="Bitcoin" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
 
-                                <th colspan="2" class="text-left text-h6 small-caps">Price History</th>
-                            </tr>                            <tr>
+                                <th colspan="2" class="text-left text-h6 small-caps bg-grey">Price History</th>
+                            </tr>
+
+                            <tr>
                                 <th class="text-left small-caps">Date</th>
                                 <th class="text-left small-caps">Time</th>
                                 <th class="text-left small-caps">Course
@@ -375,8 +377,8 @@
                 <v-row>
 <!-- Price chart BTC -->
                     <v-card v-if="states.chart && prices.ethereum.history" class="ma-8" height="auto" width="auto">
-                        <v-card-title class="small-caps ma-2">
-                            <v-btn class="mx-2">
+                        <v-card-title class="small-caps bg-grey">
+                            <v-btn class="bg-grey" elevation="0">
                                 <template v-slot:prepend>
                                     <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="32" height="32" />
                                 </template>
@@ -397,8 +399,8 @@
 
 <!-- Price chart ETH -->
                     <v-card v-if="states.chart && prices.bitcoin.history" class="ma-8" height="auto" width="auto">
-                        <v-card-title class="small-caps ma-2">
-                            <v-btn class="mx-2">
+                        <v-card-title class="small-caps bg-grey">
+                            <v-btn class="bg-grey" elevation="0">
                                 <template v-slot:prepend>
                                     <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="32" height="32" />
                                 </template>
