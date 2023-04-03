@@ -6,7 +6,7 @@
 <!-- Controls -->
             <v-navigation-drawer height="auto" width="400">
                 <v-list>
-                    <v-list-item class="small-caps text-h6 bg-grey">Controls</v-list-item>
+                    <v-list-item class="bg-grey text-h6 small-caps">Controls</v-list-item>
                 </v-list>
 
                 <v-divider class="mb-4"></v-divider>
@@ -14,7 +14,7 @@
                 <span class="small-caps ml-4">Select a currency</span>
 
                 <v-row class="ml-4">
-                    <v-col cols="6">
+                    <v-col>
                         <v-switch
                             v-model="states.bitcoin"
                             label="BTC"
@@ -23,7 +23,7 @@
                         </v-switch>
                     </v-col>
 
-                    <v-col cols="6">
+                    <v-col>
                         <v-switch
                             v-model="states.ethereum"
                             label="ETH"
@@ -38,7 +38,7 @@
                 <span class="small-caps ml-4">Select a period</span>
 
                 <v-row class="ml-4">
-                    <v-col cols="6">
+                    <v-col>
                         <v-switch
                             v-model="states.week"
                             label="Last week"
@@ -47,7 +47,7 @@
                         </v-switch>
                     </v-col>
                     
-                    <v-col cols="6">
+                    <v-col>
                         <v-switch
                             v-model="states.month"
                             label="Last month"
@@ -56,11 +56,11 @@
                         </v-switch>
                     </v-col>
                 </v-row>
-
+<!-- Date Picker -->
                 <span class="small-caps ml-4">Select a date</span>
 
                 <v-row class="ml-4">
-                    <v-col cols="6">
+                    <v-col>
                         <v-switch
                             v-model="states.anytime"
                             :label="states.anytime ? 'Hide' : 'Show'"
@@ -69,56 +69,50 @@
                         </v-switch>
                     </v-col>
 
-                    <v-col cols="6">
+                    <v-col v-if="states.anytime">
                         <v-form @submit.prevent>
-                            <v-container v-if="states.anytime">
-                                <v-row>
-                                    <input id="datetime" type="date" value="2023-01-01" />
+                            <input id="datetime" type="date" value="2023-01-01" />
 
-                                    <v-btn
-                                        inline
-                                        class="small-caps text-white ml-4"
-                                        color="grey"
-                                        size="small"
-                                        variant="flat"
-                                        @click="
-                                            getPrices('bitcoin', getDayDifference());
-                                            getPrices('ethereum', getDayDifference());
-                                            getPrices('bitcoin', 100, getTimeRange());
-                                            getPrices('ethereum', 100, getTimeRange())"
-                                        >Send
-                                    </v-btn>
-                                </v-row>
-                            </v-container>
+                            <v-btn
+                                class="small-caps"
+                                color="grey"
+                                size="small"
+                                title="Send"
+                                @click="
+                                    getPrices('bitcoin', getDayDifference());
+                                    getPrices('ethereum', getDayDifference());
+                                    getPrices('bitcoin', 100, getTimeRange());
+                                    getPrices('ethereum', 100, getTimeRange())"
+                                >Go
+                            </v-btn>
                         </v-form>
                     </v-col>
                 </v-row>
-<!-- Period end -->
+<!-- Date Picker && Period end -->
                 <v-divider class="mb-4"></v-divider>
 <!-- History -->
                 <span class="small-caps ml-4">Price History</span>
 
                 <v-row class="ml-4">
-                    <v-col cols="6">
+                    <v-col>
                         <v-switch
                             v-model="states.history"
-                            :label="states.history ? 'Hide' : 'Show'"
                             color="blue-grey"
+                            :label="states.history ? 'Hide' : 'Show'"
                         >
                         </v-switch>
                     </v-col>
-
                 </v-row>
 
-                <v-row class="ma-4 mt-0">
-                    <v-col v-if="states.history && !prices.bitcoin.history">
+                <v-row v-if="states.history && !prices.bitcoin.history" class="ma-4 mt-0">
+                    <v-col>
                         <v-alert
                             border="start"
                             border-color="warning"
                             elevation="2"
                             title="NO DATA FETCHED YET!"
-                            text="Please select a date from the date picker above to display the price history."
                         >
+                        Please select a date from the date picker above to display the price history.
                         </v-alert>
                     </v-col>
                 </v-row>
@@ -128,25 +122,25 @@
                 <span class="small-caps ml-4">Price Chart</span>
 
                 <v-row class="ml-4">
-                    <v-col cols="6">
+                    <v-col>
                         <v-switch
                             v-model="states.chart"
-                            :label="states.chart ? 'Hide' : 'Show'"
                             color="blue-grey"
+                            :label="states.chart ? 'Hide' : 'Show'"
                         >
                         </v-switch>
                     </v-col>
                 </v-row>
 
-                <v-row class="ma-4">
-                    <v-col v-if="states.chart && !prices.bitcoin.history">
+                <v-row v-if="states.chart && !prices.bitcoin.history" class="ma-4">
+                    <v-col>
                         <v-alert
                             border="start"
                             border-color="warning"
                             elevation="2"
                             title="NO DATA FETCHED YET!"
-                            text="Please select a date from the date picker above to display the price chart."
                         >
+                        Please select a date from the date picker above to display the price chart.
                         </v-alert>
                     </v-col>
                 </v-row>
@@ -228,7 +222,8 @@
                             <template v-slot:prepend>
                                 <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
                             </template>
-                            Ethereum (ETH)
+
+                            <span class="small-caps">Ethereum (ETH)</span>
                         </v-btn>
 
                         <v-table v-if="states.ethereum"
