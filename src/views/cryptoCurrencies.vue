@@ -33,7 +33,7 @@
                     </v-col>
                 </v-row>
 <!-- Currency end -->
-                <v-divider class="mb-8"></v-divider>
+                <v-divider class="mb-4"></v-divider>
 <!-- Period -->
                 <span class="small-caps ml-4">Select a period</span>
 
@@ -68,36 +68,33 @@
                         >
                         </v-switch>
                     </v-col>
+
+                    <v-col cols="6">
+                        <v-form @submit.prevent>
+                            <v-container v-if="states.anytime">
+                                <v-row>
+                                    <input id="datetime" type="date" value="2023-01-01" />
+
+                                    <v-btn
+                                        inline
+                                        class="small-caps text-white ml-4"
+                                        color="grey"
+                                        size="small"
+                                        variant="flat"
+                                        @click="
+                                            getPrices('bitcoin', getDayDifference());
+                                            getPrices('ethereum', getDayDifference());
+                                            getPrices('bitcoin', 100, getTimeRange());
+                                            getPrices('ethereum', 100, getTimeRange())"
+                                        >Send
+                                    </v-btn>
+                                </v-row>
+                            </v-container>
+                        </v-form>
+                    </v-col>
                 </v-row>
-
-                <v-form @submit.prevent>
-                    <v-container v-if="states.anytime">
-                        <v-row>
-                            <v-col
-                                cols="12"
-                                md="12"
-                            >
-                            <input id="datetime" type="date" value="2023-01-01" />
-
-                            <v-btn
-                                inline
-                                class="small-caps text-white ml-4"
-                                color="grey"
-                                size="small"
-                                variant="flat"
-                                @click="
-                                    getPrices('bitcoin', getDayDifference());
-                                    getPrices('ethereum', getDayDifference());
-                                    getPrices('bitcoin', 100, getTimeRange());
-                                    getPrices('ethereum', 100, getTimeRange())"
-                                >Send
-                            </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                </v-form>
 <!-- Period end -->
-                <v-divider class="mb-8"></v-divider>
+                <v-divider class="mb-4"></v-divider>
 <!-- History -->
                 <span class="small-caps ml-4">Price History</span>
 
@@ -126,7 +123,7 @@
                     </v-col>
                 </v-row>
 <!-- History end -->
-                <v-divider class="mb-8"></v-divider>
+                <v-divider class="mb-4"></v-divider>
 <!-- Chart -->
                 <span class="small-caps ml-4">Price Chart</span>
 
@@ -161,8 +158,8 @@
             <v-container fluid>
                 <v-row justify="space-around">
 <!-- Single courses BTC -->
-                    <v-card  v-if="states.bitcoin || states.ethereum"
-                        class="mt-8" height="auto" width="auto">
+                    <v-card v-if="states.bitcoin || states.ethereum"
+                        class="ma-8" height="auto" width="auto">
                         <v-card-title class="small-caps ma-4">
                             Currency courses
                         </v-card-title>
