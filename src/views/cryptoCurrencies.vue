@@ -257,7 +257,7 @@
                         </v-table>
                     </v-card>
 
-                    <v-table v-if="states.history && states.bitcoin"
+                    <v-table v-if="states.history"
                         fixed-header
                         height="580px"
                         class="mt-8"
@@ -307,7 +307,7 @@
                         </tbody>
                     </v-table>
 
-                    <v-table v-if="states.history && states.ethereum"
+                    <v-table v-if="states.history"
                         fixed-header
                         height="580px"
                         class="mt-8"
@@ -355,6 +355,22 @@
                         </tbody>
                     </v-table>
 
+                    <v-card v-if="states.chart" class="mt-8 mb-8" width="1280">
+                        <v-card-title class="small-caps ma-4">
+                            Price Chart
+                            <v-btn class="mx-2">
+                                <template v-slot:prepend>
+                                    <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
+                                </template>
+                            </v-btn>
+                        </v-card-title>    
+
+                        <v-divider></v-divider>
+
+                        <v-row class="mx-4">
+                            <span v-for="n in prices.bitcoin.history.sort()" :key="n" class="stakes ml-2 mb-8 text-center">{{ n[1].toFixed(0) }}</span>
+                        </v-row>
+                    </v-card>
                 </v-row>
             </v-container>
         </v-main>
@@ -588,6 +604,12 @@ export default {
 </script>
 
 <style>
+.stakes {
+    display: inline-block;
+    background-color: purple;
+    height: 100px;
+    width: 52px;
+}
 .dot {
     display: inline-block;
     border-radius: 50%;
