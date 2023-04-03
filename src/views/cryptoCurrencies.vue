@@ -379,20 +379,20 @@
 <!-- Price chart BTC -->
                     <v-card v-if="states.chart && prices.ethereum.history" class="ma-8" height="auto" width="auto">
                         <v-card-title class="small-caps ma-2">
-                            Price Chart
                             <v-btn class="mx-2">
                                 <template v-slot:prepend>
                                     <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="32" height="32" />
                                 </template>
                             </v-btn>
+                            Price Chart
                         </v-card-title>    
 
                         <v-divider></v-divider>
                         <!-- vertical margin diretions get exchanged due to rotation; e.g. mb === mt and vice versa -->
                         <v-row class="ma-4" style="transform: rotate(180deg);">
                             <div v-for="(values, index) in prices.bitcoin.history" :key="index"
-                                class="bar bg-purple ml-2 mt-4" :style="{ height: `${barHeight('bitcoin', index)}px`}">
-                                <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }}</span>
+                                class="bar bg-purple ml-2" :style="{ height: getBarHeight('bitcoin', values[1]) + 'px'}">
+                                <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }} €</span>
                             </div>
                         </v-row>
                     </v-card>
@@ -401,20 +401,20 @@
 <!-- Price chart ETH -->
                     <v-card v-if="states.chart && prices.bitcoin.history" class="ma-8" height="auto" width="auto">
                         <v-card-title class="small-caps ma-2">
-                            Price Chart
                             <v-btn class="mx-2">
                                 <template v-slot:prepend>
                                     <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="32" height="32" />
                                 </template>
                             </v-btn>
+                            Price Chart
                         </v-card-title>    
 
                         <v-divider></v-divider>
                         <!-- vertical margin diretions get exchanged due to rotation; e.g. mb === mt and vice versa -->
                         <v-row class="ma-4" style="transform: rotate(180deg);">
                             <div v-for="(values, index) in prices.ethereum.history" :key="index"
-                                class="bar bg-blue ml-2 mt-4" :style="{ height: `${barHeight('ethereum', index)}px`}">
-                                <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }}</span>
+                                class="bar bg-blue ml-2" :style="{ height: getBarHeight('ethereum', values[1]) + 'px'}">
+                                <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }} €</span>
                             </div>
                         </v-row>
                     </v-card>
@@ -641,15 +641,25 @@ export default {
                         this.prices[id].anytime = Math.round(eur)
                 }
         },
-        barHeight(id, index) {
-            // filter prices only
-            const prices = this.prices[id].history.map(price => price[1].toFixed(2))
-            // get max max price
-            const max = prices.sort((x, y) => y - x)[0]
-            // calculate the ratio betwenn the "current price" (prices[index]) and the max price
-            const ratio = Math.round(prices[index] / (max / 100))
-            // since the price differences are rather small, the ratio is multilied for better visualization
-            return ratio * 2
+        /*
+            get individual bar heights in pixels
+
+            @param id <String> e.g 'bitcoin' || 'ethereum'
+            @param price <Integer>
+
+            @return <Integer>
+        */
+        getBarHeight(id, price) {
+            // add a minimum height for each bar
+            const minHeight = 100
+
+            return id === 'bitcoin'
+                ? price < 1000
+                    ? (price / 20) + minHeight
+                    : price / 200
+                : price < 2000
+                    ? (price / 10) + minHeight
+                    : price / 20
         },
         init() {
             const periods = [0, 7, 30]
