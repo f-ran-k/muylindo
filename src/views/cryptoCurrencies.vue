@@ -646,7 +646,6 @@ export default {
             const max = prices.sort((x, y) => y - x)[0]
             // calculate the ratio betwenn the "current price" (prices[index]) and the max price
             const ratio = Math.round(prices[index] / (max / 100))
-            console.log(index, prices[index], ratio)
             // since the price differences are rather small, the ratio is multilied for better visualization
             return ratio * 2
         },
