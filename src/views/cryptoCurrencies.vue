@@ -492,7 +492,7 @@ export default {
                 return this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
             }
 
-            const date = this.getDateFormat(period, false, true)
+            const date = this.getDateFormat(period, 0, true)
 
             return period === 0
                 ? this.endpoints[id].price
@@ -537,6 +537,8 @@ export default {
         /*
             extract the time portion from the date, e.g. 09:22:35
 
+            @param timestamp <Integer>
+
             @return <String>
         */
         getTime(timestamp) {
@@ -556,6 +558,7 @@ export default {
         },
         /*
             calculate the ratio between the current price and the past one
+            and set either percentage state
 
             @param currentprice <Float>
             @param pastPrice <Float>
@@ -621,19 +624,19 @@ export default {
         */
         getPriceByPeriod(id, period, data) {
             const { market_data } = data
-                const { current_price } = market_data
-                const { eur } = current_price
+            const { current_price } = market_data
+            const { eur } = current_price
 
-                switch (period) {
-                    case 7:
-                        this.prices[id].week = Math.round(eur)
-                    break
-                    case 30:
-                        this.prices[id].month = Math.round(eur)
-                    break
-                    default:
-                        this.prices[id].anytime = Math.round(eur)
-                }
+            switch (period) {
+                case 7:
+                    this.prices[id].week = Math.round(eur)
+                break
+                case 30:
+                    this.prices[id].month = Math.round(eur)
+                break
+                default:
+                    this.prices[id].anytime = Math.round(eur)
+            }
         },
         /*
             get individual bar heights in pixels
@@ -643,6 +646,7 @@ export default {
 
             @return <Integer>
         */
+       // TODO :: sort of sloppy; needs a better logical approach
         getBarHeight(id, price) {
             // add a minimum height for each bar
             const minHeight = 100
@@ -655,6 +659,7 @@ export default {
                     ? (price / 10) + minHeight
                     : price / 20
         },
+        // start out ...
         init() {
             const periods = [0, 7, 30]
 
