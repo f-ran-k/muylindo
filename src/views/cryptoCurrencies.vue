@@ -3,13 +3,14 @@
         <ComponentHeader />
 
         <v-main>
-            <v-navigation-drawer width="400">
+<!-- Controls -->
+            <v-navigation-drawer height="auto" width="400">
                 <v-list>
                     <v-list-item class="small-caps text-h6 bg-grey">Controls</v-list-item>
                 </v-list>
 
                 <v-divider class="mb-4"></v-divider>
-
+<!-- Currency -->
                 <span class="small-caps ml-4">Select a currency</span>
 
                 <v-row class="ml-4">
@@ -31,9 +32,9 @@
                         </v-switch>
                     </v-col>
                 </v-row>
-
+<!-- Currency end -->
                 <v-divider class="mb-8"></v-divider>
-
+<!-- Period -->
                 <span class="small-caps ml-4">Select a period</span>
 
                 <v-row class="ml-4">
@@ -56,7 +57,7 @@
                     </v-col>
                 </v-row>
 
-                <span class="small-caps ml-4">... by date</span>
+                <span class="small-caps ml-4">Select a date</span>
 
                 <v-row class="ml-4">
                     <v-col cols="6">
@@ -84,16 +85,20 @@
                                 color="grey"
                                 size="small"
                                 variant="flat"
-                                @click="getPrices('bitcoin', getDayDifference()); getPrices('ethereum', getDayDifference())"
+                                @click="
+                                    getPrices('bitcoin', getDayDifference());
+                                    getPrices('ethereum', getDayDifference());
+                                    getPrices('bitcoin', 100, getTimeRange());
+                                    getPrices('ethereum', 100, getTimeRange())"
                                 >Send
                             </v-btn>
                             </v-col>
                         </v-row>
                     </v-container>
                 </v-form>
-
+<!-- Period end -->
                 <v-divider class="mb-8"></v-divider>
-
+<!-- History -->
                 <span class="small-caps ml-4">Price History</span>
 
                 <v-row class="ml-4">
@@ -105,34 +110,24 @@
                         >
                         </v-switch>
                     </v-col>
+
                 </v-row>
 
-                <v-form @submit.prevent>
-                    <v-container v-if="states.history">
-                        <v-row>
-                            <v-col
-                                cols="12"
-                                md="12"
-                            >
-                            <input id="upto" type="date" value="2023-03-01" />
-
-                            <v-btn
-                                inline
-                                class="small-caps text-white ml-4"
-                                color="grey"
-                                size="small"
-                                variant="flat"
-                                @click="getPrices('bitcoin', 100, getTimeRange()); getPrices('ethereum', 100, getTimeRange())"
-                                >Send
-                            </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                </v-form>
-
-
+                <v-row class="ma-4 mt-0">
+                    <v-col v-if="states.history && !prices.bitcoin.history">
+                        <v-alert
+                            border="start"
+                            border-color="warning"
+                            elevation="2"
+                            title="NO DATA FETCHED YET!"
+                            text="Please select a date from the date picker above to display the price history."
+                        >
+                        </v-alert>
+                    </v-col>
+                </v-row>
+<!-- History end -->
                 <v-divider class="mb-8"></v-divider>
-
+<!-- Chart -->
                 <span class="small-caps ml-4">Price Chart</span>
 
                 <v-row class="ml-4">
@@ -145,12 +140,29 @@
                         </v-switch>
                     </v-col>
                 </v-row>
-            </v-navigation-drawer>
 
+                <v-row class="ma-4">
+                    <v-col v-if="states.chart && !prices.bitcoin.history">
+                        <v-alert
+                            border="start"
+                            border-color="warning"
+                            elevation="2"
+                            title="NO DATA FETCHED YET!"
+                            text="Please select a date from the date picker above to display the price chart."
+                        >
+                        </v-alert>
+                    </v-col>
+                </v-row>
+<!-- Chart end -->
+            </v-navigation-drawer>
+<!-- Controls end -->
+
+<!-- Main View -->
             <v-container fluid>
                 <v-row justify="space-around">
+<!-- Single courses BTC -->
                     <v-card  v-if="states.bitcoin || states.ethereum"
-                        class="mt-8" width="600">
+                        class="mt-8" height="auto" width="auto">
                         <v-card-title class="small-caps ma-4">
                             Currency courses
                         </v-card-title>
@@ -199,14 +211,16 @@
                                         <span :class="[dot.name, dot.margin, !percentageState.bitcoin.month ? dot.color.red : dot.color.green]"></span>
                                     </td>
 
-                                    <td v-if="states.anytime">
+                                    <td v-if="states.anytime && prices.bitcoin.history">
                                         {{ getPercentage(prices.bitcoin.current, prices.bitcoin.anytime, 'bitcoin', 'anytime') }} %
                                         <span :class="[dot.name, dot.margin, !percentageState.bitcoin.anytime ? dot.color.red : dot.color.green]"></span>
                                     </td>
                                 </tr>
                             </tbody>
                         </v-table>
+<!-- Single courses BTC end -->
 
+<!-- Single courses ETH -->
                         <v-btn v-if="states.ethereum"
                             block
                             class="text-none text-black my-4"
@@ -248,7 +262,7 @@
                                         <span :class="[dot.name, dot.margin, !percentageState.ethereum.month ? dot.color.red : dot.color.green]"></span>
                                     </td>
 
-                                    <td v-if="states.anytime">
+                                    <td v-if="states.anytime && prices.ethereum.history">
                                         {{ getPercentage(prices.ethereum.current, prices.ethereum.anytime, 'ethereum', 'anytime') }} %
                                         <span :class="[dot.name, dot.margin, !percentageState.ethereum.anytime ? dot.color.red : dot.color.green]"></span>
                                     </td>
@@ -256,10 +270,12 @@
                             </tbody>
                         </v-table>
                     </v-card>
+<!-- Single courses ETH end -->
 
-                    <v-table v-if="states.history"
+<!-- Price history BTC -->
+                    <v-table v-if="states.history && prices.bitcoin.history"
                         fixed-header
-                        height="580px"
+                        height="630px"
                         class="mt-8"
                     >
                         <thead>
@@ -281,13 +297,13 @@
                                 <th class="text-left small-caps">Course
                                     <v-chip
                                         v-if="prices.bitcoin.history"
-                                        title="Reverse"
+                                        title="Sort by Price"
                                         label
                                         class="mx-2 bg-purple-accent-2"
-                                        @click="prices.bitcoin.history.reverse()"
+                                        @click="prices.bitcoin.history.sort((a, b) => b[1] - a[1])"
                                         >
                                         <template v-slot:prepend>
-                                            <img alt="Reverse" src="@/assets/icons/IconReverse.svg" width="32" height="32" />
+                                            <img alt="Sort" src="@/assets/icons/IconSort.svg" width="32" height="32" />
                                         </template>
                                     </v-chip>
                                 </th>
@@ -306,10 +322,12 @@
                             </tr>
                         </tbody>
                     </v-table>
+<!-- Price history BTC end -->
 
-                    <v-table v-if="states.history"
+<!-- Price history ETH -->
+                    <v-table v-if="states.history && prices.ethereum.history"
                         fixed-header
-                        height="580px"
+                        height="630px"
                         class="mt-8"
                     >
                     <thead>
@@ -329,13 +347,13 @@
                                 <th class="text-left small-caps">Course
                                     <v-chip
                                         v-if="prices.ethereum.history"
-                                        title="Reverse"
+                                        title="Sort by Price"
                                         label
                                         class="mx-2 bg-blue"
-                                        @click="prices.ethereum.history.reverse()"
+                                        @click="prices.ethereum.history.sort((a, b) => b[1] - a[1])"
                                         >
                                         <template v-slot:prepend>
-                                            <img alt="Reverse" src="@/assets/icons/IconReverse.svg" width="32" height="32" />
+                                            <img alt="Sort" src="@/assets/icons/IconSort.svg" width="32" height="32" />
                                         </template>
                                     </v-chip>
                                 </th>
@@ -354,25 +372,54 @@
                             </tr>
                         </tbody>
                     </v-table>
+<!-- Price history ETH end -->
+                </v-row>
 
-                    <v-card v-if="states.chart" class="mt-8 mb-8" width="1280">
-                        <v-card-title class="small-caps ma-4">
+                <v-row>
+<!-- Price chart BTC -->
+                    <v-card v-if="states.chart && prices.ethereum.history" class="ma-8" height="auto" width="auto">
+                        <v-card-title class="small-caps ma-2">
                             Price Chart
                             <v-btn class="mx-2">
                                 <template v-slot:prepend>
-                                    <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
+                                    <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="32" height="32" />
                                 </template>
                             </v-btn>
                         </v-card-title>    
 
                         <v-divider></v-divider>
-
-                        <v-row class="mx-4">
-                            <span v-for="n in prices.bitcoin.history.sort()" :key="n" class="stakes ml-2 mb-8 text-center">{{ n[1].toFixed(0) }}</span>
+                        <!-- vertical margin diretions get exchanged due to rotation; e.g. mb === mt and vice versa -->
+                        <v-row class="ma-4" style="transform: rotate(180deg);">
+                            <div v-for="(values, index) in prices.bitcoin.history" :key="index" class="bar ml-2 mt-4" :style="{ height: `${barHeight('bitcoin', index)}px` }">
+                                <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }}</span>
+                            </div>
                         </v-row>
                     </v-card>
+<!-- Price chart BTC end -->
+
+<!-- Price chart ETH -->
+                    <v-card v-if="states.chart && prices.bitcoin.history" class="ma-8" height="auto" width="auto">
+                        <v-card-title class="small-caps ma-2">
+                            Price Chart
+                            <v-btn class="mx-2">
+                                <template v-slot:prepend>
+                                    <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="32" height="32" />
+                                </template>
+                            </v-btn>
+                        </v-card-title>    
+
+                        <v-divider></v-divider>
+                        <!-- vertical margin diretions get exchanged due to rotation; e.g. mb === mt and vice versa -->
+                        <v-row class="ma-4" style="transform: rotate(180deg);">
+                            <div v-for="(values, index) in prices.ethereum.history" :key="index" class="bar ml-2 mt-4" :style="{ height: `${barHeight('ethereum', index)}px` }">
+                                <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }}</span>
+                            </div>
+                        </v-row>
+                    </v-card>
+<!-- Price chart ETH end -->
                 </v-row>
             </v-container>
+<!-- Main View end -->
         </v-main>
 
         <ComponentFooter />
@@ -391,6 +438,7 @@ export default {
     },
     data() {
         return {
+            bulkLimit: 20,
             dot: {
                 name: 'dot',
                 margin: 'ml-2',
@@ -506,7 +554,7 @@ export default {
         */
         getTimeRange() {
             const currentDate = new Date().getTime() / 1000
-            const pastDate = new Date(document.getElementById('upto').value).getTime() / 1000
+            const pastDate = new Date(document.getElementById('datetime').value).getTime() / 1000
 
             return [Math.floor(currentDate), Math.floor(pastDate)]
         },
@@ -549,7 +597,7 @@ export default {
                     // get price history bulk data
                     if (range.length) {
                         const { prices } = data
-                        this.prices[id].history = prices.slice(0, 20)
+                        this.prices[id].history = prices.slice(0, this.bulkLimit)
 
                         return
                     }
@@ -591,6 +639,16 @@ export default {
                         this.prices[id].anytime = Math.round(eur)
                 }
         },
+        barHeight(id, index) {
+            // filter prices only
+            const prices = this.prices[id].history.map(price => price[1].toFixed(2))
+            // get max max price
+            const max = prices.sort((x, y) => y - x)[0]
+            // calculate the ratio betwenn the "current price" (prices[index]) and the max price
+            const ratio = Math.round(prices[index] / (max / 100))
+            // since the price differences are rather small, the ratio is multilied for better visualization
+            return ratio * 2
+        },
         init() {
             const periods = [0, 7, 30]
 
@@ -598,7 +656,7 @@ export default {
                 this.getPrices('bitcoin', period)
                 this.getPrices('ethereum', period)
             }
-        }
+        },
     },
     mounted() {
         this.init()
@@ -607,11 +665,11 @@ export default {
 </script>
 
 <style>
-.stakes {
+.bar {
     display: inline-block;
     background-color: purple;
-    height: 100px;
-    width: 52px;
+    width: 24px;
+    writing-mode: vertical-rl;
 }
 .dot {
     display: inline-block;
