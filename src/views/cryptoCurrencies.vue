@@ -18,7 +18,7 @@
                         <v-switch
                             v-model="states.bitcoin"
                             label="BTC"
-                            color="purple-accent-2"
+                            color="purple"
                         >
                         </v-switch>
                     </v-col>
@@ -172,7 +172,7 @@
                         <v-btn v-if="states.bitcoin"
                             block
                             class="text-none text-black my-4"
-                            color="purple-accent-2"
+                            color="purple"
                             size="x-large"
                             variant="flat"
                             >
@@ -299,7 +299,7 @@
                                         v-if="prices.bitcoin.history"
                                         title="Sort by Price"
                                         label
-                                        class="mx-2 bg-purple-accent-2"
+                                        class="mx-2 bg-purple"
                                         @click="prices.bitcoin.history.sort((a, b) => b[1] - a[1])"
                                         >
                                         <template v-slot:prepend>
@@ -390,7 +390,7 @@
                         <v-divider></v-divider>
                         <!-- vertical margin diretions get exchanged due to rotation; e.g. mb === mt and vice versa -->
                         <v-row class="ma-4" style="transform: rotate(180deg);">
-                            <div v-for="(values, index) in prices.bitcoin.history" :key="index" class="bar ml-2 mt-4" :style="{ height: `${barHeight('bitcoin', index)}px` }">
+                            <div v-for="(values, index) in prices.bitcoin.history" :key="index" class="bar bg-purple ml-2 mt-4" :style="{ height: `${barHeight('bitcoin', index)}px`}">
                                 <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }}</span>
                             </div>
                         </v-row>
@@ -411,7 +411,7 @@
                         <v-divider></v-divider>
                         <!-- vertical margin diretions get exchanged due to rotation; e.g. mb === mt and vice versa -->
                         <v-row class="ma-4" style="transform: rotate(180deg);">
-                            <div v-for="(values, index) in prices.ethereum.history" :key="index" class="bar ml-2 mt-4" :style="{ height: `${barHeight('ethereum', index)}px` }">
+                            <div v-for="(values, index) in prices.ethereum.history" :key="index" class="bar bg-blue ml-2 mt-4" :style="{ height: `${barHeight('ethereum', index)}px`}">
                                 <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }}</span>
                             </div>
                         </v-row>
@@ -646,6 +646,7 @@ export default {
             const max = prices.sort((x, y) => y - x)[0]
             // calculate the ratio betwenn the "current price" (prices[index]) and the max price
             const ratio = Math.round(prices[index] / (max / 100))
+            console.log(index, prices[index], ratio)
             // since the price differences are rather small, the ratio is multilied for better visualization
             return ratio * 2
         },
@@ -667,7 +668,6 @@ export default {
 <style>
 .bar {
     display: inline-block;
-    background-color: purple;
     width: 24px;
     writing-mode: vertical-rl;
 }
