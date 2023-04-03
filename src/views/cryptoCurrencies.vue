@@ -555,38 +555,41 @@ export default {
                     }
                     // ... otherwise get a single course; either the current course (today)
                     if (period === 0) {
-                        if (id === 'bitcoin') {
-                            const { bitcoin } = data
-                            const { eur } = bitcoin
+                        const { bitcoin, ethereum } = data
 
-                            this.prices[id].current = Math.round(eur)
-                        }
-                        else {
-                            const { ethereum } = data
-                            const { eur } = ethereum
+                        const { eur } = id === 'bitcoin'
+                            ? bitcoin
+                            : ethereum
 
-                            this.prices[id].current = Math.round(eur)
-                        }
+                        this.prices[id].current = Math.round(eur)
                     }
                     // ...or the past course according to the period given
                     else {
-                        const { market_data } = data
-                        const { current_price } = market_data
-                        const { eur } = current_price
-
-                        switch (period) {
-                            case 7:
-                                this.prices[id].week = Math.round(eur)
-                            break
-                            case 30:
-                                this.prices[id].month = Math.round(eur)
-                            break
-                            default:
-                                this.prices[id].anytime = Math.round(eur)
-                        }
+                        this.getPriceByPeriod(id, period, data)
                     }
                 })
                 .catch((err) => console.error(`Server error: ${err.message}`))
+        },
+        /*
+            @param id <String>
+            @param period <Integer>
+            @param data <Object>
+        */
+        getPriceByPeriod(id, period, data) {
+            const { market_data } = data
+                const { current_price } = market_data
+                const { eur } = current_price
+
+                switch (period) {
+                    case 7:
+                        this.prices[id].week = Math.round(eur)
+                    break
+                    case 30:
+                        this.prices[id].month = Math.round(eur)
+                    break
+                    default:
+                        this.prices[id].anytime = Math.round(eur)
+                }
         },
         init() {
             const periods = [0, 7, 30]
