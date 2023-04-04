@@ -3,14 +3,7 @@
         <ComponentHeader />
 
         <v-main>
-<!-- Controls -->
-            <ControlPanel
-                :states="states"
-                :prices="prices"
-                @update-price="updatePrice()"
-            />
-<!-- Controls end -->
-
+            <ControlPanel :states="states" :prices="prices" @update-price="updatePrice()" />
 <!-- Main View -->
             <v-container fluid>
                 <v-row justify="space-around">
@@ -221,53 +214,7 @@
 <!-- Price history ETH end -->
                 </v-row>
 
-                <v-row justify="space-around">
-<!-- Price chart BTC -->
-                    <v-card v-if="states.chart && states.bitcoin && prices.bitcoin.history" class="ma-8" height="auto" width="auto">
-                        <v-card-title class="small-caps bg-grey">
-                            <v-btn class="bg-grey" elevation="0">
-                                <template v-slot:prepend>
-                                    <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
-                                </template>
-                            </v-btn>
-                            Price Chart
-                        </v-card-title>
-
-                        <v-divider></v-divider>
-                        <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
-                        <v-row class="swap-vertical ma-4">
-                            <div v-for="(values, index) in prices.bitcoin.history" :key="index"
-                                class="bar bg-purple ml-2" :style="{ height: getBarHeight('bitcoin', values[1]) + 'px'}">
-
-                                <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }} €</span>
-                            </div>
-                        </v-row>
-                    </v-card>
-<!-- Price chart BTC end -->
-
-<!-- Price chart ETH -->
-                    <v-card v-if="states.chart && states.ethereum && prices.ethereum.history" class="ma-8" height="auto" width="auto">
-                        <v-card-title class="small-caps bg-grey">
-                            <v-btn class="bg-grey" elevation="0">
-                                <template v-slot:prepend>
-                                    <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
-                                </template>
-                            </v-btn>
-                            Price Chart
-                        </v-card-title>
-
-                        <v-divider></v-divider>
-                        <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
-                        <v-row class="swap-vertical ma-4">
-                            <div v-for="(values, index) in prices.ethereum.history" :key="index"
-                                class="bar bg-blue ml-2" :style="{ height: getBarHeight('ethereum', values[1]) + 'px'}">
-
-                                <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }} €</span>
-                            </div>
-                        </v-row>
-                    </v-card>
-<!-- Price chart ETH end -->
-                </v-row>
+                <PriceChart :states="states" :prices="prices" />
             </v-container>
 <!-- Main View end -->
         </v-main>
@@ -280,6 +227,7 @@
 import ComponentHeader from '@/components/ComponentHeader.vue'
 import ComponentFooter from '@/components/ComponentFooter.vue'
 import ControlPanel from '@/components/ControlPanel.vue'
+import PriceChart from '@/components/PriceChart.vue'
 
 export default {
     name: 'CryptoCurrencies',
@@ -287,6 +235,7 @@ export default {
         ComponentHeader,
         ComponentFooter,
         ControlPanel,
+        PriceChart,
     },
     data() {
         return {
@@ -492,27 +441,6 @@ export default {
                 default:
                     this.prices[id].anytime = Math.round(eur)
             }
-        },
-        /*
-            get individual bar heights in pixels
-
-            @param id <String> e.g 'bitcoin' || 'ethereum'
-            @param price <Integer>
-
-            @return <Integer>
-        */
-       // TODO :: sort of sloppy; needs a better logical approach
-        getBarHeight(id, price) {
-            // add a minimum height for each bar
-            const minHeight = 100
-
-            return id === 'bitcoin'
-                ? price < 2000
-                    ? (price / 20) + minHeight
-                    : price / 200
-                : price < 2000
-                    ? (price / 10) + minHeight
-                    : price / 20
         },
         /*
             Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue
