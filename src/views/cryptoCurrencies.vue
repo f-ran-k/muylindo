@@ -3,7 +3,7 @@
         <ComponentHeader />
 
         <v-main>
-            <ControlPanel :states="states" :prices="prices" @update-price="updatePrice()" />
+            <ControlPanel :prices="prices" :states="states" @update-price="updatePrice()" />
 <!-- Main View -->
             <v-container fluid>
                 <v-row justify="space-around">
@@ -116,105 +116,10 @@
                         </v-table>
                     </v-card>
 <!-- Single courses ETH end -->
-
-<!-- Price history BTC -->
-                    <v-table v-if="states.history && states.bitcoin && prices.bitcoin.history"
-                        fixed-header
-                        class="mt-8"
-                        height="600px"
-                    >
-                        <thead>
-                            <tr class="small-caps">
-                                <th class="bg-grey ">
-                                    <v-btn class="bg-grey mx-4" elevation="0">
-                                        <template v-slot:prepend>
-                                            <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
-                                        </template>
-                                    </v-btn>
-                                </th>
-
-                                <th colspan="2" class="bg-grey text-h6">Price History</th>
-                            </tr>
-
-                            <tr class="small-caps">
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Course
-                                    <v-chip
-                                        v-if="prices.bitcoin.history"
-                                        class="mx-2"
-                                        label
-                                        title="Sort by Course"
-                                        @click="prices.bitcoin.history.sort((a, b) => b[1] - a[1])"
-                                        >
-                                        <template v-slot:prepend>
-                                            <img alt="Sort" src="@/assets/icons/IconSort.svg" width="30" height="30" />
-                                        </template>
-                                    </v-chip>
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr v-for="n in prices.bitcoin.history" :key="n">
-                                <td>{{ getDateFormat(0, n[0]) }}</td>
-                                <td>{{ getTime(n[0]) }}</td>
-                                <td>{{ +(n[1]).toFixed(2) }} €</td>
-                            </tr>
-                        </tbody>
-                    </v-table>
-<!-- Price history BTC end -->
-
-<!-- Price history ETH -->
-                    <v-table v-if="states.history && states.ethereum && prices.ethereum.history"
-                        fixed-header
-                        class="mt-8"
-                        height="600px"
-                    >
-                        <thead>
-                            <tr class="small-caps">
-                                <th class="bg-grey ">
-                                    <v-btn class="bg-grey mx-4" elevation="0">
-                                        <template v-slot:prepend>
-                                            <img alt="Bitcoin" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
-                                        </template>
-                                    </v-btn>
-                                </th>
-
-                                <th colspan="2" class="bg-grey text-h6">Price History</th>
-                            </tr>
-
-                            <tr class="small-caps">
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Course
-                                    <v-chip
-                                        v-if="prices.ethereum.history"
-                                        class="mx-2"
-                                        label
-                                        title="Sort by Course"
-                                        @click="prices.ethereum.history.sort((a, b) => b[1] - a[1])"
-                                        >
-                                        <template v-slot:prepend>
-                                            <img alt="Sort" src="@/assets/icons/IconSort.svg" width="30" height="30" />
-                                        </template>
-                                    </v-chip>
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr v-for="n in prices.ethereum.history" :key="n">
-                                <td>{{ getDateFormat(0, n[0]) }}</td>
-                                <td>{{ getTime(n[0]) }}</td>
-                                <td>{{ +(n[1]).toFixed(2) }} €</td>
-                            </tr>
-                        </tbody>
-                    </v-table>
-<!-- Price history ETH end -->
+                    <PriceHistory :prices="prices" :states="states" :dateFormat="getDateFormat" />
                 </v-row>
 
-                <PriceChart :states="states" :prices="prices" />
+                <PriceChart :prices="prices" :states="states" />
             </v-container>
 <!-- Main View end -->
         </v-main>
@@ -225,17 +130,19 @@
 
 <script>
 import ComponentHeader from '@/components/ComponentHeader.vue'
-import ComponentFooter from '@/components/ComponentFooter.vue'
 import ControlPanel from '@/components/ControlPanel.vue'
+import PriceHistory from '@/components/PriceHistory.vue'
 import PriceChart from '@/components/PriceChart.vue'
+import ComponentFooter from '@/components/ComponentFooter.vue'
 
 export default {
     name: 'CryptoCurrencies',
     components: {
         ComponentHeader,
-        ComponentFooter,
         ControlPanel,
+        PriceHistory,
         PriceChart,
+        ComponentFooter,
     },
     data() {
         return {
@@ -338,16 +245,6 @@ export default {
             const differenceTime = currentDate.getTime() - pastDate.getTime()
             // calculate the number of days ==> ms * sec * min * h
             return Math.round(differenceTime / (1000 * 60 * 60 * 24) - 1)
-        },
-        /*
-            extract the time portion from the date, e.g. 09:22:35
-
-            @param timestamp <Integer>
-
-            @return <String>
-        */
-        getTime(timestamp) {
-            return new Date(timestamp).toTimeString().slice(0, 8)
         },
         /*
             get time in seconds
