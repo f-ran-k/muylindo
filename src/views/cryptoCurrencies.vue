@@ -151,18 +151,17 @@
 <!-- Main View -->
             <v-container fluid>
                 <v-row justify="space-around">
-<!-- Single courses BTC -->
-                    <v-card v-if="states.bitcoin || states.ethereum"
-                        class="ma-8" height="auto" width="auto">
-                        <v-card-title class="small-caps bg-grey">
+                    <v-card v-if="states.bitcoin || states.ethereum" height="auto" width="auto">
+                        <v-card-title class="small-caps my-2">
                             Currency courses
                         </v-card-title>
 
                         <v-divider></v-divider>
 
+<!-- Single courses BTC -->
                         <v-btn v-if="states.bitcoin"
                             block
-                            class="text-none text-black"
+                            class="text-black"
                             color="purple"
                             size="x-large"
                             variant="flat"
@@ -175,16 +174,15 @@
                         </v-btn>
 
                         <v-table v-if="states.bitcoin"
-                            bordered
                             fixed-header
-                            height="120px"
                         >
                             <thead>
-                                <tr class="small-caps">
-                                    <th class="text-left">Today</th>
-                                    <th v-if="states.week" class="text-left">Change (week)</th>
-                                    <th v-if="states.month" class="text-left">Change (month)</th>
-                                    <th v-if="states.anytime" class="text-left">Change ({{ getDateFormat(getDayDifference()) }})</th>
+                                <tr class="small-caps text-left">
+                                    <th>Today</th>
+                                    <th v-if="states.week">Change (week)</th>
+                                    <th v-if="states.month">Change (month)</th>
+
+                                    <th v-if="states.anytime">Change ({{ getDateFormat(getDayDifference()) }})</th>
                                 </tr>
                             </thead>
 
@@ -214,7 +212,7 @@
 <!-- Single courses ETH -->
                         <v-btn v-if="states.ethereum"
                             block
-                            class="text-none text-black my-4"
+                            class="text-black"
                             color="blue"
                             size="x-large"
                             variant="flat"
@@ -227,16 +225,15 @@
                         </v-btn>
 
                         <v-table v-if="states.ethereum"
-                            bordered
                             fixed-header
-                            height="120px"
                         >
                             <thead>
-                                <tr class="small-caps">
-                                    <th class="text-left">Today</th>
-                                    <th v-if="states.week" class="text-left">Change (week)</th>
-                                    <th v-if="states.month" class="text-left">Change (month)</th>
-                                    <th v-if="states.anytime" class="text-left">Change ({{ getDateFormat(getDayDifference()) }})</th>
+                                <tr class="small-caps text-left">
+                                    <th>Today</th>
+                                    <th v-if="states.week">Change (week)</th>
+                                    <th v-if="states.month">Change (month)</th>
+
+                                    <th v-if="states.anytime">Change ({{ getDateFormat(getDayDifference()) }})</th>
                                 </tr>
                             </thead>
 
@@ -267,35 +264,34 @@
 <!-- Price history BTC -->
                     <v-table v-if="states.history && prices.bitcoin.history"
                         fixed-header
-                        height="600px"
                         class="mt-8"
                     >
                         <thead>
-                            <tr>
-                                <th class="bg-grey">
-                                    <v-btn class="mx-2 bg-grey" elevation="0">
+                            <tr class="bg-grey small-caps text-left">
+                                <th>
+                                    <v-btn class="mx-4" elevation="0">
                                         <template v-slot:prepend>
                                             <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
 
-                                <th colspan="2" class="text-left text-h6 small-caps bg-grey">Price History</th>
+                                <th colspan="2" class="text-h6">Price History</th>
                             </tr>
 
-                            <tr>
-                                <th class="text-left small-caps">Date</th>
-                                <th class="text-left small-caps">Time</th>
-                                <th class="text-left small-caps">Course
+                            <tr class="text-left small-caps">
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Course
                                     <v-chip
                                         v-if="prices.bitcoin.history"
-                                        title="Sort by Price"
-                                        label
                                         class="mx-2 bg-purple"
+                                        label
+                                        title="Sort by Price"
                                         @click="prices.bitcoin.history.sort((a, b) => b[1] - a[1])"
                                         >
                                         <template v-slot:prepend>
-                                            <img alt="Sort" src="@/assets/icons/IconSort.svg" width="32" height="32" />
+                                            <img alt="Sort" src="@/assets/icons/IconSort.svg" width="30" height="30" />
                                         </template>
                                     </v-chip>
                                 </th>
@@ -303,11 +299,7 @@
                         </thead>
 
                         <tbody>
-                            <tr
-                                v-for="n in prices.bitcoin.history"
-                                :key="n"
-                                class="text-left"
-                                >
+                            <tr v-for="n in prices.bitcoin.history" :key="n">
                                 <td>{{ getDateFormat(0, n[0]) }}</td>
                                 <td>{{ getTime(n[0]) }}</td>
                                 <td>{{ +(n[1]).toFixed(2) }} €</td>
@@ -319,35 +311,34 @@
 <!-- Price history ETH -->
                     <v-table v-if="states.history && prices.ethereum.history"
                         fixed-header
-                        height="600px"
                         class="mt-8"
                     >
                         <thead>
-                            <tr>
-                                <th class="bg-grey">
-                                    <v-btn class="mx-2 bg-grey" elevation="0">
+                            <tr class="bg-grey small-caps text-left">
+                                <th>
+                                    <v-btn class="mx-4" elevation="0">
                                         <template v-slot:prepend>
                                             <img alt="Bitcoin" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
 
-                                <th colspan="2" class="text-left text-h6 small-caps bg-grey">Price History</th>
+                                <th colspan="2" class="text-h6">Price History</th>
                             </tr>
 
-                            <tr>
-                                <th class="text-left small-caps">Date</th>
-                                <th class="text-left small-caps">Time</th>
-                                <th class="text-left small-caps">Course
+                            <tr class="text-left small-caps">
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Course
                                     <v-chip
                                         v-if="prices.ethereum.history"
-                                        title="Sort by Price"
+                                        class="mx-2 bg-purple"
                                         label
-                                        class="mx-2 bg-blue"
+                                        title="Sort by Price"
                                         @click="prices.ethereum.history.sort((a, b) => b[1] - a[1])"
                                         >
                                         <template v-slot:prepend>
-                                            <img alt="Sort" src="@/assets/icons/IconSort.svg" width="32" height="32" />
+                                            <img alt="Sort" src="@/assets/icons/IconSort.svg" width="30" height="30" />
                                         </template>
                                     </v-chip>
                                 </th>
@@ -355,11 +346,7 @@
                         </thead>
 
                         <tbody>
-                            <tr
-                                v-for="n in prices.ethereum.history"
-                                :key="n"
-                                class="text-center"
-                                >
+                            <tr v-for="n in prices.ethereum.history" :key="n">
                                 <td>{{ getDateFormat(0, n[0]) }}</td>
                                 <td>{{ getTime(n[0]) }}</td>
                                 <td>{{ +(n[1]).toFixed(2) }} €</td>
@@ -371,21 +358,22 @@
 
                 <v-row>
 <!-- Price chart BTC -->
-                    <v-card v-if="states.chart && prices.ethereum.history" class="ma-8" height="auto" width="auto">
+                    <v-card v-if="states.chart && prices.bitcoin.history" class="ma-8" height="auto" width="auto">
                         <v-card-title class="small-caps bg-grey">
                             <v-btn class="bg-grey" elevation="0">
                                 <template v-slot:prepend>
-                                    <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="32" height="32" />
+                                    <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
                                 </template>
                             </v-btn>
                             Price Chart
-                        </v-card-title>    
+                        </v-card-title>
 
                         <v-divider></v-divider>
-                        <!-- vertical margin diretions get exchanged due to rotation; e.g. mb === mt and vice versa -->
+                        <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
                         <v-row class="ma-4" style="transform: rotate(180deg);">
                             <div v-for="(values, index) in prices.bitcoin.history" :key="index"
                                 class="bar bg-purple ml-2" :style="{ height: getBarHeight('bitcoin', values[1]) + 'px'}">
+
                                 <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }} €</span>
                             </div>
                         </v-row>
@@ -393,21 +381,22 @@
 <!-- Price chart BTC end -->
 
 <!-- Price chart ETH -->
-                    <v-card v-if="states.chart && prices.bitcoin.history" class="ma-8" height="auto" width="auto">
+                    <v-card v-if="states.chart && prices.ethereum.history" class="ma-8" height="auto" width="auto">
                         <v-card-title class="small-caps bg-grey">
                             <v-btn class="bg-grey" elevation="0">
                                 <template v-slot:prepend>
-                                    <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="32" height="32" />
+                                    <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
                                 </template>
                             </v-btn>
                             Price Chart
-                        </v-card-title>    
+                        </v-card-title>
 
                         <v-divider></v-divider>
-                        <!-- vertical margin diretions get exchanged due to rotation; e.g. mb === mt and vice versa -->
+                        <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
                         <v-row class="ma-4" style="transform: rotate(180deg);">
                             <div v-for="(values, index) in prices.ethereum.history" :key="index"
                                 class="bar bg-blue ml-2" :style="{ height: getBarHeight('ethereum', values[1]) + 'px'}">
+
                                 <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }} €</span>
                             </div>
                         </v-row>
