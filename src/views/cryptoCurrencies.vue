@@ -505,7 +505,7 @@ export default {
 
             if (period !== 0) date.setDate(date.getDate() - period)
 
-            // if <url> ist set, the format has to comply with the API specs
+            // if <url> ist set, the format has to comply with the API specs; e.g. DD-MM-YYYY || YYYY-MM-DD if not
             return url
                 ? `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
                 : `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
@@ -548,8 +548,7 @@ export default {
             return [Math.floor(currentDate), Math.floor(pastDate)]
         },
         /*
-            calculate the ratio between the current price and the past one
-            and set either percentage state
+            calculate the ratio between the current price and the past one to set either percentage state
 
             @param currentprice <Float>
             @param pastPrice <Float>
@@ -569,7 +568,7 @@ export default {
         /*
             fetch data from coinGecko
 
-            @param id <String> :: denotes the currency; e.g. bitcoin
+            @param id <String> :: denotes the currency; e.g. bitcoin || ethereum
             @param period <Integer> :: past time; e.g. 0 === current | 7 === last week | 30 === last month
             @param range <Array>
         */
