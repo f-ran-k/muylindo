@@ -125,7 +125,7 @@
 <!-- Single courses ETH end -->
 
 <!-- Price history BTC -->
-                    <v-table v-if="states.history && prices.bitcoin.history"
+                    <v-table v-if="states.history && states.bitcoin && prices.bitcoin.history"
                         fixed-header
                         class="mt-8"
                         height="600px"
@@ -173,7 +173,7 @@
 <!-- Price history BTC end -->
 
 <!-- Price history ETH -->
-                    <v-table v-if="states.history && prices.ethereum.history"
+                    <v-table v-if="states.history && states.ethereum && prices.ethereum.history"
                         fixed-header
                         class="mt-8"
                         height="600px"
@@ -223,7 +223,7 @@
 
                 <v-row justify="space-around">
 <!-- Price chart BTC -->
-                    <v-card v-if="states.chart && prices.bitcoin.history" class="ma-8" height="auto" width="auto">
+                    <v-card v-if="states.chart && states.bitcoin && prices.bitcoin.history" class="ma-8" height="auto" width="auto">
                         <v-card-title class="small-caps bg-grey">
                             <v-btn class="bg-grey" elevation="0">
                                 <template v-slot:prepend>
@@ -246,7 +246,7 @@
 <!-- Price chart BTC end -->
 
 <!-- Price chart ETH -->
-                    <v-card v-if="states.chart && prices.ethereum.history" class="ma-8" height="auto" width="auto">
+                    <v-card v-if="states.chart && states.ethereum && prices.ethereum.history" class="ma-8" height="auto" width="auto">
                         <v-card-title class="small-caps bg-grey">
                             <v-btn class="bg-grey" elevation="0">
                                 <template v-slot:prepend>

@@ -89,6 +89,7 @@
                     v-model="localStates.history"
                     color="blue-grey"
                     :label="localStates.history ? 'Hide' : 'Show'"
+                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
                 >
                 </v-switch>
             </v-col>
@@ -117,6 +118,7 @@
                     v-model="localStates.chart"
                     color="blue-grey"
                     :label="localStates.chart ? 'Hide' : 'Show'"
+                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
                 >
                 </v-switch>
             </v-col>
