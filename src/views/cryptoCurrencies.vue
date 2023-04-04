@@ -4,148 +4,11 @@
 
         <v-main>
 <!-- Controls -->
-            <v-navigation-drawer height="auto" width="400">
-                <v-list>
-                    <v-list-item class="bg-grey text-h6 small-caps">Controls</v-list-item>
-                </v-list>
-
-                <v-divider class="mb-4"></v-divider>
-<!-- Currency -->
-                <span class="small-caps ml-4">Select a currency</span>
-
-                <v-row class="ml-4">
-                    <v-col>
-                        <v-switch
-                            v-model="states.bitcoin"
-                            label="BTC"
-                            color="purple"
-                        >
-                        </v-switch>
-                    </v-col>
-
-                    <v-col>
-                        <v-switch
-                            v-model="states.ethereum"
-                            label="ETH"
-                            color="blue"
-                        >
-                        </v-switch>
-                    </v-col>
-                </v-row>
-<!-- Currency end -->
-                <v-divider class="mb-4"></v-divider>
-<!-- Period -->
-                <span class="small-caps ml-4">Select a period</span>
-
-                <v-row class="ml-4">
-                    <v-col>
-                        <v-switch
-                            v-model="states.week"
-                            label="Last week"
-                            color="cyan"
-                            >
-                        </v-switch>
-                    </v-col>
-                    
-                    <v-col>
-                        <v-switch
-                            v-model="states.month"
-                            label="Last month"
-                            color="cyan"
-                            >
-                        </v-switch>
-                    </v-col>
-                </v-row>
-<!-- Date Picker -->
-                <span class="small-caps ml-4">Select a date</span>
-
-                <v-row class="ml-4">
-                    <v-col>
-                        <v-switch
-                            v-model="states.anytime"
-                            :label="states.anytime ? 'Hide' : 'Show'"
-                            color="cyan"
-                        >
-                        </v-switch>
-                    </v-col>
-
-                    <v-col v-if="states.anytime">
-                        <v-form @submit.prevent>
-                            <input id="datetime" type="date" value="2023-01-01" />
-
-                            <v-btn
-                                class="small-caps"
-                                color="grey"
-                                size="small"
-                                title="Send"
-                                @click="
-                                    getPrices('bitcoin', getDayDifference());
-                                    getPrices('ethereum', getDayDifference());
-                                    getPrices('bitcoin', 100, getTimeRange());
-                                    getPrices('ethereum', 100, getTimeRange())"
-                                >Go
-                            </v-btn>
-                        </v-form>
-                    </v-col>
-                </v-row>
-<!-- Date Picker && Period end -->
-                <v-divider class="mb-4"></v-divider>
-<!-- History -->
-                <span class="small-caps ml-4">Price History</span>
-
-                <v-row class="ml-4">
-                    <v-col>
-                        <v-switch
-                            v-model="states.history"
-                            color="blue-grey"
-                            :label="states.history ? 'Hide' : 'Show'"
-                        >
-                        </v-switch>
-                    </v-col>
-                </v-row>
-
-                <v-row v-if="states.history && !prices.bitcoin.history" class="ma-4 mt-0">
-                    <v-col>
-                        <v-alert
-                            border="start"
-                            border-color="warning"
-                            elevation="2"
-                            title="NO DATA FETCHED YET!"
-                        >
-                        Please select a date from the date picker above to display the price history.
-                        </v-alert>
-                    </v-col>
-                </v-row>
-<!-- History end -->
-                <v-divider class="mb-4"></v-divider>
-<!-- Chart -->
-                <span class="small-caps ml-4">Price Chart</span>
-
-                <v-row class="ml-4">
-                    <v-col>
-                        <v-switch
-                            v-model="states.chart"
-                            color="blue-grey"
-                            :label="states.chart ? 'Hide' : 'Show'"
-                        >
-                        </v-switch>
-                    </v-col>
-                </v-row>
-
-                <v-row v-if="states.chart && !prices.bitcoin.history" class="ma-4">
-                    <v-col>
-                        <v-alert
-                            border="start"
-                            border-color="warning"
-                            elevation="2"
-                            title="NO DATA FETCHED YET!"
-                        >
-                        Please select a date from the date picker above to display the price chart.
-                        </v-alert>
-                    </v-col>
-                </v-row>
-<!-- Chart end -->
-            </v-navigation-drawer>
+            <ControlPanel
+                :states="states"
+                :prices="prices"
+                @update-price="updatePrice()"
+            />
 <!-- Controls end -->
 
 <!-- Main View -->
@@ -416,12 +279,14 @@
 <script>
 import ComponentHeader from '@/components/ComponentHeader.vue'
 import ComponentFooter from '@/components/ComponentFooter.vue'
+import ControlPanel from '@/components/ControlPanel.vue'
 
 export default {
     name: 'CryptoCurrencies',
     components: {
         ComponentHeader,
-        ComponentFooter
+        ComponentFooter,
+        ControlPanel,
     },
     data() {
         return {
@@ -468,7 +333,7 @@ export default {
     },
     methods: {
         /*
-            compose API URL
+            compose API URL            test: false,
 
             @param id <String>
             @param period <Integer>
@@ -642,12 +507,21 @@ export default {
             const minHeight = 100
 
             return id === 'bitcoin'
-                ? price < 1000
+                ? price < 2000
                     ? (price / 20) + minHeight
                     : price / 200
                 : price < 2000
                     ? (price / 10) + minHeight
                     : price / 20
+        },
+        /*
+            Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue
+        */
+        updatePrice() {
+            this.getPrices('bitcoin', this.getDayDifference())
+            this.getPrices('ethereum', this.getDayDifference())
+            this.getPrices('bitcoin', 100, this.getTimeRange())
+            this.getPrices('ethereum', 100, this.getTimeRange())
         },
         // start out ...
         init() {
