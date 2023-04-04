@@ -151,7 +151,7 @@
 <!-- Main View -->
             <v-container fluid>
                 <v-row justify="space-around">
-                    <v-card v-if="states.bitcoin || states.ethereum" height="auto" width="auto">
+                    <v-card v-if="states.bitcoin || states.ethereum" class="mt-8" height="auto" width="auto">
                         <v-card-title class="small-caps my-2">
                             Currency courses
                         </v-card-title>
@@ -177,7 +177,7 @@
                             fixed-header
                         >
                             <thead>
-                                <tr class="small-caps text-left">
+                                <tr class="small-caps">
                                     <th>Today</th>
                                     <th v-if="states.week">Change (week)</th>
                                     <th v-if="states.month">Change (month)</th>
@@ -228,7 +228,7 @@
                             fixed-header
                         >
                             <thead>
-                                <tr class="small-caps text-left">
+                                <tr class="small-caps">
                                     <th>Today</th>
                                     <th v-if="states.week">Change (week)</th>
                                     <th v-if="states.month">Change (month)</th>
@@ -265,27 +265,28 @@
                     <v-table v-if="states.history && prices.bitcoin.history"
                         fixed-header
                         class="mt-8"
+                        height="600px"
                     >
                         <thead>
-                            <tr class="bg-grey small-caps text-left">
-                                <th>
-                                    <v-btn class="mx-4" elevation="0">
+                            <tr class="small-caps">
+                                <th class="bg-grey ">
+                                    <v-btn class="bg-grey mx-4" elevation="0">
                                         <template v-slot:prepend>
                                             <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
 
-                                <th colspan="2" class="text-h6">Price History</th>
+                                <th colspan="2" class="bg-grey text-h6">Price History</th>
                             </tr>
 
-                            <tr class="text-left small-caps">
+                            <tr class="small-caps">
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Course
                                     <v-chip
                                         v-if="prices.bitcoin.history"
-                                        class="mx-2 bg-purple"
+                                        class="mx-2"
                                         label
                                         title="Sort by Price"
                                         @click="prices.bitcoin.history.sort((a, b) => b[1] - a[1])"
@@ -312,27 +313,28 @@
                     <v-table v-if="states.history && prices.ethereum.history"
                         fixed-header
                         class="mt-8"
+                        height="600px"
                     >
                         <thead>
-                            <tr class="bg-grey small-caps text-left">
-                                <th>
-                                    <v-btn class="mx-4" elevation="0">
+                            <tr class="small-caps">
+                                <th class="bg-grey ">
+                                    <v-btn class="bg-grey mx-4" elevation="0">
                                         <template v-slot:prepend>
                                             <img alt="Bitcoin" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
                                         </template>
                                     </v-btn>
                                 </th>
 
-                                <th colspan="2" class="text-h6">Price History</th>
+                                <th colspan="2" class="bg-grey text-h6">Price History</th>
                             </tr>
 
-                            <tr class="text-left small-caps">
+                            <tr class="small-caps">
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Course
                                     <v-chip
                                         v-if="prices.ethereum.history"
-                                        class="mx-2 bg-purple"
+                                        class="mx-2"
                                         label
                                         title="Sort by Price"
                                         @click="prices.ethereum.history.sort((a, b) => b[1] - a[1])"
@@ -356,7 +358,7 @@
 <!-- Price history ETH end -->
                 </v-row>
 
-                <v-row>
+                <v-row justify="space-around">
 <!-- Price chart BTC -->
                     <v-card v-if="states.chart && prices.bitcoin.history" class="ma-8" height="auto" width="auto">
                         <v-card-title class="small-caps bg-grey">
