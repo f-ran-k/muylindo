@@ -146,7 +146,6 @@ export default {
     },
     data() {
         return {
-            bulkLimit: 20,
             dot: {
                 name: 'dot',
                 margin: 'ml-2',
@@ -182,6 +181,7 @@ export default {
                     current: null, week: null, month: null, anytime: null, history: null,
                 },
             },
+            records: 20,
             states: {
                 bitcoin: true, ethereum: true, week: true, month: true, anytime: false, history: false, chart: false,
             },
@@ -297,7 +297,7 @@ export default {
                     // get price history bulk data
                     if (range.length) {
                         const { prices } = data
-                        this.prices[id].history = prices.slice(0, this.bulkLimit)
+                        this.prices[id].history = prices.slice(0, this.records)
 
                         return
                     }

@@ -67,7 +67,7 @@
 
             <v-col cols="8" v-if="localStates.anytime" class="mt-4">
                 <v-form @submit.prevent>
-                    <input id="datetime" type="date" value="2023-01-01" />
+                    <input id="datetime" type="date" value="2023-01-01" :disabled="!(localStates.bitcoin || localStates.ethereum)" />
 
                     <v-btn
                         class="small-caps ml-2"
