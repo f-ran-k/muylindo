@@ -36,6 +36,7 @@
                     v-model="localStates.week"
                     label="Last week"
                     color="cyan"
+                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
                     >
                 </v-switch>
             </v-col>
@@ -45,6 +46,7 @@
                     v-model="localStates.month"
                     label="Last month"
                     color="cyan"
+                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
                     >
                 </v-switch>
             </v-col>
@@ -56,8 +58,9 @@
             <v-col cols="4">
                 <v-switch
                     v-model="localStates.anytime"
-                    :label="localStates.anytime ? 'Hide' : 'Show'"
                     color="cyan"
+                    :label="localStates.anytime ? 'Hide' : 'Show'"
+                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
                 >
                 </v-switch>
             </v-col>
@@ -71,6 +74,7 @@
                         color="grey"
                         size="small"
                         title="Send"
+                        :disabled="!(localStates.bitcoin || localStates.ethereum)"
                         @click="$emit('update-price')"
                         >
                         <span>Go</span>
