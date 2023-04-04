@@ -288,7 +288,7 @@
                                         v-if="prices.bitcoin.history"
                                         class="mx-2"
                                         label
-                                        title="Sort by Price"
+                                        title="Sort by Course"
                                         @click="prices.bitcoin.history.sort((a, b) => b[1] - a[1])"
                                         >
                                         <template v-slot:prepend>
@@ -336,7 +336,7 @@
                                         v-if="prices.ethereum.history"
                                         class="mx-2"
                                         label
-                                        title="Sort by Price"
+                                        title="Sort by Course"
                                         @click="prices.ethereum.history.sort((a, b) => b[1] - a[1])"
                                         >
                                         <template v-slot:prepend>
