@@ -370,7 +370,7 @@
 
                         <v-divider></v-divider>
                         <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
-                        <v-row class="ma-4" style="transform: rotate(180deg);">
+                        <v-row class="swap-vertical ma-4">
                             <div v-for="(values, index) in prices.bitcoin.history" :key="index"
                                 class="bar bg-purple ml-2" :style="{ height: getBarHeight('bitcoin', values[1]) + 'px'}">
 
@@ -393,7 +393,7 @@
 
                         <v-divider></v-divider>
                         <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
-                        <v-row class="ma-4" style="transform: rotate(180deg);">
+                        <v-row class="swap-vertical ma-4">
                             <div v-for="(values, index) in prices.ethereum.history" :key="index"
                                 class="bar bg-blue ml-2" :style="{ height: getBarHeight('ethereum', values[1]) + 'px'}">
 
@@ -676,8 +676,14 @@ export default {
     height: 16px;
     width: 16px;
 }
+.no-wrap {
+    white-space: nowrap;
+}
 .small-caps {
     font-variant: small-caps;
     font-weight: bold;
+}
+.swap-vertical {
+    transform: rotate(180deg);
 }
 </style>

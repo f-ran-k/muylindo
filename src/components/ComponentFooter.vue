@@ -1,7 +1,7 @@
 <template>
     <v-footer app>
         <v-container fill-height>
-            <v-row justify="center" class="small-caps">
+            <v-row justify="center" class="small-caps no-wrap">
                 <v-col>
                     <span>Build w/</span>
 
