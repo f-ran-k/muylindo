@@ -80,11 +80,14 @@
         </v-row>
 <!-- Date Picker && Period end -->
         <v-divider class="mb-4"></v-divider>
-<!-- History -->
-        <span class="small-caps ml-4">Price History</span>
+<!-- History && Chart -->
+        <v-row class="small-caps">
+            <v-col class="ml-4">Price History</v-col>
+            <v-col class="ml-4">Price Chart</v-col>
+        </v-row>
 
-        <v-row class="ml-4">
-            <v-col>
+        <v-row>
+            <v-col class="ml-4">
                 <v-switch
                     v-model="localStates.history"
                     color="blue-grey"
@@ -93,27 +96,8 @@
                 >
                 </v-switch>
             </v-col>
-        </v-row>
 
-        <v-row v-if="localStates.history && !localPrices.bitcoin.history" class="ma-4 mt-0">
-            <v-col>
-                <v-alert
-                    border="start"
-                    border-color="warning"
-                    elevation="2"
-                    title="NO DATA FETCHED YET!"
-                >
-                Please select a date from the date picker above to display the price history.
-                </v-alert>
-            </v-col>
-        </v-row>
-<!-- History end -->
-        <v-divider class="mb-4"></v-divider>
-<!-- Chart -->
-        <span class="small-caps ml-4">Price Chart</span>
-
-        <v-row class="ml-4">
-            <v-col>
+            <v-col class="ml-4">
                 <v-switch
                     v-model="localStates.chart"
                     color="blue-grey"
@@ -124,19 +108,18 @@
             </v-col>
         </v-row>
 
-        <v-row v-if="localStates.chart && !localPrices.bitcoin.history" class="ma-4">
-            <v-col>
-                <v-alert
-                    border="start"
-                    border-color="warning"
-                    elevation="2"
-                    title="NO DATA FETCHED YET!"
-                >
-                Please select a date from the date picker above to display the price chart.
-                </v-alert>
-            </v-col>
+        <v-row v-if="(localStates.history || localStates.chart) && !localPrices.bitcoin.history" class="ma-4 mt-0">
+            <v-alert
+                border="start"
+                border-color="warning"
+                elevation="2"
+                title="NO DATA FETCHED YET!"
+            >
+                Please select a date from the date picker above to display the price history and chart.
+            </v-alert>
         </v-row>
-<!-- Chart end -->
+<!-- History && Chart end -->
+        <v-divider class="mb-4"></v-divider>
     </v-navigation-drawer>
 </template>
 
