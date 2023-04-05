@@ -3,9 +3,9 @@
         <ComponentHeader @toggle-theme="toggleTheme()" />
 
         <v-main>
-            <ControlPanel :prices="prices" :states="states" @update-price="updatePrice()" />
-<!-- Main View -->
             <v-container fluid>
+                <ControlPanel :prices="prices" :states="states" @update-price="updatePrice()" />
+    <!-- Main View -->
                 <v-row justify="space-around">
                     <v-card v-if="states.bitcoin || states.ethereum" class="mt-8" height="auto" width="auto">
                         <v-card-title class="small-caps my-2">

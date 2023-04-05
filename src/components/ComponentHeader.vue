@@ -1,22 +1,22 @@
 <template>
-    <v-app-bar elevated>
-        <v-app-bar-title class="small-caps text-h5">Crypto currency</v-app-bar-title>
+    <v-app-bar>
+        <v-app-bar-title class="small-caps">Crypto currency</v-app-bar-title>
 
-        <template v-slot:prepend>
-            <img title="Crypto currency" alt="Coin" src="@/assets/icons/IconCoin.svg" width="40" height="40" />
-        </template>
+            <template v-slot:prepend>
+                <img title="Crypto currency" alt="Coin" src="@/assets/icons/IconCoin.svg" width="40" height="40" />
+            </template>
 
-        <v-spacer></v-spacer><v-spacer></v-spacer><v-spacer></v-spacer>
+            <template v-slot:append>
+                <v-switch
+                    class="small-caps mt-4"
+                    color="blue-grey"
+                    title="Switch Theme"
+                    @click="$emit('toggle-theme')"
+                    >
+                </v-switch>
 
-        <v-row>
-            <v-switch
-                class="small-caps mt-4"
-                color="blue-grey"
-                label="Toggle Theme"
-                @click="$emit('toggle-theme')"
-                >
-            </v-switch>
-        </v-row>
+                <img class="mx-4" alt="Coin" src="@/assets/icons/IconMoon.svg" width="30" height="30" />
+            </template>
     </v-app-bar>
 </template>
 
