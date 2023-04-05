@@ -1,6 +1,6 @@
 <template>
-    <v-app theme="dark">
-        <ComponentHeader />
+    <v-app :theme="theme">
+        <ComponentHeader @toggle-theme="toggleTheme()" />
 
         <v-main>
             <ControlPanel :prices="prices" :states="states" @update-price="updatePrice()" />
@@ -185,6 +185,7 @@ export default {
             states: {
                 bitcoin: true, ethereum: true, week: true, month: true, anytime: false, history: false, chart: false,
             },
+            theme: 'dark',
         }
     },
     methods: {
@@ -347,6 +348,9 @@ export default {
             this.getPrices('ethereum', this.getDayDifference())
             this.getPrices('bitcoin', 100, this.getTimeRange())
             this.getPrices('ethereum', 100, this.getTimeRange())
+        },
+        toggleTheme() {
+            this.theme = this.theme === 'dark' ? 'light' : 'dark'
         },
         // start out ...
         init() {
