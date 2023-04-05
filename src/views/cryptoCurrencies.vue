@@ -190,7 +190,7 @@ export default {
     },
     methods: {
         /*
-            compose API URL            test: false,
+            compose API URL
 
             @param id <String>
             @param period <Integer>
