@@ -33,7 +33,7 @@
                             fixed-header
                         >
                             <thead>
-                                <tr class="small-caps">
+                                <tr class="small-caps no-wrap">
                                     <th>Today</th>
                                     <th v-if="states.week">Change (week)</th>
                                     <th v-if="states.month">Change (month)</th>
@@ -43,7 +43,7 @@
                             </thead>
 
                             <tbody>
-                                <tr>
+                                <tr class="no-wrap">
                                     <td>{{ prices.bitcoin.current }} €</td>
 
                                     <td v-if="states.week">
@@ -84,7 +84,7 @@
                             fixed-header
                         >
                             <thead>
-                                <tr class="small-caps">
+                                <tr class="small-caps no-wrap">
                                     <th>Today</th>
                                     <th v-if="states.week">Change (week)</th>
                                     <th v-if="states.month">Change (month)</th>
@@ -94,7 +94,7 @@
                             </thead>
 
                             <tbody>
-                                <tr>
+                                <tr class="no-wrap">
                                     <td>{{ prices.ethereum.current }} €</td>
 
                                     <td v-if="states.week">
