@@ -2,10 +2,10 @@
     <v-app :theme="theme">
         <ComponentHeader @toggle-theme="toggleTheme()" />
 
+<!-- Main View -->
         <v-main>
             <v-container fluid>
                 <ControlPanel :prices="prices" :states="states" @update-price="updatePrice()" />
-    <!-- Main View -->
                 <v-row justify="space-around">
                     <v-card v-if="states.bitcoin || states.ethereum" class="mt-8" height="auto" width="auto">
                         <v-card-title class="small-caps my-2">
@@ -121,8 +121,8 @@
 
                 <PriceChart :prices="prices" :states="states" />
             </v-container>
-<!-- Main View end -->
         </v-main>
+<!-- Main View end -->
 
         <ComponentFooter />
     </v-app>
