@@ -15,7 +15,7 @@
                     >
                 </v-switch>
 
-                <img class="mx-4" alt="Coin" src="@/assets/icons/IconMoon.svg" width="30" height="30" />
+                <img class="mx-4" alt="Coin" src="@/assets/icons/IconMoon.svg" width="24" height="24" />
             </template>
     </v-app-bar>
 </template>

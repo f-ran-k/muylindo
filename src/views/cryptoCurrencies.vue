@@ -344,8 +344,10 @@ export default {
             Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue
         */
         updatePrice() {
+            // update courses (anytime)
             this.getPrices('bitcoin', this.getDayDifference())
             this.getPrices('ethereum', this.getDayDifference())
+            // update Price History
             this.getPrices('bitcoin', 100, this.getTimeRange())
             this.getPrices('ethereum', 100, this.getTimeRange())
         },
