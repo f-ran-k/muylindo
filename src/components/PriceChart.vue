@@ -1,7 +1,7 @@
 <template>
     <v-row justify="space-around">
         <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
-            <v-card v-if="chartStates.chart && chartStates[currency] && chartPrices[currency].history" class="ma-8" height="auto" width="auto">
+            <v-card v-if="chartStates.chart && chartStates[currency] && chartPrices[currency].history" class="ma-8" height="300" width="auto">
                 <v-card-title class="small-caps bg-grey">
                     <v-btn class="bg-grey" elevation="0">
                         <template v-slot:prepend>
