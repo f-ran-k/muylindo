@@ -3,6 +3,8 @@
         <v-list>
             <v-list-item class="bg-grey text-h6 small-caps">Controls</v-list-item>
         </v-list>
+
+        <v-divider class="mb-4"></v-divider>
 <!-- Currency -->
         <span class="small-caps ml-4">Select a currency</span>
 
