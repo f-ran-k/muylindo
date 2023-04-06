@@ -79,7 +79,7 @@ export default {
                 },
                 ethereum: {
                     altTag: 'Ethereum',
-                    path: 'src/assets/icons/IconEthereum.svg',
+                    path: '/src/assets/icons/IconEthereum.svg',
                 },
             },
             historyPrices: this.prices,

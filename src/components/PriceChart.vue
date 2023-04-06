@@ -52,7 +52,7 @@ export default {
                 ethereum: {
                     altTag: 'Ethereum',
                     color: 'bg-blue',
-                    path: 'src/assets/icons/IconEthereum.svg',
+                    path: '/src/assets/icons/IconEthereum.svg',
                 },
                 margin: 'ml-2',
             },

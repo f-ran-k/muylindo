@@ -94,7 +94,7 @@ export default {
                     altTag: 'Ethereum',
                     color: 'blue',
                     heading: 'Ethereum (Eth)',
-                    path: 'src/assets/icons/IconEthereum.svg',
+                    path: '/src/assets/icons/IconEthereum.svg',
                 },
             },
             dot: {
