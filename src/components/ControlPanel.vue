@@ -30,22 +30,12 @@
 <!-- Period -->
         <span class="small-caps ml-4">Select a period</span>
 
-        <v-row class="ml-4">
-            <v-col>
+        <v-row class="small-caps ml-4">
+            <v-col v-for="period in ['week', 'month']" :key="period">
                 <v-switch
-                    v-model="panelStates.week"
-                    label="Last week"
+                    v-model="panelStates[period]"
                     color="cyan"
-                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
-                    >
-                </v-switch>
-            </v-col>
-
-            <v-col>
-                <v-switch
-                    v-model="panelStates.month"
-                    label="Last month"
-                    color="cyan"
+                    :label="`Last ${period}`"   
                     :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
                     >
                 </v-switch>
@@ -55,7 +45,7 @@
         <span class="small-caps ml-4">Select a date</span>
 
         <v-row cols="12" class="ml-4">
-            <v-col cols="4">
+            <v-col cols="4" class="small-caps">
                 <v-switch
                     v-model="panelStates.anytime"
                     color="cyan"
@@ -77,7 +67,7 @@
                         :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
                         @click="$emit('update-price')"
                         >
-                        <span>Go</span>
+                        <span>Send</span>
                     </v-btn>
                 </v-form>
             </v-col>
@@ -91,28 +81,18 @@
         </v-row>
 
         <v-row>
-            <v-col class="ml-4">
+            <v-col class="small-caps ml-4" v-for="dataType in ['history', 'chart']" :key="dataType">
                 <v-switch
-                    v-model="panelStates.history"
+                    v-model="panelStates[dataType]"
                     color="blue-grey"
-                    :label="panelStates.history ? 'Hide' : 'Show'"
-                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
-                >
-                </v-switch>
-            </v-col>
-
-            <v-col class="ml-4">
-                <v-switch
-                    v-model="panelStates.chart"
-                    color="blue-grey"
-                    :label="panelStates.chart ? 'Hide' : 'Show'"
+                    :label="panelStates[dataType] ? 'Hide' : 'Show'"
                     :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
                 >
                 </v-switch>
             </v-col>
         </v-row>
 
-        <v-row v-if="(panelStates.history || panelStates.chart) && !panelPrices.bitcoin.history" class="ma-4 mt-0">
+        <v-row v-if="(panelStates.history || panelStates.chart) && !(panelPrices.bitcoin.history || panelPrices.ethereum.history)" class="ma-4 mt-0">
             <v-alert
                 border="start"
                 border-color="warning"
