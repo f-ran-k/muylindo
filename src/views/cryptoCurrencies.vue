@@ -1,148 +1,137 @@
 <template>
-    <v-app :theme="theme">
-        <ComponentHeader @toggle-theme="toggleTheme()" />
+    <ControlPanel :prices="prices" :states="states" @update-price="updatePrice()" />
 
-<!-- Main View -->
-        <v-main>
-            <v-container fluid>
-                <ControlPanel :prices="prices" :states="states" @update-price="updatePrice()" />
-                <v-row justify="space-around">
-                    <v-card v-if="states.bitcoin || states.ethereum" class="mt-8" height="auto" width="auto">
-                        <v-card-title class="small-caps my-2">
-                            Currency courses
-                        </v-card-title>
+    <v-main>
+        <v-container fluid>
+            <v-row justify="space-around">
+                <v-card v-if="states.bitcoin || states.ethereum" class="mt-8" height="auto" width="auto">
+                    <v-card-title class="small-caps my-2">
+                        Currency courses
+                    </v-card-title>
 
-                        <v-divider></v-divider>
-
+                    <v-divider></v-divider>
 <!-- Single courses BTC -->
-                        <v-btn v-if="states.bitcoin"
-                            block
-                            class="text-black"
-                            color="purple"
-                            size="x-large"
-                            variant="flat"
-                            >
-                            <template v-slot:prepend>
-                                <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
-                            </template>
-
-                            <span class="small-caps">Bitcoin (BTC)</span>
-                        </v-btn>
-
-                        <v-table v-if="states.bitcoin"
-                            fixed-header
+                    <v-btn v-if="states.bitcoin"
+                        block
+                        class="text-black"
+                        color="purple"
+                        size="x-large"
+                        variant="flat"
                         >
-                            <thead>
-                                <tr class="small-caps no-wrap">
-                                    <th>Today</th>
-                                    <th v-if="states.week">Change (week)</th>
-                                    <th v-if="states.month">Change (month)</th>
+                        <template v-slot:prepend>
+                            <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
+                        </template>
 
-                                    <th v-if="states.anytime">Change ({{ getDateFormat(getDayDifference()) }})</th>
-                                </tr>
-                            </thead>
+                        <span class="small-caps">Bitcoin (BTC)</span>
+                    </v-btn>
 
-                            <tbody>
-                                <tr class="no-wrap">
-                                    <td>{{ prices.bitcoin.current }} €</td>
+                    <v-table v-if="states.bitcoin"
+                        fixed-header
+                    >
+                        <thead>
+                            <tr class="small-caps no-wrap">
+                                <th>Today</th>
+                                <th v-if="states.week">Change (week)</th>
+                                <th v-if="states.month">Change (month)</th>
 
-                                    <td v-if="states.week">
-                                        {{ getPercentage(prices.bitcoin.current, prices.bitcoin.week, 'bitcoin', 'week') }} %
-                                        <span :class="[dot.name, dot.margin, !percentageState.bitcoin.week ? dot.color.red : dot.color.green]"></span>
-                                    </td>
+                                <th v-if="states.anytime">Change ({{ getDateFormat(getDayDifference()) }})</th>
+                            </tr>
+                        </thead>
 
-                                    <td v-if="states.month">
-                                        {{ getPercentage(prices.bitcoin.current, prices.bitcoin.month, 'bitcoin', 'month') }} %
-                                        <span :class="[dot.name, dot.margin, !percentageState.bitcoin.month ? dot.color.red : dot.color.green]"></span>
-                                    </td>
+                        <tbody>
+                            <tr class="no-wrap">
+                                <td>{{ prices.bitcoin.current }} €</td>
 
-                                    <td v-if="states.anytime && prices.bitcoin.history">
-                                        {{ getPercentage(prices.bitcoin.current, prices.bitcoin.anytime, 'bitcoin', 'anytime') }} %
-                                        <span :class="[dot.name, dot.margin, !percentageState.bitcoin.anytime ? dot.color.red : dot.color.green]"></span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </v-table>
+                                <td v-if="states.week">
+                                    {{ getPercentage(prices.bitcoin.current, prices.bitcoin.week, 'bitcoin', 'week') }} %
+                                    <span :class="[dot.name, dot.margin, !percentageState.bitcoin.week ? dot.color.red : dot.color.green]"></span>
+                                </td>
+
+                                <td v-if="states.month">
+                                    {{ getPercentage(prices.bitcoin.current, prices.bitcoin.month, 'bitcoin', 'month') }} %
+                                    <span :class="[dot.name, dot.margin, !percentageState.bitcoin.month ? dot.color.red : dot.color.green]"></span>
+                                </td>
+
+                                <td v-if="states.anytime && prices.bitcoin.history">
+                                    {{ getPercentage(prices.bitcoin.current, prices.bitcoin.anytime, 'bitcoin', 'anytime') }} %
+                                    <span :class="[dot.name, dot.margin, !percentageState.bitcoin.anytime ? dot.color.red : dot.color.green]"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </v-table>
 <!-- Single courses BTC end -->
 
 <!-- Single courses ETH -->
-                        <v-btn v-if="states.ethereum"
-                            block
-                            class="text-black"
-                            color="blue"
-                            size="x-large"
-                            variant="flat"
-                            >
-                            <template v-slot:prepend>
-                                <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
-                            </template>
-
-                            <span class="small-caps">Ethereum (ETH)</span>
-                        </v-btn>
-
-                        <v-table v-if="states.ethereum"
-                            fixed-header
+                    <v-btn v-if="states.ethereum"
+                        block
+                        class="text-black"
+                        color="blue"
+                        size="x-large"
+                        variant="flat"
                         >
-                            <thead>
-                                <tr class="small-caps no-wrap">
-                                    <th>Today</th>
-                                    <th v-if="states.week">Change (week)</th>
-                                    <th v-if="states.month">Change (month)</th>
+                        <template v-slot:prepend>
+                            <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
+                        </template>
 
-                                    <th v-if="states.anytime">Change ({{ getDateFormat(getDayDifference()) }})</th>
-                                </tr>
-                            </thead>
+                        <span class="small-caps">Ethereum (ETH)</span>
+                    </v-btn>
 
-                            <tbody>
-                                <tr class="no-wrap">
-                                    <td>{{ prices.ethereum.current }} €</td>
+                    <v-table v-if="states.ethereum"
+                        fixed-header
+                    >
+                        <thead>
+                            <tr class="small-caps no-wrap">
+                                <th>Today</th>
+                                <th v-if="states.week">Change (week)</th>
+                                <th v-if="states.month">Change (month)</th>
 
-                                    <td v-if="states.week">
-                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.week, 'ethereum', 'week') }} %
-                                        <span :class="[dot.name, dot.margin, !percentageState.ethereum.week ? dot.color.red : dot.color.green]"></span>
-                                    </td>
+                                <th v-if="states.anytime">Change ({{ getDateFormat(getDayDifference()) }})</th>
+                            </tr>
+                        </thead>
 
-                                    <td v-if="states.month">
-                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.month, 'ethereum', 'month') }} %
-                                        <span :class="[dot.name, dot.margin, !percentageState.ethereum.month ? dot.color.red : dot.color.green]"></span>
-                                    </td>
+                        <tbody>
+                            <tr class="no-wrap">
+                                <td>{{ prices.ethereum.current }} €</td>
 
-                                    <td v-if="states.anytime && prices.ethereum.history">
-                                        {{ getPercentage(prices.ethereum.current, prices.ethereum.anytime, 'ethereum', 'anytime') }} %
-                                        <span :class="[dot.name, dot.margin, !percentageState.ethereum.anytime ? dot.color.red : dot.color.green]"></span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                    </v-card>
+                                <td v-if="states.week">
+                                    {{ getPercentage(prices.ethereum.current, prices.ethereum.week, 'ethereum', 'week') }} %
+                                    <span :class="[dot.name, dot.margin, !percentageState.ethereum.week ? dot.color.red : dot.color.green]"></span>
+                                </td>
+
+                                <td v-if="states.month">
+                                    {{ getPercentage(prices.ethereum.current, prices.ethereum.month, 'ethereum', 'month') }} %
+                                    <span :class="[dot.name, dot.margin, !percentageState.ethereum.month ? dot.color.red : dot.color.green]"></span>
+                                </td>
+
+                                <td v-if="states.anytime && prices.ethereum.history">
+                                    {{ getPercentage(prices.ethereum.current, prices.ethereum.anytime, 'ethereum', 'anytime') }} %
+                                    <span :class="[dot.name, dot.margin, !percentageState.ethereum.anytime ? dot.color.red : dot.color.green]"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </v-table>
+                </v-card>
 <!-- Single courses ETH end -->
-                    <PriceHistory :prices="prices" :states="states" :dateFormat="getDateFormat" />
-                </v-row>
+            </v-row>
 
-                <PriceChart :prices="prices" :states="states" />
-            </v-container>
-        </v-main>
-<!-- Main View end -->
+            <PriceHistory :prices="prices" :states="states" :dateFormat="getDateFormat" />
 
-        <ComponentFooter />
-    </v-app>
+            <PriceChart :prices="prices" :states="states" />
+        </v-container>
+    </v-main>
 </template>
 
 <script>
-import ComponentHeader from '@/components/ComponentHeader.vue'
 import ControlPanel from '@/components/ControlPanel.vue'
 import PriceHistory from '@/components/PriceHistory.vue'
 import PriceChart from '@/components/PriceChart.vue'
-import ComponentFooter from '@/components/ComponentFooter.vue'
 
 export default {
     name: 'CryptoCurrencies',
     components: {
-        ComponentHeader,
         ControlPanel,
         PriceHistory,
         PriceChart,
-        ComponentFooter,
     },
     data() {
         return {
@@ -185,7 +174,6 @@ export default {
             states: {
                 bitcoin: true, ethereum: true, week: true, month: true, anytime: false, history: false, chart: false,
             },
-            theme: 'dark',
         }
     },
     methods: {
@@ -347,12 +335,9 @@ export default {
             // update courses (anytime)
             this.getPrices('bitcoin', this.getDayDifference())
             this.getPrices('ethereum', this.getDayDifference())
-            // update Price History
+            // update Price History and Charts
             this.getPrices('bitcoin', 100, this.getTimeRange())
             this.getPrices('ethereum', 100, this.getTimeRange())
-        },
-        toggleTheme() {
-            this.theme = this.theme === 'dark' ? 'light' : 'dark'
         },
         // start out ...
         init() {
@@ -369,27 +354,3 @@ export default {
     }
 }
 </script>
-
-<style>
-.bar {
-    display: inline-block;
-    width: 24px;
-    writing-mode: vertical-rl;
-}
-.dot {
-    display: inline-block;
-    border-radius: 50%;
-    height: 16px;
-    width: 16px;
-}
-.no-wrap {
-    white-space: nowrap;
-}
-.small-caps {
-    font-variant: small-caps;
-    font-weight: bold;
-}
-.swap-vertical {
-    transform: rotate(180deg);
-}
-</style>

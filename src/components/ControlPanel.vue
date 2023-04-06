@@ -1,4 +1,4 @@
-<template v-if="localStates && localPrices">
+<template v-if="panelStates && panelPrices">
     <v-navigation-drawer height="auto" width="400">
         <v-list>
             <v-list-item class="bg-grey text-h6 small-caps">Controls</v-list-item>
@@ -9,7 +9,7 @@
         <v-row class="ml-4">
             <v-col>
                 <v-switch
-                    v-model="localStates.bitcoin"
+                    v-model="panelStates.bitcoin"
                     label="BTC"
                     color="purple"
                 >
@@ -18,7 +18,7 @@
 
             <v-col>
                 <v-switch
-                    v-model="localStates.ethereum"
+                    v-model="panelStates.ethereum"
                     label="ETH"
                     color="blue"
                 >
@@ -33,20 +33,20 @@
         <v-row class="ml-4">
             <v-col>
                 <v-switch
-                    v-model="localStates.week"
+                    v-model="panelStates.week"
                     label="Last week"
                     color="cyan"
-                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
+                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
                     >
                 </v-switch>
             </v-col>
 
             <v-col>
                 <v-switch
-                    v-model="localStates.month"
+                    v-model="panelStates.month"
                     label="Last month"
                     color="cyan"
-                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
+                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
                     >
                 </v-switch>
             </v-col>
@@ -57,24 +57,24 @@
         <v-row cols="12" class="ml-4">
             <v-col cols="4">
                 <v-switch
-                    v-model="localStates.anytime"
+                    v-model="panelStates.anytime"
                     color="cyan"
-                    :label="localStates.anytime ? 'Hide' : 'Show'"
-                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
+                    :label="panelStates.anytime ? 'Hide' : 'Show'"
+                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
                 >
                 </v-switch>
             </v-col>
 
-            <v-col cols="8" v-if="localStates.anytime" class="mt-4">
+            <v-col cols="8" v-if="panelStates.anytime" class="mt-4">
                 <v-form @submit.prevent>
-                    <input id="datetime" type="date" value="2023-01-01" :disabled="!(localStates.bitcoin || localStates.ethereum)" />
+                    <input id="datetime" type="date" value="2023-01-01" :disabled="!(panelStates.bitcoin || panelStates.ethereum)" />
 
                     <v-btn
                         class="small-caps ml-2"
                         color="grey"
                         size="small"
                         title="Send"
-                        :disabled="!(localStates.bitcoin || localStates.ethereum)"
+                        :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
                         @click="$emit('update-price')"
                         >
                         <span>Go</span>
@@ -93,26 +93,26 @@
         <v-row>
             <v-col class="ml-4">
                 <v-switch
-                    v-model="localStates.history"
+                    v-model="panelStates.history"
                     color="blue-grey"
-                    :label="localStates.history ? 'Hide' : 'Show'"
-                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
+                    :label="panelStates.history ? 'Hide' : 'Show'"
+                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
                 >
                 </v-switch>
             </v-col>
 
             <v-col class="ml-4">
                 <v-switch
-                    v-model="localStates.chart"
+                    v-model="panelStates.chart"
                     color="blue-grey"
-                    :label="localStates.chart ? 'Hide' : 'Show'"
-                    :disabled="!(localStates.bitcoin || localStates.ethereum)"
+                    :label="panelStates.chart ? 'Hide' : 'Show'"
+                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
                 >
                 </v-switch>
             </v-col>
         </v-row>
 
-        <v-row v-if="(localStates.history || localStates.chart) && !localPrices.bitcoin.history" class="ma-4 mt-0">
+        <v-row v-if="(panelStates.history || panelStates.chart) && !panelPrices.bitcoin.history" class="ma-4 mt-0">
             <v-alert
                 border="start"
                 border-color="warning"
@@ -143,8 +143,8 @@ export default {
     },
     data() {
         return {
-            localPrices: this.prices,
-            localStates: this.states,
+            panelPrices: this.prices,
+            panelStates: this.states,
         }
     },
 }

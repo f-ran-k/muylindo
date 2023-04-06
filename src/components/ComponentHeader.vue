@@ -3,7 +3,7 @@
         <v-app-bar-title class="small-caps">Crypto currency</v-app-bar-title>
 
             <template v-slot:prepend>
-                <img title="Crypto currency" alt="Coin" src="@/assets/icons/IconCoin.svg" width="40" height="40" />
+                <img alt="Coin" src="@/assets/icons/IconCoin.svg" width="40" height="40" />
             </template>
 
             <template v-slot:append>
