@@ -11,7 +11,7 @@
                         <th class="bg-grey">
                             <v-btn class="bg-grey ml-4" elevation="0">
                                 <template v-slot:prepend>
-                                    <img :alt="currencyProps[currency].altTag" :src="getIcon(currency)" height="40" width="40" />
+                                    <img :alt="currencyProps[currency].altTag" :src="currencyProps[currency].icon" height="40" width="40" />
                                 </template>
                             </v-btn>
                         </th>
@@ -73,8 +73,14 @@ export default {
     data() {
         return {
             currencyProps: {
-                bitcoin: { altTag: 'Bitcoin' },
-                ethereum: { altTag: 'Ethereum' },
+                bitcoin: {
+                    altTag: 'Bitcoin',
+                    icon: '/src/assets/icons/IconBitcoin.svg',
+                },
+                ethereum: {
+                    altTag: 'Ethereum',
+                    icon: '/src/assets/icons/IconEthereum.svg',
+                },
             },
             historyPrices: this.prices,
             historyStates: this.states,
@@ -82,11 +88,6 @@ export default {
         }
     },
     methods: {
-        getIcon(currency) {
-            return currency === 'bitcoin'
-                ? '/src/assets/icons/IconBitcoin.svg'
-                : '/src/assets/icons/IconEthereum.svg'
-        },
         /*
             extract the time portion from the date, e.g. 09:22:35
 

@@ -94,14 +94,14 @@
             </v-col>
         </v-row>
 
-        <v-row v-if="(panelStates.history || panelStates.chart) && !(panelPrices.bitcoin.history || panelPrices.ethereum.history)" class="ma-4 mt-0">
+        <v-row v-if="(panelStates.history || panelStates.chart) && !(panelPrices.bitcoin.history || panelPrices.ethereum.history)" class="small-caps ma-4 mt-0">
             <v-alert
                 border="start"
                 border-color="warning"
                 elevation="2"
-                title="NO DATA FETCHED YET!"
+                title="No Data fetched yet!"
             >
-                Please select a date from the date picker above to display the price history and chart.
+                <span style="font-weight: normal;">Please select a date from the date picker above to display the price history and chart.</span>
             </v-alert>
         </v-row>
 <!-- History && Chart end -->
