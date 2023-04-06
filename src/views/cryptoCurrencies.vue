@@ -15,7 +15,8 @@
                             variant="flat"
                             >
                             <template v-slot:prepend>
-                                <img :alt="currencyProps[currency].altTag" :src="currencyProps[currency].icon" height="40" width="40" />
+                                <img v-if="currency === 'bitcoin'" alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
+                                <img v-else alt="Ethereum" src="@/assets/icons/IconEthereum.svg" height="40" width="40" />
                             </template>
 
                             <span class="small-caps">{{ currencyProps[currency].heading }}</span>
@@ -85,16 +86,12 @@ export default {
         return {
             currencyProps: {
                 bitcoin: {
-                    altTag: 'Bitcoin',
                     color: 'purple',
                     heading: 'Bitcoin (Btc)',
-                    icon: '/src/assets/icons/IconBitcoin.svg',
                 },
                 ethereum: {
-                    altTag: 'Ethereum',
                     color: 'blue',
                     heading: 'Ethereum (Eth)',
-                    icon: '/src/assets/icons/IconEthereum.svg',
                 },
             },
             dot: {

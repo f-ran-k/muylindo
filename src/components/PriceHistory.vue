@@ -11,7 +11,9 @@
                         <th class="bg-grey">
                             <v-btn class="bg-grey ml-4" elevation="0">
                                 <template v-slot:prepend>
-                                    <img :alt="currencyProps[currency].altTag" :src="currencyProps[currency].icon" height="40" width="40" />
+                                    <img v-if="currency === 'bitcoin'" alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
+                                    <img v-else alt="Ethereum" src="@/assets/icons/IconEthereum.svg" height="40" width="40" />
+
                                 </template>
                             </v-btn>
                         </th>
@@ -72,16 +74,6 @@ export default {
     },
     data() {
         return {
-            currencyProps: {
-                bitcoin: {
-                    altTag: 'Bitcoin',
-                    icon: '/src/assets/icons/IconBitcoin.svg',
-                },
-                ethereum: {
-                    altTag: 'Ethereum',
-                    icon: '/src/assets/icons/IconEthereum.svg',
-                },
-            },
             historyPrices: this.prices,
             historyStates: this.states,
             historyDateFormat: this.dateFormat,

@@ -5,7 +5,8 @@
                 <v-card-title class="small-caps bg-grey">
                     <v-btn class="bg-grey" elevation="0">
                         <template v-slot:prepend>
-                            <img :alt="currencyProps[currency].altTag" :src="currencyProps[currency].icon" height="40" width="40" />
+                            <img v-if="currency === 'bitcoin'" alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
+                            <img v-else alt="Ethereum" src="@/assets/icons/IconEthereum.svg" height="40" width="40" />
                         </template>
                     </v-btn>
                     Price Chart
@@ -45,14 +46,10 @@ export default {
             currencyProps: {
                 bar: 'bar',
                 bitcoin: {
-                    altTag: 'Bitcoin',
                     color: 'bg-purple',
-                    icon: '/src/assets/icons/IconBitcoin.svg',
                 },
                 ethereum: {
-                    altTag: 'Ethereum',
                     color: 'bg-blue',
-                    icon: 'src/assets/icons/IconEthereum.svg',
                 },
                 margin: 'ml-2',
             },
