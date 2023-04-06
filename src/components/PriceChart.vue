@@ -5,7 +5,10 @@
                 <v-card-title class="small-caps bg-grey">
                     <v-btn class="bg-grey" elevation="0">
                         <template v-slot:prepend>
-                            <img :alt="currencyProps[currency].altTag" :src="currencyProps[currency].path" width="40" height="40" />
+                            <img height="40" width="40"
+                                    :alt="currencyProps[currency].altTag"
+                                    :src="`/src/assets/icons/Icon${getIcon(currency)}.svg`"
+                                />
                         </template>
                     </v-btn>
                     Price Chart
@@ -47,18 +50,19 @@ export default {
                 bitcoin: {
                     altTag: 'Bitcoin',
                     color: 'bg-purple',
-                    path: '/src/assets/icons/IconBitcoin.svg',
                 },
                 ethereum: {
                     altTag: 'Ethereum',
                     color: 'bg-blue',
-                    path: '/src/assets/icons/IconEthereum.svg',
                 },
                 margin: 'ml-2',
             },
         }
     },
     methods: {
+        getIcon(currency) {
+            return currency === 'bitcoin' ? 'Bitcoin' : 'Ethereum'
+        },
         /*
             get individual bar heights in pixels
 

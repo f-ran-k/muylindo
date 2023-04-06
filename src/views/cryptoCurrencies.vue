@@ -15,7 +15,10 @@
                             variant="flat"
                             >
                             <template v-slot:prepend>
-                                <img :alt="currencyProps[currency].altTag" :src="`/src/assets/icons/${currencyProps[currency].icon}`" width="40" height="40" />
+                                <img height="40" width="40"
+                                    :alt="currencyProps[currency].altTag"
+                                    :src="`/src/assets/icons/Icon${getIcon(currency)}.svg`"
+                                />
                             </template>
 
                             <span class="small-caps">{{ currencyProps[currency].heading }}</span>
@@ -88,13 +91,11 @@ export default {
                     altTag: 'Bitcoin',
                     color: 'purple',
                     heading: 'Bitcoin (Btc)',
-                    icon: 'IconBitcoin.svg',
                 },
                 ethereum: {
                     altTag: 'Ethereum',
                     color: 'blue',
                     heading: 'Ethereum (Eth)',
-                    icon: 'IconEthereum.svg',
                 },
             },
             dot: {
@@ -289,6 +290,9 @@ export default {
                 default:
                     this.prices[id].anytime = Math.round(eur)
             }
+        },
+        getIcon(currency) {
+            return currency === 'bitcoin' ? 'Bitcoin' : 'Ethereum'
         },
         /*
             Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue
