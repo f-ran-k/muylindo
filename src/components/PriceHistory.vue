@@ -11,7 +11,7 @@
                         <th class="bg-grey">
                             <v-btn class="bg-grey ml-4" elevation="0">
                                 <template v-slot:prepend>
-                                    <img :alt="currencyProps[currency]" :src="currencyProps[currency].path" width="40" height="40" />
+                                    <img :alt="currencyProps[currency].altTag" :src="currencyProps[currency].path" width="40" height="40" />
                                 </template>
                             </v-btn>
                         </th>
