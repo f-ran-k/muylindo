@@ -1,50 +1,27 @@
 <template>
     <v-row justify="space-around">
-<!-- Price chart BTC -->
-        <v-card v-if="chartStates.chart && chartStates.bitcoin && chartPrices.bitcoin.history" class="ma-8" height="auto" width="auto">
-            <v-card-title class="small-caps bg-grey">
-                <v-btn class="bg-grey" elevation="0">
-                    <template v-slot:prepend>
-                        <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" width="40" height="40" />
-                    </template>
-                </v-btn>
-                Price Chart
-            </v-card-title>
+        <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
+            <v-card v-if="chartStates.chart && chartStates[currency] && chartPrices[currency].history" class="ma-8" height="auto" width="auto">
+                <v-card-title class="small-caps bg-grey">
+                    <v-btn class="bg-grey" elevation="0">
+                        <template v-slot:prepend>
+                            <img :alt="currencyProps[currency].altTag" :src="currencyProps[currency].path" width="40" height="40" />
+                        </template>
+                    </v-btn>
+                    Price Chart
+                </v-card-title>
 
-            <v-divider></v-divider>
-            <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
-            <v-row class="swap-vertical ma-4">
-                <div v-for="(values, index) in chartPrices.bitcoin.history" :key="index"
-                    class="bar bg-purple ml-2" :style="{ height: getBarHeight('bitcoin', values[1]) + 'px'}">
+                <v-divider></v-divider>
+                <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
+                <v-row class="swap-vertical ma-4">
+                    <div v-for="(values, index) in chartPrices[currency].history" :key="index"
+                        :class="[currencyProps[currency].color, currencyProps.bar, currencyProps.margin]" :style="{ height: getBarHeight(currency, values[1]) + 'px'}">
 
-                    <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }} €</span>
-                </div>
-            </v-row>
-        </v-card>
-<!-- Price chart BTC end -->
-
-<!-- Price chart ETH -->
-        <v-card v-if="chartStates.chart && chartStates.ethereum && chartPrices.ethereum.history" class="ma-8" height="auto" width="auto">
-            <v-card-title class="small-caps bg-grey">
-                <v-btn class="bg-grey" elevation="0">
-                    <template v-slot:prepend>
-                        <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" width="40" height="40" />
-                    </template>
-                </v-btn>
-                Price Chart
-            </v-card-title>
-
-            <v-divider></v-divider>
-            <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
-            <v-row class="swap-vertical ma-4">
-                <div v-for="(values, index) in chartPrices.ethereum.history" :key="index"
-                    class="bar bg-blue ml-2" :style="{ height: getBarHeight('ethereum', values[1]) + 'px'}">
-
-                    <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(0) }} €</span>
-                </div>
-            </v-row>
-        </v-card>
-<!-- Price chart ETH end -->
+                        <span class="small-caps mx-2 mt-8">{{ values[1].toFixed(2) }} €</span>
+                    </div>
+                </v-row>
+            </v-card>
+        </div>
     </v-row>
 </template>
 
@@ -65,6 +42,20 @@ export default {
         return {
             chartPrices: this.prices,
             chartStates: this.states,
+            currencyProps: {
+                bar: 'bar',
+                bitcoin: {
+                    altTag: 'Bitcoin',
+                    color: 'bg-purple',
+                    path: '/src/assets/icons/IconBitcoin.svg',
+                },
+                ethereum: {
+                    altTag: 'Ethereum',
+                    color: 'bg-blue',
+                    path: 'src/assets/icons/IconEthereum.svg',
+                },
+                margin: 'ml-2',
+            },
         }
     },
     methods: {
