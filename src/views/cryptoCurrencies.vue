@@ -15,7 +15,7 @@
                             variant="flat"
                             >
                             <template v-slot:prepend>
-                                <img :alt="currencyProps[currency].altTag" :src="`@/assets/icons/ets/icons/${currencyProps[currency].path}`" width="40" height="40" />
+                                <img :alt="currencyProps[currency].altTag" :src="`/src/assets/icons/${currencyProps[currency].icon}`" width="40" height="40" />
                             </template>
 
                             <span class="small-caps">{{ currencyProps[currency].heading }}</span>
@@ -88,13 +88,13 @@ export default {
                     altTag: 'Bitcoin',
                     color: 'purple',
                     heading: 'Bitcoin (Btc)',
-                    path: 'IconBitcoin.svg',
+                    icon: 'IconBitcoin.svg',
                 },
                 ethereum: {
                     altTag: 'Ethereum',
                     color: 'blue',
                     heading: 'Ethereum (Eth)',
-                    path: 'IconEthereum.svg',
+                    icon: 'IconEthereum.svg',
                 },
             },
             dot: {
