@@ -44,10 +44,10 @@
                 </thead>
 
                 <tbody>
-                    <tr v-for="n in historyPrices[currency].history.slice(0, 20)" :key="n">
-                        <td>{{ historyDateFormat(0, n[0]) }}</td>
-                        <td>{{ getTime(n[0]) }}</td>
-                        <td>{{ n[1].toFixed(2) }} €</td>
+                    <tr v-for="datePrice in historyPrices[currency].history" :key="datePrice[0]">
+                        <td>{{ historyDateFormat(0, datePrice[0]) }}</td>
+                        <td>{{ getTime(datePrice[0]) }}</td>
+                        <td>{{ datePrice[1].toFixed(2) }} €</td>
                     </tr>
                 </tbody>
             </v-table>

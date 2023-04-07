@@ -29,6 +29,39 @@
         </v-row>
 <!-- Currency end -->
         <v-divider class="mb-4"></v-divider>
+<!-- History && Chart -->
+        <span class="small-caps ml-4">Data to display</span>
+
+        <v-row class="small-caps no-wrap mt-4">
+            <v-col class="ml-4">Courses</v-col>
+            <v-col class="ml-4">History</v-col>
+            <v-col class="ml-4">Chart</v-col>
+        </v-row>
+
+        <v-row>
+            <v-col class="small-caps ml-4" v-for="dataType in ['courses', 'history', 'chart']" :key="dataType">
+                <v-switch
+                    v-model="panelStates[dataType]"
+                    color="blue-grey"
+                    :label="panelStates[dataType] ? 'Hide' : 'Show'"
+                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
+                >
+                </v-switch>
+            </v-col>
+        </v-row>
+
+        <v-row v-if="(panelStates.history || panelStates.chart) && !(panelPrices.bitcoin.history || panelPrices.ethereum.history)" class="small-caps ma-4 mt-0">
+            <v-alert
+                border="start"
+                border-color="warning"
+                elevation="2"
+                title="No Data fetched yet!"
+            >
+                <span style="font-weight: normal;">Please select a date from the date picker above to display the price history and chart.</span>
+            </v-alert>
+        </v-row>
+<!-- History && Chart end -->
+        <v-divider class="mb-4"></v-divider>
 <!-- Period -->
         <span class="small-caps ml-4">Select a period</span>
 
@@ -38,7 +71,7 @@
                     v-model="panelStates[period]"
                     color="cyan"
                     :label="`Last ${period}`"   
-                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
+                    :disabled="!panelStates.courses || !(panelStates.bitcoin || panelStates.ethereum)"
                     >
                 </v-switch>
             </v-col>
@@ -75,36 +108,6 @@
             </v-col>
         </v-row>
 <!-- Date Picker && Period end -->
-        <v-divider class="mb-4"></v-divider>
-<!-- History && Chart -->
-        <v-row class="small-caps">
-            <v-col class="ml-4">Price History</v-col>
-            <v-col class="ml-4">Price Chart</v-col>
-        </v-row>
-
-        <v-row>
-            <v-col class="small-caps ml-4" v-for="dataType in ['history', 'chart']" :key="dataType">
-                <v-switch
-                    v-model="panelStates[dataType]"
-                    color="blue-grey"
-                    :label="panelStates[dataType] ? 'Hide' : 'Show'"
-                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
-                >
-                </v-switch>
-            </v-col>
-        </v-row>
-
-        <v-row v-if="(panelStates.history || panelStates.chart) && !(panelPrices.bitcoin.history || panelPrices.ethereum.history)" class="small-caps ma-4 mt-0">
-            <v-alert
-                border="start"
-                border-color="warning"
-                elevation="2"
-                title="No Data fetched yet!"
-            >
-                <span style="font-weight: normal;">Please select a date from the date picker above to display the price history and chart.</span>
-            </v-alert>
-        </v-row>
-<!-- History && Chart end -->
         <v-divider class="mb-4"></v-divider>
     </v-navigation-drawer>
 </template>

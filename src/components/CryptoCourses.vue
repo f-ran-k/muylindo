@@ -1,7 +1,7 @@
 <template>
     <v-row justify="space-around">
         <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
-            <v-card v-if="localStates.bitcoin || localStates.ethereum" class="mt-8" height="auto" width="auto">
+            <v-card v-if="localStates.courses && (localStates.bitcoin || localStates.ethereum)" class="mt-8" height="auto" width="auto">
                 <v-btn v-if="localStates[currency]" block class="small-caps text-black mb-2" size="x-large" variant="flat" :color="currencyProps[currency].color">
                     <template v-slot:prepend>
                         <img v-if="currency === 'bitcoin'" alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />

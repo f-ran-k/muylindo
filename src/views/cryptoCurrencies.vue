@@ -66,7 +66,7 @@ export default {
             },
             records: 20,
             states: {
-                bitcoin: true, ethereum: true, week: true, month: true, anytime: false, history: false, chart: false,
+                bitcoin: true, ethereum: true, week: true, month: true, anytime: false, courses: true, history: false, chart: false,
             },
         }
     },
