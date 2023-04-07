@@ -35,26 +35,4 @@ export default {
 }
 </script>
 
-<style>
-.bar {
-    display: inline-block;
-    width: 24px;
-    writing-mode: vertical-rl;
-}
-.dot {
-    display: inline-block;
-    border-radius: 50%;
-    height: 16px;
-    width: 16px;
-}
-.no-wrap {
-    white-space: nowrap;
-}
-.small-caps {
-    font-variant: small-caps;
-    font-weight: bold;
-}
-.swap-vertical {
-    transform: rotate(180deg);
-}
-</style>
+<style lang="css" src="@/assets/currency.css"></style>
