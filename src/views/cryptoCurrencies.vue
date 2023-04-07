@@ -64,7 +64,7 @@ export default {
                     current: null, week: null, month: null, anytime: null, history: null,
                 },
             },
-            records: 20,
+            records: 30,
             states: {
                 bitcoin: true, ethereum: true, week: true, month: true, anytime: false, courses: true, history: false, chart: false,
             },

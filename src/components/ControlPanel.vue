@@ -90,21 +90,23 @@
                 </v-switch>
             </v-col>
 
-            <v-col cols="8" v-if="panelStates.anytime" class="mt-4">
-                <v-form @submit.prevent>
-                    <input id="datetime" type="date" value="2023-01-01" :disabled="!(panelStates.bitcoin || panelStates.ethereum)" />
+            <v-col cols="8" v-if="panelStates.anytime">
+                <v-row class="mt-4 ml-4">
+                    <v-form @submit.prevent>
+                        <input id="datetime" type="date" value="2023-04-01" :disabled="!(panelStates.bitcoin || panelStates.ethereum)" />
 
-                    <v-btn
-                        class="small-caps ml-2"
-                        color="grey"
-                        size="small"
-                        title="Send"
-                        :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
-                        @click="$emit('update-price')"
+                        <v-btn
+                            class="small-caps ml-2"
+                            color="grey"
+                            size="small"
+                            title="Send"
+                            :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
+                            @click="$emit('update-price')"
                         >
-                        <span>Send</span>
-                    </v-btn>
-                </v-form>
+                            <span>Send</span>
+                        </v-btn>
+                    </v-form>
+                </v-row>
             </v-col>
         </v-row>
 <!-- Date Picker && Period end -->
