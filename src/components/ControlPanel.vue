@@ -57,7 +57,7 @@
                 elevation="2"
                 title="No Data fetched yet!"
             >
-                <span style="font-weight: normal;">Please select a date from the date picker above to display the price history and chart.</span>
+                <span style="font-weight: normal;">Please select a date from the date picker below to display the price history and chart.</span>
             </v-alert>
         </v-row>
 <!-- History && Chart end -->
