@@ -1,77 +1,36 @@
 <template>
-    <ControlPanel :prices="prices" :states="states" @update-price="updatePrice()" />
+    <ControlPanel
+        :prices="prices"
+        :states="states"
+        @update-price="updatePrice()"
+    />
 
     <v-main>
         <v-container fluid>
-<!-- Single courses -->
-            <v-row justify="space-around">
-                <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
-                    <v-card v-if="states.bitcoin || states.ethereum" class="mt-8" height="auto" width="auto">
-                        <v-btn v-if="states[currency]"
-                            block
-                            class="small-caps text-black mb-2"
-                            :color="currencyProps[currency].color"
-                            size="x-large"
-                            variant="flat"
-                            >
-                            <template v-slot:prepend>
-                                <img v-if="currency === 'bitcoin'" alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
-                                <img v-else alt="Ethereum" src="@/assets/icons/IconEthereum.svg" height="40" width="40" />
-                            </template>
+            <CryptoCourses
+                :prices="prices"
+                :states="states"
+                :dateFormat="getDateFormat"
+                :dayDifference="getDayDifference"
+            />
 
-                            <span class="small-caps">{{ currencyProps[currency].heading }}</span>
-                        </v-btn>
+            <PriceHistory
+                :prices="prices"
+                :states="states"
+                :dateFormat="getDateFormat"
+            />
 
-                        <v-divider></v-divider>
-
-                        <v-table v-if="states[currency]"
-                            fixed-header
-                        >
-                            <thead>
-                                <tr class="small-caps no-wrap">
-                                    <th>Today</th>
-                                    <th v-if="states.week">Change (week)</th>
-                                    <th v-if="states.month">Change (month)</th>
-
-                                    <th v-if="states.anytime">Change ({{ getDateFormat(getDayDifference()) }})</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <tr class="no-wrap">
-                                    <td>{{ prices[currency].current }} €</td>
-
-                                    <td v-if="states.week">
-                                        {{ getPercentage(prices[currency].current, prices[currency].week, currency, 'week') }} %
-                                        <span :class="[dot.name, dot.margin, !percentageState[currency].week ? dot.color.red : dot.color.green]"></span>
-                                    </td>
-
-                                    <td v-if="states.month">
-                                        {{ getPercentage(prices[currency].current, prices[currency].month, currency, 'month') }} %
-                                        <span :class="[dot.name, dot.margin, !percentageState[currency].month ? dot.color.red : dot.color.green]"></span>
-                                    </td>
-
-                                    <td v-if="states.anytime && prices[currency].history">
-                                        {{ getPercentage(prices[currency].current, prices[currency].anytime, currency, 'anytime') }} %
-                                        <span :class="[dot.name, dot.margin, !percentageState[currency].anytime ? dot.color.red : dot.color.green]"></span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                    </v-card>
-                </div>
-            </v-row>
-<!-- Single courses end -->
-
-            <PriceHistory :prices="prices" :states="states" :dateFormat="getDateFormat" />
-
-            <PriceChart :prices="prices" :states="states" />
+            <PriceChart
+                :prices="prices"
+                :states="states"
+            />
         </v-container>
     </v-main>
 </template>
 
 <script>
 import ControlPanel from '@/components/ControlPanel.vue'
+import CryptoCourses from '@/components/CryptoCourses.vue'
 import PriceHistory from '@/components/PriceHistory.vue'
 import PriceChart from '@/components/PriceChart.vue'
 
@@ -79,28 +38,12 @@ export default {
     name: 'CryptoCurrencies',
     components: {
         ControlPanel,
+        CryptoCourses,
         PriceHistory,
         PriceChart,
     },
     data() {
         return {
-            currencyProps: {
-                bitcoin: {
-                    color: 'purple',
-                    heading: 'Bitcoin (Btc)',
-                },
-                ethereum: {
-                    color: 'blue',
-                    heading: 'Ethereum (Eth)',
-                },
-            },
-            dot: {
-                name: 'dot',
-                margin: 'ml-2',
-                color: {
-                    red: 'bg-red', green: 'bg-green',
-                },
-            },
             endpoints: {
                 bitcoin: {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
@@ -111,14 +54,6 @@ export default {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=eur',
                     history: 'https://api.coingecko.com/api/v3/coins/ethereum/history?',
                     range: 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&',
-                },
-            },
-            percentageState: {
-                bitcoin: {
-                    week: null, month: null, anytime: null,
-                },
-                ethereum: {
-                    week: null, month: null, anytime: null,
                 },
             },
             prices: {
@@ -205,24 +140,6 @@ export default {
             const pastDate = new Date(document.getElementById('datetime').value).getTime() / 1000
 
             return [Math.floor(currentDate), Math.floor(pastDate)]
-        },
-        /*
-            calculate the ratio between the current price and the past one to set either percentage state
-
-            @param currentprice <Float>
-            @param pastPrice <Float>
-            @param id <String>
-            @param period <String>
-
-            @return <String>
-        */
-        getPercentage(currentPrice, pastPrice, id, period) {
-            // the prepended '+' gets rid of trailing zeros; e.g. 1.50 ==> 1.5
-            const percent = +((currentPrice / pastPrice * 100) - 100).toFixed(2)
-
-            this.percentageState[id][period] = percent > 0 ? true : false
-
-            return percent
         },
         /*
             fetch data from coinGecko
