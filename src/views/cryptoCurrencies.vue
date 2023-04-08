@@ -7,7 +7,7 @@
 
     <v-main>
         <v-container fluid>
-            <AppInfo v-if="false" />
+            <AppInfo v-show="!(states.bitcoin || states.ethereum)" />
 
             <CryptoCourses
                 :prices="prices"
