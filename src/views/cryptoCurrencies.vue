@@ -189,9 +189,7 @@ export default {
             @param data <Object>
         */
         getPriceByPeriod(id, period, data) {
-            const { market_data } = data
-            const { current_price } = market_data
-            const { eur } = current_price
+            const { eur } = data.market_data.current_price
 
             switch (period) {
                 case 7:
