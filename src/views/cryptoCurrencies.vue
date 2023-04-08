@@ -7,6 +7,8 @@
 
     <v-main>
         <v-container fluid>
+            <AppInfo v-if="true" />
+
             <CryptoCourses
                 :prices="prices"
                 :states="states"
@@ -29,6 +31,7 @@
 </template>
 
 <script>
+import AppInfo from '@/components/AppInfo.vue'
 import ControlPanel from '@/components/ControlPanel.vue'
 import CryptoCourses from '@/components/CryptoCourses.vue'
 import PriceHistory from '@/components/PriceHistory.vue'
@@ -37,6 +40,7 @@ import PriceChart from '@/components/PriceChart.vue'
 export default {
     name: 'CryptoCurrencies',
     components: {
+        AppInfo,
         ControlPanel,
         CryptoCourses,
         PriceHistory,
@@ -66,7 +70,7 @@ export default {
             },
             records: 30,
             states: {
-                bitcoin: true, ethereum: true, week: true, month: true, anytime: false, courses: true, history: false, chart: false,
+                bitcoin: false, ethereum: false, week: true, month: true, anytime: false, courses: true, history: false, chart: false,
             },
         }
     },
