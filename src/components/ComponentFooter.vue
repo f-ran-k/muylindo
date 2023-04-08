@@ -3,13 +3,9 @@
         <v-container fill-height>
             <v-row justify="center" class="small-caps no-wrap">
                 <v-col>
-                    <span>Build w/</span>
-
                     <a href="https://vuejs.org" target="_blank" class="mx-4">
                         <img title="Vue.js" alt="Vue.js" src="@/assets/icons/IconVue.svg" width="30" height="30" />
                     </a>
-
-                    <span>&nbsp;+&nbsp;</span>
 
                     <a href="https://vuetifyjs.com" target="_blank" class="mx-4">
                         <img title="Vuetify" alt="Vuetify" src="@/assets/icons/IconVuetify.svg" width="30" height="30" />
