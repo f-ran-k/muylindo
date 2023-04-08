@@ -7,7 +7,7 @@
 
     <v-main>
         <v-container fluid>
-            <AppInfo v-if="true" />
+            <AppInfo v-if="false" />
 
             <CryptoCourses
                 :prices="prices"
