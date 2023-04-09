@@ -74,15 +74,6 @@ export default {
             @return <Integer>
         */
        getBarHeight(id, price) {
-            // const boundaries = {
-            //     bitcoin: { height: 50, 500: 5, 1000: 10, 2000: 20, 5000: 100, 10000: 200, 25000: 500, 50000: 1000 },
-            //     ethereum: { height: 100, 100: 5, 200: 10, 500: 20, 1000: 50, 2000: 100, 5000: 250 }
-            // }
-
-            // const matches = Object.keys(boundaries[id]).filter(val => val < price)
-            // const min = matches[matches.length - 1]
-
-            // return boundaries[id].height + Math.round(price / boundaries[id][min])
             return id === 'bitcoin'
                 ? 100 + (price / 250)
                 : 100 + (price / 25)

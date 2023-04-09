@@ -32,8 +32,8 @@ export default {
                 data: {
                     title: 'Data',
                     color: 'info',
-                    text: 'The Data displayed is fetched from <strong>CoinGecko</strong>.<br />\
-                            The following Rules apply when using the <strong>Date Picker</strong>:<br />\
+                    text: 'The Data displayed is provided by the <strong>CoinGecko</strong> API.<br />\
+                            The following Rules apply when selecting a past date from the <strong>Date Picker</strong>:<br />\
                             1 day from current time = 5 minute interval data<br />\
                             1 - 90 days from current time = hourly data<br />\
                             above 90 days from current time = daily data'
@@ -41,8 +41,9 @@ export default {
                 format: {
                     title: 'Date Format',
                     color: 'warning',
-                    text: 'The <strong>Date Picker</strong> to the left uses the format <strong>MM/DD/YYYY</strong><br />\
-                            whereas <strong>YYYY/MM/DD</strong> is used throughout the rest of the <strong>application<strong>.'
+                    text: 'The <strong>Date Picker</strong> uses the format <strong>MM/DD/YYYY</strong><br />\
+                            as opposed to <strong>YYYY/MM/DD</strong> used throughout the rest of the <strong>Application</strong>\
+                            to display the dates.'
                 },
             },
         }

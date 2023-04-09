@@ -13,7 +13,6 @@
                                 <template v-slot:prepend>
                                     <img v-if="currency === 'bitcoin'" alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
                                     <img v-else alt="Ethereum" src="@/assets/icons/IconEthereum.svg" height="40" width="40" />
-
                                 </template>
                             </v-btn>
                         </th>
@@ -42,7 +41,7 @@
                         <th>Course</th>
                     </tr>
                 </thead>
-
+<!-- datePrice === [<time in seconds>, <price>] -->
                 <tbody>
                     <tr v-for="datePrice in historyPrices[currency].history" :key="datePrice[0]">
                         <td>{{ historyDateFormat(0, datePrice[0]) }}</td>

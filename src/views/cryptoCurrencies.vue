@@ -210,12 +210,12 @@ export default {
             Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue
         */
         updatePrice() {
-            // update courses (anytime)
-            this.getPrices('bitcoin', this.getDayDifference())
-            this.getPrices('ethereum', this.getDayDifference())
-            // update Price History and Charts
-            this.getPrices('bitcoin', 100, this.getTimeRange())
-            this.getPrices('ethereum', 100, this.getTimeRange())
+            for (let currency of ['bitcoin', 'ethereum']) {
+                // update courses (anytime)
+                this.getPrices(currency, this.getDayDifference())
+                // update Price History and Charts
+                this.getPrices(currency, 100, this.getTimeRange())
+            }
         },
         // start out ...
         init() {
