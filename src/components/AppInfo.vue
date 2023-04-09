@@ -41,9 +41,8 @@ export default {
                 format: {
                     title: 'Date Format',
                     color: 'warning',
-                    text: 'The <strong>Date Picker</strong> uses the format <strong>MM/DD/YYYY</strong><br />\
-                            as opposed to <strong>YYYY/MM/DD</strong> used throughout the rest of the <strong>Application</strong>\
-                            to display the dates.'
+                    text: 'The <strong>Date Picker</strong> uses the format <strong>MM/DD/YYYY</strong> as opposed to <strong>YYYY/MM/DD</strong><br />\
+                            used throughout the <strong>Application</strong> to display the dates.'
                 },
             },
         }
