@@ -22,7 +22,7 @@
                             <th v-if="localStates.week">Change (week)</th>
                             <th v-if="localStates.month">Change (month)</th>
 
-                            <th v-if="localStates.anytime">Change ({{ localDateFormat(localDayDifference()) }})</th>
+                            <th v-if="localStates.anytime">Change ({{ dateFormat(dayDifference()) }})</th>
                         </tr>
                     </thead>
 
@@ -55,6 +55,7 @@
 <script>
 export default {
     name: 'CryptoCourses',
+    inject: ['dateFormat', 'dayDifference'],
     props: {
         prices: {
             type: Object,
@@ -62,14 +63,6 @@ export default {
         },
         states: {
             type: Object,
-            required: true,
-        },
-        dateFormat: {
-            type: Function,
-            required: true,
-        },
-        dayDifference: {
-            type: Function,
             required: true,
         },
     },
@@ -94,8 +87,6 @@ export default {
             },
             localPrices: this.prices,
             localStates: this.states,
-            localDateFormat: this.dateFormat,
-            localDayDifference: this.dayDifference,
             percentageState: {
                 bitcoin: {
                     week: null, month: null, anytime: null,

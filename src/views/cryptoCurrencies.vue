@@ -12,14 +12,11 @@
             <CryptoCourses
                 :prices="prices"
                 :states="states"
-                :dateFormat="getDateFormat"
-                :dayDifference="getDayDifference"
             />
 
             <PriceHistory
                 :history="history"
                 :states="states"
-                :dateFormat="getDateFormat"
             />
 
             <PriceChart
@@ -46,6 +43,14 @@ export default {
         PriceHistory,
         PriceChart,
     },
+    provide() {
+        return {
+            dateFormat: this.getDateFormat,
+            dayDifference: this.getDayDifference,
+            getDate: this.getDate,
+            time: this.getTime,
+        }
+    },
     data() {
         return {
             endpoints: {
@@ -60,6 +65,9 @@ export default {
                     range: 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&',
                 },
             },
+            history: {
+                bitcoin: null, ethereum: null,
+            },
             prices: {
                 bitcoin: {
                     current: null, week: null, month: null, anytime: null,
@@ -67,9 +75,6 @@ export default {
                 ethereum: {
                     current: null, week: null, month: null, anytime: null,
                 },
-            },
-            history: {
-                bitcoin: null, ethereum: null,
             },
             records: 30,
             states: {
@@ -147,6 +152,19 @@ export default {
             const pastDate = new Date(document.getElementById('datetime').value).getTime() / 1000
 
             return [Math.floor(currentDate), Math.floor(pastDate)]
+        },
+        /*
+            extract the time portion from the date, e.g. 09:22:35
+
+            @param timestamp <Integer>
+
+            @return <String>
+        */
+        getTime(timestamp) {
+            return new Date(timestamp).toTimeString().slice(0, 8)
+        },
+        getDate(seconds) {
+            return new Date(seconds).toDateString()
         },
         /*
             fetch data from coinGecko

@@ -1,7 +1,7 @@
 <template>
     <v-row justify="space-around">
         <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
-            <v-table v-if="States.history && States[currency] && History[currency]"
+            <v-table v-if="states.history && states[currency] && history[currency]"
                 fixed-header
                 class="mt-8"
                 height="600px"
@@ -21,7 +21,7 @@
 
                         <th class="bg-grey">
                             <v-btn
-                                v-if="History[currency]"
+                                v-if="history[currency]"
                                 class="bg-grey"
                                 label
                                 elevation="0"
@@ -43,9 +43,9 @@
                 </thead>
 <!-- datePrice === [<time in seconds>, <price>] -->
                 <tbody>
-                    <tr v-for="datePrice in History[currency]" :key="datePrice[0]">
-                        <td>{{ historyDateFormat(0, datePrice[0]) }}</td>
-                        <td>{{ getTime(datePrice[0]) }}</td>
+                    <tr v-for="datePrice in history[currency]" :key="datePrice[0]">
+                        <td>{{ dateFormat(0, datePrice[0]) }}</td>
+                        <td>{{ time(datePrice[0]) }}</td>
                         <td>{{ datePrice[1].toFixed(2) }} €</td>
                     </tr>
                 </tbody>
@@ -57,6 +57,7 @@
 <script>
 export default {
     name: 'PriceHistory',
+    inject: ['dateFormat', 'time'],
     props: {
         history: {
             type: Object,
@@ -66,29 +67,11 @@ export default {
             type: Object,
             required: true,
         },
-        dateFormat: {
-            type: Function,
-            required: true,
-        },
     },
     data() {
         return {
             History: this.history,
-            States: this.states,
-            historyDateFormat: this.dateFormat,
         }
-    },
-    methods: {
-        /*
-            extract the time portion from the date, e.g. 09:22:35
-
-            @param timestamp <Integer>
-
-            @return <String>
-        */
-        getTime(timestamp) {
-            return new Date(timestamp).toTimeString().slice(0, 8)
-        },
     },
 }
 </script>

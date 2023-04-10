@@ -35,6 +35,7 @@
 <script>
 export default {
     name: 'PriceChart',
+    inject: ['getDate'],
     props: {
         history: {
             type: Object,
@@ -62,9 +63,6 @@ export default {
         }
     },
     methods: {
-        getDate(seconds) {
-            return new Date(seconds).toDateString()
-        },
         /*
             get individual bar heights in pixels
 

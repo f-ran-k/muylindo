@@ -1,4 +1,4 @@
-<template v-if="States && History">
+<template v-if="States && history">
     <v-navigation-drawer class="small-caps" height="auto" width="400">
         <v-list>
             <v-list-item class="bg-grey text-h6">Controls</v-list-item>
@@ -50,7 +50,7 @@
             </v-col>
         </v-row>
 
-        <v-row v-if="(States.history || States.chart) && !(History.bitcoin || History.ethereum)" class="ma-4 mt-0">
+        <v-row v-if="(States.history || States.chart) && !(history.bitcoin || history.ethereum)" class="ma-4 mt-0">
             <v-alert
                 border="start"
                 border-color="warning"
@@ -130,7 +130,6 @@ export default {
     },
     data() {
         return {
-            History: this.history,
             States: this.states,
         }
     },
