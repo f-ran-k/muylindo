@@ -40,7 +40,7 @@
                                 <span :class="[dot.name, dot.margin, !percentageState[currency].month ? dot.color.red : dot.color.green]"></span>
                             </td>
 
-                            <td v-if="localStates.anytime && localPrices[currency].history">
+                            <td v-if="localStates.anytime && localPrices[currency].anytime">
                                 {{ getPercentage(localPrices[currency].current, localPrices[currency].anytime, currency, 'anytime') }} %
                                 <span :class="[dot.name, dot.margin, !percentageState[currency].anytime ? dot.color.red : dot.color.green]"></span>
                             </td>

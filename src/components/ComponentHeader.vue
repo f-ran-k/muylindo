@@ -8,7 +8,7 @@
 
             <template v-slot:append>
                 <v-switch
-                    class="small-caps mt-4"
+                    class="small-caps mt-6"
                     color="blue-grey"
                     title="Switch Theme"
                     @click="$emit('toggle-theme')"

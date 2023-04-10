@@ -1,6 +1,6 @@
 <template>
     <ControlPanel
-        :prices="prices"
+        :history="history"
         :states="states"
         @update-price="updatePrice()"
     />
@@ -17,13 +17,13 @@
             />
 
             <PriceHistory
-                :prices="prices"
+                :history="history"
                 :states="states"
                 :dateFormat="getDateFormat"
             />
 
             <PriceChart
-                :prices="prices"
+                :history="history"
                 :states="states"
             />
         </v-container>
@@ -62,11 +62,14 @@ export default {
             },
             prices: {
                 bitcoin: {
-                    current: null, week: null, month: null, anytime: null, history: null,
+                    current: null, week: null, month: null, anytime: null,
                 },
                 ethereum: {
-                    current: null, week: null, month: null, anytime: null, history: null,
+                    current: null, week: null, month: null, anytime: null,
                 },
+            },
+            history: {
+                bitcoin: null, ethereum: null,
             },
             records: 30,
             states: {
@@ -119,7 +122,7 @@ export default {
                 : `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
         },
         /*
-            calculate the time difference of two dates in milliseconds => days
+            calculate the time difference of two dates in days
 
             @return <Integer>
         */
@@ -131,7 +134,7 @@ export default {
 
             const differenceTime = currentDate.getTime() - pastDate.getTime()
             // calculate the number of days ==> ms * sec * min * h
-            return Math.round(differenceTime / (1000 * 60 * 60 * 24) - 1)
+            return Math.round(differenceTime / (1000 * 60 * 60 * 24))
         },
         /*
             get time in seconds
@@ -158,15 +161,14 @@ export default {
             fetch(apiUrl)
                 .then((response) => {
                     if (!response.ok) {
-                        throw new Error(`HTTP error: ${response.status}`)
+                        throw new Error(`HTTP error: code: ${response.status} type: ${response.type} url: ${response.url}`)
                     }
                     return response.json()
                 })
                 .then((data) => {
                     // get price history bulk data
                     if (range.length) {
-                        const { prices } = data
-                        this.prices[id].history = prices.slice(0, this.records)
+                        this.history[id] = data.prices.slice(0, this.records)
 
                         return
                     }

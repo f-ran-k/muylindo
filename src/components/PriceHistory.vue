@@ -1,7 +1,7 @@
 <template>
     <v-row justify="space-around">
         <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
-            <v-table v-if="historyStates.history && historyStates[currency] && historyPrices[currency].history"
+            <v-table v-if="States.history && States[currency] && History[currency]"
                 fixed-header
                 class="mt-8"
                 height="600px"
@@ -21,12 +21,12 @@
 
                         <th class="bg-grey">
                             <v-btn
-                                v-if="historyPrices[currency].history"
+                                v-if="History[currency]"
                                 class="bg-grey"
                                 label
                                 elevation="0"
                                 title="Sort by Course"
-                                @click="historyPrices[currency].history.sort((a, b) => b[1] - a[1])"
+                                @click="History[currency].sort((a, b) => b[1] - a[1])"
                                 >
                                 <template v-slot:prepend>
                                     <img alt="Sort" src="@/assets/icons/IconSort.svg" width="30" height="30" />
@@ -43,7 +43,7 @@
                 </thead>
 <!-- datePrice === [<time in seconds>, <price>] -->
                 <tbody>
-                    <tr v-for="datePrice in historyPrices[currency].history" :key="datePrice[0]">
+                    <tr v-for="datePrice in History[currency]" :key="datePrice[0]">
                         <td>{{ historyDateFormat(0, datePrice[0]) }}</td>
                         <td>{{ getTime(datePrice[0]) }}</td>
                         <td>{{ datePrice[1].toFixed(2) }} €</td>
@@ -58,7 +58,7 @@
 export default {
     name: 'PriceHistory',
     props: {
-        prices: {
+        history: {
             type: Object,
             required: true,
         },
@@ -73,8 +73,8 @@ export default {
     },
     data() {
         return {
-            historyPrices: this.prices,
-            historyStates: this.states,
+            History: this.history,
+            States: this.states,
             historyDateFormat: this.dateFormat,
         }
     },

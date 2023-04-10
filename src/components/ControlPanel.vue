@@ -1,4 +1,4 @@
-<template v-if="panelStates && panelPrices">
+<template v-if="States && History">
     <v-navigation-drawer class="small-caps" height="auto" width="400">
         <v-list>
             <v-list-item class="bg-grey text-h6">Controls</v-list-item>
@@ -11,7 +11,7 @@
         <v-row class="mx-4">
             <v-col>
                 <v-switch
-                    v-model="panelStates.bitcoin"
+                    v-model="States.bitcoin"
                     label="Bitcoin"
                     color="purple"
                 >
@@ -20,7 +20,7 @@
 
             <v-col>
                 <v-switch
-                    v-model="panelStates.ethereum"
+                    v-model="States.ethereum"
                     label="Ethereum"
                     color="blue"
                 >
@@ -41,16 +41,16 @@
         <v-row class="mx-4">
             <v-col v-for="dataType in ['courses', 'history', 'chart']" :key="dataType">
                 <v-switch
-                    v-model="panelStates[dataType]"
+                    v-model="States[dataType]"
                     color="blue-grey"
-                    :label="panelStates[dataType] ? 'Hide' : 'Show'"
-                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
+                    :label="States[dataType] ? 'Hide' : 'Show'"
+                    :disabled="!(States.bitcoin || States.ethereum)"
                 >
                 </v-switch>
             </v-col>
         </v-row>
 
-        <v-row v-if="(panelStates.history || panelStates.chart) && !(panelPrices.bitcoin.history || panelPrices.ethereum.history)" class="ma-4 mt-0">
+        <v-row v-if="(States.history || States.chart) && !(History.bitcoin || History.ethereum)" class="ma-4 mt-0">
             <v-alert
                 border="start"
                 border-color="warning"
@@ -68,10 +68,10 @@
         <v-row class="mx-4">
             <v-col v-for="period in ['week', 'month']" :key="period">
                 <v-switch
-                    v-model="panelStates[period]"
+                    v-model="States[period]"
                     color="cyan"
                     :label="`Last ${period}`"   
-                    :disabled="!panelStates.courses || !(panelStates.bitcoin || panelStates.ethereum)"
+                    :disabled="!States.courses || !(States.bitcoin || States.ethereum)"
                     >
                 </v-switch>
             </v-col>
@@ -82,25 +82,25 @@
         <v-row cols="12" class="mx-4">
             <v-col cols="4">
                 <v-switch
-                    v-model="panelStates.anytime"
+                    v-model="States.anytime"
                     color="cyan"
-                    :label="panelStates.anytime ? 'Hide' : 'Show'"
-                    :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
+                    :label="States.anytime ? 'Hide' : 'Show'"
+                    :disabled="!(States.bitcoin || States.ethereum)"
                 >
                 </v-switch>
             </v-col>
 
-            <v-col cols="8" v-if="panelStates.anytime">
+            <v-col cols="8" v-if="States.anytime">
                 <v-row class="mt-4 ml-4">
                     <v-form @submit.prevent>
-                        <input id="datetime" type="date" value="2023-04-01" :disabled="!(panelStates.bitcoin || panelStates.ethereum)" />
+                        <input id="datetime" type="date" value="2023-04-01" :disabled="!(States.bitcoin || States.ethereum)" />
 
                         <v-btn
                             class=" ml-2"
                             color="grey"
                             size="small"
                             title="Send"
-                            :disabled="!(panelStates.bitcoin || panelStates.ethereum)"
+                            :disabled="!(States.bitcoin || States.ethereum)"
                             @click="$emit('update-price')"
                         >
                             <span>Send</span>
@@ -119,7 +119,7 @@ export default {
     name: 'ControlPanel',
     emits:['update-price'],
     props: {
-        prices: {
+        history: {
             type: Object,
             required: true,
         },
@@ -130,8 +130,8 @@ export default {
     },
     data() {
         return {
-            panelPrices: this.prices,
-            panelStates: this.states,
+            History: this.history,
+            States: this.states,
         }
     },
 }
