@@ -1,8 +1,8 @@
 <template>
     <v-row justify="space-around">
         <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
-            <v-card v-if="localStates.courses && (localStates.bitcoin || localStates.ethereum)" class="mt-8" height="auto" width="auto">
-                <v-btn v-if="localStates[currency]" block class="small-caps text-black mb-2" size="x-large" variant="flat" :color="currencyProps[currency].color">
+            <v-card v-if="states.courses && (states.bitcoin || states.ethereum)" class="mt-8" height="auto" width="auto">
+                <v-btn v-if="states[currency]" block class="small-caps text-black mb-2" size="x-large" variant="flat" :color="currencyProps[currency].color">
                     <template v-slot:prepend>
                         <img v-if="currency === 'bitcoin'" alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
                         <img v-else alt="Ethereum" src="@/assets/icons/IconEthereum.svg" height="40" width="40" />
@@ -13,35 +13,35 @@
 
                 <v-divider></v-divider>
 
-                <v-table v-if="localStates[currency]"
+                <v-table v-if="states[currency]"
                     fixed-header
                 >
                     <thead>
                         <tr class="small-caps no-wrap">
                             <th>Today</th>
-                            <th v-if="localStates.week">Change (week)</th>
-                            <th v-if="localStates.month">Change (month)</th>
+                            <th v-if="states.week">Change (week)</th>
+                            <th v-if="states.month">Change (month)</th>
 
-                            <th v-if="localStates.anytime">Change ({{ dateFormat(dayDifference()) }})</th>
+                            <th v-if="states.anytime">Change ({{ dateFormat(dayDifference()) }})</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr class="no-wrap">
-                            <td>{{ localPrices[currency].current }} €</td>
+                            <td>{{ prices[currency].current }} €</td>
 
-                            <td v-if="localStates.week">
-                                {{ getPercentage(localPrices[currency].current, localPrices[currency].week, currency, 'week') }} %
+                            <td v-if="states.week">
+                                {{ getPercentage(prices[currency].current, prices[currency].week, currency, 'week') }} %
                                 <span :class="[dot.name, dot.margin, !percentageState[currency].week ? dot.color.red : dot.color.green]"></span>
                             </td>
 
-                            <td v-if="localStates.month">
-                                {{ getPercentage(localPrices[currency].current, localPrices[currency].month, currency, 'month') }} %
+                            <td v-if="states.month">
+                                {{ getPercentage(prices[currency].current, prices[currency].month, currency, 'month') }} %
                                 <span :class="[dot.name, dot.margin, !percentageState[currency].month ? dot.color.red : dot.color.green]"></span>
                             </td>
 
-                            <td v-if="localStates.anytime && localPrices[currency].anytime">
-                                {{ getPercentage(localPrices[currency].current, localPrices[currency].anytime, currency, 'anytime') }} %
+                            <td v-if="states.anytime && prices[currency].anytime">
+                                {{ getPercentage(prices[currency].current, prices[currency].anytime, currency, 'anytime') }} %
                                 <span :class="[dot.name, dot.margin, !percentageState[currency].anytime ? dot.color.red : dot.color.green]"></span>
                             </td>
                         </tr>
@@ -85,8 +85,6 @@ export default {
                     red: 'bg-red', green: 'bg-green',
                 },
             },
-            localPrices: this.prices,
-            localStates: this.states,
             percentageState: {
                 bitcoin: {
                     week: null, month: null, anytime: null,

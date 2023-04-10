@@ -26,7 +26,7 @@
                                 label
                                 elevation="0"
                                 title="Sort by Course"
-                                @click="History[currency].sort((a, b) => b[1] - a[1])"
+                                @click="h = history; h[currency].sort((a, b) => b[1] - a[1])"
                                 >
                                 <template v-slot:prepend>
                                     <img alt="Sort" src="@/assets/icons/IconSort.svg" width="30" height="30" />
@@ -41,12 +41,12 @@
                         <th>Course</th>
                     </tr>
                 </thead>
-<!-- datePrice === [<time in seconds>, <price>] -->
+<!-- dateUnit === [<time in seconds>, <price>] -->
                 <tbody>
-                    <tr v-for="datePrice in history[currency]" :key="datePrice[0]">
-                        <td>{{ dateFormat(0, datePrice[0]) }}</td>
-                        <td>{{ time(datePrice[0]) }}</td>
-                        <td>{{ datePrice[1].toFixed(2) }} €</td>
+                    <tr v-for="dateUnit in history[currency]" :key="dateUnit[0]">
+                        <td>{{ dateFormat(0, dateUnit[0]) }}</td>
+                        <td>{{ time(dateUnit[0]) }}</td>
+                        <td>{{ dateUnit[1].toFixed(2) }} €</td>
                     </tr>
                 </tbody>
             </v-table>
@@ -67,11 +67,6 @@ export default {
             type: Object,
             required: true,
         },
-    },
-    data() {
-        return {
-            History: this.history,
-        }
     },
 }
 </script>

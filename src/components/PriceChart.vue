@@ -1,7 +1,7 @@
 <template>
     <v-row justify="space-around">
         <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
-            <v-card v-if="States.chart && States[currency] && History[currency]" class="ma-8" height="auto" width="auto">
+            <v-card v-if="states.chart && states[currency] && history[currency]" class="ma-8" height="auto" width="auto">
 
                 <v-card-title class="small-caps bg-grey">
                     <v-btn class="bg-grey" elevation="0">
@@ -18,7 +18,7 @@
 
                 <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
                 <v-row class="swap-vertical ma-4">
-                    <span v-for="(values, index) in History[currency]" :key="index"
+                    <span v-for="(values, index) in history[currency]" :key="index"
                         :class="[currencyProps.bar, currencyProps[currency].color, currencyProps.margin]"
                         :style="{ height: getBarHeight(currency, values[1]) + 'px'}"
                         :title="getDate(values[0])" 
@@ -48,8 +48,6 @@ export default {
     },
     data() {
         return {
-            History: this.history,
-            States: this.states,
             currencyProps: {
                 bar: 'bar',
                 bitcoin: {
