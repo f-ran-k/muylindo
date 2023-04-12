@@ -11,8 +11,8 @@ import * as directives from 'vuetify/directives'
 /**
  * mimic Vue v2.x's behaviour of providing an EventBus
  * 
- * call this.$eventBus.emit() instead of this.$root.emit() to make an event globally available
- * or rather this.$eventBus.on() instead of this.$root.on() to listen for custom gloabl events respectively
+ * call this.$eventBus.emit() instead of this.$root.$emit() to make an event globally available
+ * or rather this.$eventBus.on() instead of this.$root.$on() to listen for custom gloabl events respectively
 */
 import mitt from 'mitt'
 
