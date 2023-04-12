@@ -63,6 +63,13 @@ export default {
         }
     },
     methods: {
+        /*
+            uppercase first letter; corresponds to PHP's ucfirst()
+
+            @param term <String>
+
+            @return <String>
+        */
         getTitle(term) {
             return term.charAt(0).toUpperCase() + term.slice(1)
         },
