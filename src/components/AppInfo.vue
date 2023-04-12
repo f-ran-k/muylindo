@@ -7,7 +7,7 @@
                 elevation="2"
                 :title="props.title"
                 >
-                <span style="font-weight: normal;" v-html="props.text"></span>
+                <span class="font-weight-normal" v-html="props.text"></span>
             </v-alert>
         </v-card>
     </div>
@@ -29,11 +29,19 @@ export default {
                             It is build with <strong>Vue.js</strong> and <strong>Vuetify</strong>.<br />\
                             The Code is hosted on <strong>GitHub</strong> and is open source.'
                 },
+                usage: {
+                    title: 'Usage',
+                    color: 'info',
+                    text: 'The upper switches - <strong>Bitcoin</strong> and <strong>Ethereum</strong> - in the Control Panel to the left serve as masters.<br />\
+                    If both are disabled, this info is displayed and all other switches are disabled as well.<br />\
+                    Toggle either of it or both to display the single currency courses and enable the other switches.<br />\
+                    Toggle either of the latter in turn to display the appropriate data.',
+                },
                 data: {
                     title: 'Data',
                     color: 'info',
-                    text: 'The Data displayed is provided by the <strong>CoinGecko</strong> API.<br />\
-                            The following Rules apply when selecting a past date from the <strong>Date Picker</strong>:<br />\
+                    text: 'The Data displayed is provided by <strong>CoinGecko</strong>.<br />\
+                            The following Rules apply when selecting a date from the <strong>Date Picker</strong>:<br />\
                             1 day from current time = 5 minute interval data<br />\
                             1 - 90 days from current time = hourly data<br />\
                             above 90 days from current time = daily data'
