@@ -1,34 +1,34 @@
 <template>
-    <v-row justify="space-around">
-        <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
-            <v-card v-if="states.chart && states[currency] && history[currency]" class="ma-8" height="auto" width="auto">
+    <v-row justify="center">
+        <v-card v-if="states.chart && (states.bitcoin || states.ethereum)" class="ma-8" height="auto" width="auto">
 
-                <v-card-title class="small-caps bg-grey">
-                    <v-btn class="bg-grey" elevation="0">
-                        <template v-slot:prepend>
-                            <img v-if="currency === 'bitcoin'" alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
-                            <img v-else alt="Ethereum" src="@/assets/icons/IconEthereum.svg" height="40" width="40" />
-                        </template>
-                    </v-btn>
+            <v-card-title class="small-caps bg-grey">
+                <v-btn class="bg-grey" elevation="0">
+                    <template v-slot:prepend>
+                        <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
+                            &nbsp;&nbsp;
+                        <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" height="40" width="40" />
+                    </template>
+                </v-btn>
 
-                    <span>Price Chart</span>
-                </v-card-title>
+                <span>Price Chart</span>
+            </v-card-title>
 
-                <v-divider></v-divider>
+            <v-divider></v-divider>
 
-                <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
-                <v-row class="swap-vertical ma-4">
-                    <span v-for="(values, index) in history[currency]" :key="index"
+            <!-- vertical margins get exchanged due to rotation; e.g. mb =||== mt and vice versa -->
+            <v-row class="swap-vertical ma-4">
+                <div v-for="(values, index) in chartPrices" :key="index">
+                    <span v-for="currency in ['bitcoin', 'ethereum']" :key="currency"
                         :class="[currencyProps.bar, currencyProps[currency].color, currencyProps.margin]"
-                        :style="{ height: getBarHeight(currency, values[1]) + 'px'}"
-                        :title="getDate(values[0])" 
+                        :style="{ height: getBarHeight(currency, values[currencyProps[currency].index]) + 'px' }"
+                        :title="getTitle(currency) + ': ' + getDate(parseInt(index))"
                         >
-                        <span class="mt-4">{{ values[1].toFixed(2)  }} €</span>
+                        <span class="rotate-text mt-4">{{ values[currencyProps[currency].index] }} €</span>
                     </span>
-                </v-row>
-
-            </v-card>
-        </div>
+                </div>
+            </v-row>
+        </v-card>
     </v-row>
 </template>
 
@@ -37,7 +37,7 @@ export default {
     name: 'PriceChart',
     inject: ['getDate'],
     props: {
-        history: {
+        chartPrices: {
             type: Object,
             required: true,
         },
@@ -52,15 +52,20 @@ export default {
                 bar: 'bar',
                 bitcoin: {
                     color: 'bg-purple',
+                    index: 0,
                 },
                 ethereum: {
                     color: 'bg-blue',
+                    index: 1,
                 },
                 margin: 'ml-2',
             },
         }
     },
     methods: {
+        getTitle(term) {
+            return term.charAt(0).toUpperCase() + term.slice(1)
+        },
         /*
             get individual bar heights in pixels
 
@@ -69,10 +74,15 @@ export default {
 
             @return <Integer>
         */
-       getBarHeight(id, price) {
-            return id === 'bitcoin'
-                ? 100 + (price / 250)
-                : 100 + (price / 25)
+        getBarHeight(id, price) {
+            const boundaries = {
+                500: 5, 1000: 10, 2000: 20, 5000: 500, 10000: 1000, 20000: 2000, 50000: 5000,
+            }
+
+            const matches = Object.keys(boundaries).filter(val => val < price)
+            const min = matches[matches.length - 1]
+
+            return 100 + Math.round(price / boundaries[min])
         },
     },
 }

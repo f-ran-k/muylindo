@@ -14,13 +14,13 @@
                 :states="states"
             />
 
-            <PriceHistory
+            <PriceHistory v-if="dataFetched"
                 :history="history"
                 :states="states"
             />
 
-            <PriceChart
-                :history="history"
+            <PriceChart v-if="dataFetched"
+                :chartPrices="chartPrices"
                 :states="states"
             />
         </v-container>
@@ -48,11 +48,12 @@ export default {
             dateFormat: this.getDateFormat,
             dayDifference: this.getDayDifference,
             getDate: this.getDate,
-            time: this.getTime,
+            getTime: this.getTime,
         }
     },
     data() {
         return {
+            chartPrices: {},
             endpoints: {
                 bitcoin: {
                     price: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
@@ -66,7 +67,7 @@ export default {
                 },
             },
             history: {
-                bitcoin: null, ethereum: null,
+                bitcoin: {}, ethereum: {},
             },
             prices: {
                 bitcoin: {
@@ -76,11 +77,16 @@ export default {
                     current: null, week: null, month: null, anytime: null,
                 },
             },
-            records: 30,
+            records: 20,
             states: {
                 bitcoin: false, ethereum: false, week: true, month: true, anytime: false, courses: true, history: false, chart: false,
             },
         }
+    },
+    computed: {
+        dataFetched() {
+            return Object.keys(this.history.bitcoin).length && Object.keys(this.history.ethereum).length
+        },
     },
     methods: {
         /*
@@ -137,9 +143,9 @@ export default {
             const currentDate = new Date()
             const pastDate = new Date(date)
 
-            const differenceTime = currentDate.getTime() - pastDate.getTime()
+            const differenceSeconds = currentDate.getTime() - pastDate.getTime()
             // calculate the number of days ==> ms * sec * min * h
-            return Math.round(differenceTime / (1000 * 60 * 60 * 24))
+            return Math.round(differenceSeconds / (1000 * 60 * 60 * 24))
         },
         /*
             get time in seconds
@@ -188,6 +194,8 @@ export default {
                     if (range.length) {
                         this.history[id] = data.prices.slice(0, this.records)
 
+                        this.chartPrices = this.getChartPrices()
+
                         return
                     }
                     // ... otherwise get a single course; either the current course (today)
@@ -227,13 +235,30 @@ export default {
             }
         },
         /*
+            rearrange data for the chart
+            format: { timestamp: [bitcoinCourse, ethereumCourse] }
+        */
+        getChartPrices() {
+            const { bitcoin, ethereum } = this.history
+
+            let prices = {}
+            Object.values(bitcoin).forEach(dateprice => {
+                prices[dateprice[0]] = [dateprice[1].toFixed(2)]
+            })
+            Object.values(ethereum).forEach(dateprice => {
+                prices[dateprice[0]].push(dateprice[1].toFixed(2))
+            })
+
+            return prices
+        },
+        /*
             Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue
         */
         updatePrice() {
             for (let currency of ['bitcoin', 'ethereum']) {
                 // update courses (anytime)
                 this.getPrices(currency, this.getDayDifference())
-                // update Price History and Charts
+                // update Price History and Chart
                 this.getPrices(currency, 100, this.getTimeRange())
             }
         },
