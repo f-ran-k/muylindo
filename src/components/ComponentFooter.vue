@@ -1,10 +1,7 @@
 <template>
-    <v-footer app height="auto">
+    <v-footer app>
         <v-container fill-height>
-            <v-row justify="center" class="small-caps no-wrap">
-                <v-spacer></v-spacer>
-                <v-spacer></v-spacer>
-
+            <v-row class="float-right small-caps no-wrap">
                 <v-col>
                     <span>CoinGecko</span>
 

@@ -1,7 +1,6 @@
 .bar {
     display: inline-block;
     width: 24px;
-    writing-mode: vertical-rl;
 }
 .dot {
     display: inline-block;
@@ -13,8 +12,14 @@
     float: right;
     margin-right: 8px;
 }
+.font-weight-normal {
+    font-weight: normal;
+}
 .no-wrap {
     white-space: nowrap;
+}
+.rotate-text {
+    writing-mode: vertical-lr;
 }
 .small-caps {
     font-variant: small-caps;
