@@ -22,7 +22,7 @@
                     <span v-for="currency in ['bitcoin', 'ethereum']" :key="currency"
                         :class="[currencyProps.bar, currencyProps[currency].color, currencyProps.margin]"
                         :style="{ height: getBarHeight(currency, values[currencyProps[currency].index]) + 'px' }"
-                        :title="getTitle(currency) + ': ' + getDate(parseInt(index))"
+                        :title="getTitle(currency) + ': ' + getTimeStamp('isoCut', parseInt(index))"
                         >
                         <span class="rotate-text mt-4">{{ values[currencyProps[currency].index] }} €</span>
                     </span>
@@ -35,7 +35,7 @@
 <script>
 export default {
     name: 'PriceChart',
-    inject: ['getDate'],
+    inject: ['getTimeStamp'],
     props: {
         chartPrices: {
             type: Object,

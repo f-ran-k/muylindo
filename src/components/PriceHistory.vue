@@ -44,8 +44,8 @@
 <!-- dateUnit === [<time in seconds>, <price>] -->
                 <tbody>
                     <tr v-for="dateUnit in history[currency]" :key="dateUnit[0]">
-                        <td>{{ dateFormat(0, dateUnit[0]) }}</td>
-                        <td>{{ getTime(dateUnit[0]) }}</td>
+                        <td>{{ getTimeStamp('isoCut', dateUnit[0]) }}</td>
+                        <td>{{ getTimeStamp('timeCut', dateUnit[0]) }}</td>
                         <td>{{ dateUnit[1].toFixed(2) }} €</td>
                     </tr>
                 </tbody>
@@ -57,7 +57,7 @@
 <script>
 export default {
     name: 'PriceHistory',
-    inject: ['dateFormat', 'getTime'],
+    inject: ['getTimeStamp'],
     props: {
         history: {
             type: Object,

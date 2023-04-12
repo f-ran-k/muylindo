@@ -45,10 +45,9 @@ export default {
     },
     provide() {
         return {
-            dateFormat: this.getDateFormat,
-            dayDifference: this.getDayDifference,
-            getDate: this.getDate,
-            getTime: this.getTime,
+            getDateFormat: this.getDateFormat,
+            getDayDifference: this.getDayDifference,
+            getTimeStamp: this.getTimeStamp,
         }
     },
     data() {
@@ -111,6 +110,21 @@ export default {
                 ? this.endpoints[id].price
                 : this.endpoints[id].history = `${this.endpoints[id].history.replace(/date=.*$/, '')}date=${date}`
         },
+        getTimeStamp(format, timestamp = 0) {
+            const date = timestamp
+                ? new Date(timestamp)
+                : new Date()
+
+            const formats = {
+                isoCut: date.toISOString().slice(0, 10),
+                original: date,
+                seconds: date.getTime(),
+                short: date.toDateString(),
+                timeCut: date.toTimeString().slice(0, 8),
+            }
+
+            return formats[format]
+        },
         /*
             get the date and reformat it to comply with coinGecko's API specs (format: 'DD-MM-YYYY')
 
@@ -158,19 +172,6 @@ export default {
             const pastDate = new Date(document.getElementById('datetime').value).getTime() / 1000
 
             return [Math.floor(currentDate), Math.floor(pastDate)]
-        },
-        /*
-            extract the time portion from the date, e.g. 09:22:35
-
-            @param timestamp <Integer>
-
-            @return <String>
-        */
-        getTime(timestamp) {
-            return new Date(timestamp).toTimeString().slice(0, 8)
-        },
-        getDate(seconds) {
-            return new Date(seconds).toDateString()
         },
         /*
             fetch data from coinGecko

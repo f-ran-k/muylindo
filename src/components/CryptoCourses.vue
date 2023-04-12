@@ -26,7 +26,7 @@
                             <th v-if="states.week">Change (week)</th>
                             <th v-if="states.month">Change (month)</th>
 
-                            <th v-if="states.anytime">Change ({{ dateFormat(dayDifference()) }})</th>
+                            <th v-if="states.anytime">Change ({{ getDateFormat(getDayDifference()) }})</th>
                         </tr>
                     </thead>
 
@@ -51,7 +51,7 @@
 <script>
 export default {
     name: 'CryptoCourses',
-    inject: ['dateFormat', 'dayDifference'],
+    inject: ['getDateFormat', 'getDayDifference'],
     props: {
         prices: {
             type: Object,
