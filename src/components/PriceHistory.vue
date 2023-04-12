@@ -1,9 +1,9 @@
 <template>
-    <v-row justify="space-around">
+    <v-row justify="center">
         <div v-for="currency in ['bitcoin', 'ethereum']" :key="currency">
             <v-table v-if="states.history && states[currency] && history[currency]"
                 fixed-header
-                class="mt-8"
+                class="mt-8 mx-2"
                 height="600px"
             >
                 <thead>
@@ -45,7 +45,7 @@
                 <tbody>
                     <tr v-for="dateUnit in history[currency]" :key="dateUnit[0]">
                         <td>{{ dateFormat(0, dateUnit[0]) }}</td>
-                        <td>{{ time(dateUnit[0]) }}</td>
+                        <td>{{ getTime(dateUnit[0]) }}</td>
                         <td>{{ dateUnit[1].toFixed(2) }} €</td>
                     </tr>
                 </tbody>
@@ -57,7 +57,7 @@
 <script>
 export default {
     name: 'PriceHistory',
-    inject: ['dateFormat', 'time'],
+    inject: ['dateFormat', 'getTime'],
     props: {
         history: {
             type: Object,
