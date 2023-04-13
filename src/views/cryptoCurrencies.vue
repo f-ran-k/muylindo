@@ -45,7 +45,6 @@ export default {
     },
     provide() {
         return {
-            getDateFormat: this.getDateFormat,
             getDayDifference: this.getDayDifference,
             getTimeStamp: this.getTimeStamp,
         }
@@ -104,16 +103,25 @@ export default {
                 return this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
             }
 
-            const date = this.getDateFormat(period, 0, true)
+            const date = this.getTimeStamp('urlGecko', 0, period)
 
             return period === 0
                 ? this.endpoints[id].price
                 : this.endpoints[id].history = `${this.endpoints[id].history.replace(/date=.*$/, '')}date=${date}`
         },
-        getTimeStamp(format, timestamp = 0) {
+        /*
+            @param format <String>; either of formats.keys()
+            @param timestamp <Integer>
+            @param period <Integer>
+
+            @return <Any>
+        */
+        getTimeStamp(format, timestamp = 0, period = 0) {
             const date = timestamp
                 ? new Date(timestamp)
                 : new Date()
+
+            if (period !== 0) date.setDate(date.getDate() - period)
 
             const formats = {
                 isoCut: date.toISOString().slice(0, 10),
@@ -121,30 +129,11 @@ export default {
                 seconds: date.getTime(),
                 short: date.toDateString(),
                 timeCut: date.toTimeString().slice(0, 8),
+                url: `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
+                urlGecko: `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
             }
 
             return formats[format]
-        },
-        /*
-            get the date and reformat it to comply with coinGecko's API specs (format: 'DD-MM-YYYY')
-
-            @param period <Integer>
-            @param seconds <Integer>
-            @param url <Boolean>
-
-            @return <String>
-        */
-        getDateFormat(period = 0, seconds = 0, url = false) {
-            const date = seconds
-                ? new Date(seconds)
-                : new Date()
-
-            if (period !== 0) date.setDate(date.getDate() - period)
-
-            // if <url> ist set, the format has to comply with the API specs; e.g. DD-MM-YYYY || YYYY-MM-DD if not
-            return url
-                ? `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
-                : `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
         },
         /*
             calculate the time difference of two dates in days
