@@ -17,7 +17,7 @@
             <v-divider></v-divider>
 
             <!-- vertical margins get exchanged due to rotation; e.g. mb =||== mt and vice versa -->
-            <v-row class="swap-vertical ma-4">
+            <v-row class="ma-4 mb-0">
                 <div v-for="(values, index) in chartPrices" :key="index">
                     <span v-for="currency in ['bitcoin', 'ethereum']" :key="currency"
                         :class="[currencyProps.bar, currencyProps[currency].color, currencyProps.margin]"
