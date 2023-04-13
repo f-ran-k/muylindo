@@ -103,7 +103,7 @@ export default {
                 return this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
             }
 
-            const date = this.getTimeStamp('urlGecko', 0, period)
+            const date = this.getTimeStamp('url', 0, period)
 
             return period === 0
                 ? this.endpoints[id].price
@@ -125,12 +125,9 @@ export default {
 
             const formats = {
                 isoCut: date.toISOString().slice(0, 10),
-                original: date,
                 seconds: date.getTime(),
-                short: date.toDateString(),
                 timeCut: date.toTimeString().slice(0, 8),
                 url: `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
-                urlGecko: `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
             }
 
             return formats[format]
@@ -233,7 +230,8 @@ export default {
 
             // limit the chart data to no. of records (default: 20)
             bitcoin = bitcoin.slice(0, this.records)
-            ethereum = ethereum.slice(0, this.records)
+            if (ethereum.length)
+                ethereum = ethereum.slice(0, this.records)
 
             let prices = {}
             Object.values(bitcoin).forEach(dateprice => {
