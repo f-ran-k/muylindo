@@ -34,11 +34,19 @@
                         <tr class="no-wrap">
                             <td>{{ prices[currency].current }} €</td>
 
-                            <td v-for="period in ['week', 'month', 'anytime']" :key="period">
-                                <span v-if="states[period] && (period === 'anytime' ? prices[currency].anytime : true)">
-                                    {{ getPercentage(prices[currency].current, prices[currency][period], currency, period) }} %
-                                    <span :class="[dot.name, dot.margin, !percentageState[currency][period] ? dot.color.red : dot.color.green]"></span>
-                                </span>
+                            <td v-if="states.week">
+                                {{ getPercentage(prices[currency].current, prices[currency].week, currency, 'week') }} %
+                                <span :class="[dot.name, dot.margin, !percentageState[currency].week ? dot.color.red : dot.color.green]"></span>
+                            </td>
+
+                            <td v-if="states.month">
+                                {{ getPercentage(prices[currency].current, prices[currency].month, currency, 'month') }} %
+                                <span :class="[dot.name, dot.margin, !percentageState[currency].month ? dot.color.red : dot.color.green]"></span>
+                            </td>
+
+                            <td v-if="states.anytime && prices[currency].anytime">
+                                {{ getPercentage(prices[currency].current, prices[currency].anytime, currency, 'anytime') }} %
+                                <span :class="[dot.name, dot.margin, !percentageState[currency].anytime ? dot.color.red : dot.color.green]"></span>
                             </td>
                         </tr>
                     </tbody>
