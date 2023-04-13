@@ -224,6 +224,8 @@ export default {
         /*
             rearrange data for the chart
             format: { timestamp: [bitcoinCourse, ethereumCourse] }
+
+            @return <Object>
         */
         getChartPrices() {
             let { bitcoin, ethereum } = this.history

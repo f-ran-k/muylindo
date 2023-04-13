@@ -29,7 +29,7 @@
                                 >
                                 <template v-slot:prepend>
                                     <img title="Sort by Date" alt="Sort" src="@/assets/icons/IconSortDate.svg" width="40" height="40" @click="h = history; h[currency].sort((a, b) => a[0] - b[0])"/>
-                                    &nbsp;&nbsp;
+                                        &nbsp;&nbsp;
                                     <img title="Sort by Course" alt="Sort" src="@/assets/icons/IconSortCourse.svg" width="30" height="30" @click="h = history; h[currency].sort((a, b) => b[1] - a[1])"/>
                                 </template>
                             </v-btn>
