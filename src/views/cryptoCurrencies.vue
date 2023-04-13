@@ -182,7 +182,7 @@ export default {
                 .then((data) => {
                     // get price history bulk data
                     if (range.length) {
-                        this.history[id] = data.prices.slice(0, this.records)
+                        this.history[id] = data.prices
 
                         this.chartPrices = this.getChartPrices()
 
@@ -229,7 +229,11 @@ export default {
             format: { timestamp: [bitcoinCourse, ethereumCourse] }
         */
         getChartPrices() {
-            const { bitcoin, ethereum } = this.history
+            let { bitcoin, ethereum } = this.history
+
+            // limit the chart data to no. of records (default: 20)
+            bitcoin = bitcoin.slice(0, this.records)
+            ethereum = ethereum.slice(0, this.records)
 
             let prices = {}
             Object.values(bitcoin).forEach(dateprice => {
