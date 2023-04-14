@@ -1,27 +1,46 @@
 {
-  "name": "cryptocurrency",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test:unit": "vitest",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
-  },
-  "dependencies": {
-    "mitt": "^3.0.0",
-    "vue": "^3.2.47",
-    "vue-router": "^4.1.6",
-    "vuetify": "^3.1.11"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^4.0.0",
-    "@vue/test-utils": "^2.3.0",
-    "eslint": "^8.34.0",
-    "eslint-plugin-vue": "^9.9.0",
-    "jsdom": "^21.1.0",
-    "vite": "^4.1.4",
-    "vitest": "^0.29.1"
-  }
+    "author": "",
+    "name": "muylindo",
+    "description": "Displays information about Crypto currencies",
+    "version": "0.1.0",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/f-ran-k/muylindo.git"
+    },
+    "homepage": "https://muylindo.netlify.app",
+    "engines": {
+        "node": ""
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "test:unit": "vitest",
+        "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+    },
+    "dependencies": {
+        "mitt": "^3.0.0",
+        "vue": "^3.2.47",
+        "vue-router": "^4.1.6",
+        "vuetify": "^3.1.11"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^4.0.0",
+        "@vue/test-utils": "^2.3.0",
+        "eslint": "^8.34.0",
+        "eslint-plugin-vue": "^9.9.0",
+        "jsdom": "^21.1.0",
+        "vite": "^4.1.4",
+        "vitest": "^0.29.1"
+    },
+    "license": "",
+    "keywords": [
+        "Vue.js",
+        "Vuetify",
+        "GitHub",
+        "Crypto",
+        "Bitcoin",
+        "Ethereum"
+    ]
 }
