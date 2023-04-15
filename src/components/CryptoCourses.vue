@@ -1,13 +1,9 @@
 <template>
     <v-row justify="space-around">
         <span v-if="states.courses && (states.bitcoin || states.ethereum)">
-            <v-card v-for="currency in ['bitcoin', 'ethereum']" :key="currency" class="mt-8 mx-2">
+            <v-card v-for="currency in ['bitcoin', 'ethereum']" :key="currency" class="mt-8">
                 <v-btn v-if="states[currency]"
-                    :color="currencyProps[currency].color"
-                    block
-                    class="small-caps text-black mb-2"
-                    size="x-large"
-                    variant="flat"
+                    block class="small-caps text-black mb-2" :color="currencyProps[currency].color" size="x-large" variant="flat"
                     >
                     <template v-slot:prepend>
                         <img v-if="currency === 'bitcoin'" alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
@@ -23,9 +19,8 @@
                     <thead>
                         <tr class="small-caps no-wrap">
                             <th>Today</th>
-                            <th v-if="states.week">Change (week)</th>
-                            <th v-if="states.month">Change (month)</th>
-
+                            <th>Change (week)</th>
+                            <th>Change (month)</th>
                             <th v-if="states.anytime">Change ({{ getTimeStamp('isoCut', 0, getDayDifference()) }})</th>
                         </tr>
                     </thead>
@@ -34,19 +29,11 @@
                         <tr class="no-wrap">
                             <td>{{ prices[currency].current }} €</td>
 
-                            <td v-if="states.week">
-                                {{ getPercentage(prices[currency].current, prices[currency].week, currency, 'week') }} %
-                                <span :class="[dot.name, dot.margin, !percentageState[currency].week ? dot.color.red : dot.color.green]"></span>
-                            </td>
-
-                            <td v-if="states.month">
-                                {{ getPercentage(prices[currency].current, prices[currency].month, currency, 'month') }} %
-                                <span :class="[dot.name, dot.margin, !percentageState[currency].month ? dot.color.red : dot.color.green]"></span>
-                            </td>
-
-                            <td v-if="states.anytime && prices[currency].anytime">
-                                {{ getPercentage(prices[currency].current, prices[currency].anytime, currency, 'anytime') }} %
-                                <span :class="[dot.name, dot.margin, !percentageState[currency].anytime ? dot.color.red : dot.color.green]"></span>
+                            <td v-for="period in ['week', 'month', 'anytime']" :key="period">
+                                <v-col v-if="states[period] && (period === 'anytime' ? prices[currency].anytime : true)">
+                                    <span>{{ getPercentage(prices[currency].current, prices[currency][period], currency, period) }} %</span>
+                                    <span :class="[dot.name, dot.margin, !percentageState[currency][period] ? dot.color.red : dot.color.green]"></span>
+                                </v-col>
                             </td>
                         </tr>
                     </tbody>
@@ -75,11 +62,11 @@ export default {
             currencyProps: {
                 bitcoin: {
                     color: 'purple',
-                    heading: 'Bitcoin (BTC)',
+                    heading: 'Bitcoin',
                 },
                 ethereum: {
                     color: 'blue',
-                    heading: 'Ethereum (ETH)',
+                    heading: 'Ethereum',
                 },
             },
             dot: {
