@@ -6,20 +6,26 @@
     />
 
     <v-main>
-        <v-container fluid>
+        <v-container class="pa-0">
             <AppInfo v-show="!(states.bitcoin || states.ethereum)" />
 
-            <CryptoCourses
+            <v-tabs v-if="showTabs" bg-color="black" class="mb-8" height="56" v-model="tab">
+                <v-tab v-for="name in ['courses', 'history', 'chart']" :key="name" :disabled="!states[name]">
+                    {{ name }}
+                </v-tab>
+            </v-tabs>
+
+            <CryptoCourses v-if="tab === 0"
                 :prices="prices"
                 :states="states"
             />
 
-            <PriceHistory v-if="dataFetched"
+            <PriceHistory v-if="dataFetched && tab === 1"
                 :history="history"
                 :states="states"
             />
 
-            <PriceChart v-if="dataFetched"
+            <PriceChart v-if="dataFetched && tab === 2"
                 :chartPrices="chartPrices"
                 :states="states"
             />
@@ -77,13 +83,17 @@ export default {
             },
             records: 20,
             states: {
-                bitcoin: false, ethereum: false, week: true, month: true, anytime: false, courses: true, history: false, chart: false,
+                bitcoin: false, ethereum: false, week: true, month: true, anytime: false, courses: true, history: true, chart: true,
             },
+            tab: 0,
         }
     },
     computed: {
         dataFetched() {
             return Object.keys(this.history.bitcoin).length && Object.keys(this.history.ethereum).length
+        },
+        showTabs() {
+            return (this.states.bitcoin || this.states.ethereum) && (this.states.courses || (this.states.history && this.dataFetched) || (this.states.chart && this.dataFetched))
         },
     },
     methods: {
@@ -181,7 +191,7 @@ export default {
                     if (range.length) {
                         this.history[id] = data.prices
 
-                        this.chartPrices = this.getChartPrices()
+                        this.getChartPrices(id)
 
                         return
                     }
@@ -225,30 +235,39 @@ export default {
             rearrange data for the chart
             format: { timestamp: [bitcoinCourse, ethereumCourse] }
 
-            @return <Object>
+            @param id <String>
         */
-        getChartPrices() {
-            let { bitcoin, ethereum } = this.history
+        getChartPrices(id) {
+            if (id === 'bitcoin') {
+                let { bitcoin } = this.history
+                // limit the chart data to no. of records (default: 20)
+                bitcoin = bitcoin.slice(0, this.records)
 
-            // limit the chart data to no. of records (default: 20)
-            bitcoin = bitcoin.slice(0, this.records)
-            if (ethereum.length)
+                Object.values(bitcoin).forEach(dateprice => {
+                    const [timestamp, price] = dateprice
+                    this.chartPrices[timestamp] = [price.toFixed(2)]
+                })
+            }
+            else if (id === 'ethereum') {
+                let { ethereum } = this.history
+                // limit the chart data to no. of records (default: 20)
                 ethereum = ethereum.slice(0, this.records)
 
-            let prices = {}
-            Object.values(bitcoin).forEach(dateprice => {
-                prices[dateprice[0]] = [dateprice[1].toFixed(2)]
-            })
-            Object.values(ethereum).forEach(dateprice => {
-                prices[dateprice[0]].push(dateprice[1].toFixed(2))
-            })
+                Object.values(ethereum).forEach(dateprice => {
+                    const [timestamp, price] = dateprice
 
-            return prices
+                    if (this.chartPrices[timestamp]) {
+                        this.chartPrices[timestamp].push(price.toFixed(2))
+                    }
+                })
+            }
         },
         /*
             Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue
         */
         updatePrice() {
+            this.chartPrices = {}
+
             for (let currency of ['bitcoin', 'ethereum']) {
                 // update courses (anytime)
                 this.getPrices(currency, this.getDayDifference())
