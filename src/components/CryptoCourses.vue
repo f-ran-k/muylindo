@@ -32,7 +32,7 @@
                             <td v-for="period in ['week', 'month', 'anytime']" :key="period">
                                 <v-col v-if="states[period] && (period === 'anytime' ? prices[currency].anytime : true)">
                                     <span>{{ getPercentage(prices[currency].current, prices[currency][period], currency, period) }} %</span>
-                                    <span :class="[dot.name, dot.margin, !percentageState[currency][period] ? dot.color.red : dot.color.green]"></span>
+                                    <span :class="[dot.name, dot.margin, percentageState[currency][period] ? dot.color.red : dot.color.green]"></span>
                                 </v-col>
                             </td>
                         </tr>
@@ -98,14 +98,11 @@ export default {
             @return <String>
         */
         getPercentage(currentPrice, pastPrice, id, period) {
+            this.percentageState[id][period] = pastPrice < currentPrice
+
             // the prepended '+' gets rid of trailing zeros; e.g. 1.50 ==> 1.5
-            const percent = +((currentPrice / pastPrice * 100) - 100).toFixed(2)
-
-            this.percentageState[id][period] = percent > 0
-
-            return percent
+            return +((pastPrice / currentPrice * 100) - 100).toFixed(2)
         },
-
     },
 }
 </script>
