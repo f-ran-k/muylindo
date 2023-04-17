@@ -9,7 +9,7 @@
         <v-container class="pa-0">
             <AppInfo v-show="!(states.bitcoin || states.ethereum)" />
 
-            <v-tabs v-if="showTabs" bg-color="black" class="mb-8" height="56" v-model="tab">
+            <v-tabs v-if="showTabs" bg-color="black" class="mb-8" height="60" v-model="tab" grow>
                 <v-tab v-for="name in ['courses', 'history', 'chart']" :key="name" :disabled="!states[name]">
                     {{ name }}
                 </v-tab>

@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer class="small-caps" width="400">
         <v-row>
-            <v-col class="bg-grey text-h6 mt-2 ml-4">Controls</v-col>
+            <v-col class="bg-grey text-h6 mt-4 ml-4">Controls</v-col>
         </v-row>
 
         <v-divider class="mb-8"></v-divider>
@@ -30,7 +30,7 @@
 <!-- Currency end -->
         <v-divider class="mb-4"></v-divider>
 <!-- Courses, History, Chart -->
-        <span class="ml-4">Active tabs</span>
+        <span class="ml-4">Toggle tabs</span>
 
         <v-row class="mt-4 mx-4">
             <v-col>Courses</v-col>
@@ -102,6 +102,7 @@
                             color="grey"
                             size="small"
                             title="Submit"
+                            variant="tonal"
                             @click="$emit('update-price')"
                             :disabled="elementDisabled"
                         >
