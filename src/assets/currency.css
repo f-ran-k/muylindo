@@ -1,7 +1,6 @@
 .bar {
-    display: inline-block;
+    display: inline-flex;
     width: 24px;
-    writing-mode: vertical-lr;
 }
 .dot {
     display: inline-block;

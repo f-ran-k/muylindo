@@ -17,7 +17,7 @@
             <v-divider></v-divider>
 
             <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
-            <v-row class="ma-4 mb-0">
+            <v-row class="swap-vertical ma-4">
                 <div v-for="(values, index) in chartPrices" :key="index">
                     <span v-for="currency in ['bitcoin', 'ethereum']" :key="currency"
                         :class="[currencyProps.bar, currencyProps[currency].color, currencyProps.margin]"
@@ -82,15 +82,7 @@ export default {
             @return <Integer>
         */
         getBarHeight(id, price) {
-            const divisors = {
-                bitcoin: { 500: 15, 1000: 30, 2000: 60, 5000: 150, 10000: 300, 20000: 600, 50000: 1500 },
-                ethereum: { 500: 5, 1000: 10, 2000: 20, 5000: 50, 10000: 100, 20000: 200, 50000: 500 },
-            }
-
-            const matches = Object.keys(divisors[id]).filter(value => price < value)
-            const min = matches[matches.length - 1]
-
-            return 100 + Math.round(price / divisors[id][min])
+            return 100 + (id === 'bitcoin' ? (price / 100) : (price / 10))
         },
     },
 }
