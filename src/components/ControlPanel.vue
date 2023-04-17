@@ -1,10 +1,10 @@
 <template>
     <v-navigation-drawer class="small-caps" width="400">
-        <v-list>
-            <v-list-item class="bg-grey text-h6">Controls</v-list-item>
-        </v-list>
+        <v-row>
+            <v-col class="bg-grey text-h6 mt-2 ml-4">Controls</v-col>
+        </v-row>
 
-        <v-divider class="mb-4"></v-divider>
+        <v-divider class="mb-8"></v-divider>
 <!-- Currency -->
         <span class="ml-4">Select a currency</span>
 
@@ -30,7 +30,7 @@
 <!-- Currency end -->
         <v-divider class="mb-4"></v-divider>
 <!-- Courses, History, Chart -->
-        <span class="ml-4">Data to display</span>
+        <span class="ml-4">Active tabs</span>
 
         <v-row class="mt-4 mx-4">
             <v-col>Courses</v-col>
@@ -57,7 +57,7 @@
                 elevation="2"
                 title="No Data fetched yet!"
             >
-                <span class="font-weight-normal">Please select a date from the date picker below to display the price history and chart.</span>
+                <span class="font-weight-normal">Please select a date from the date picker to display the price history and chart.</span>
             </v-alert>
         </v-row>
 <!-- Courses, History, Chart end -->
