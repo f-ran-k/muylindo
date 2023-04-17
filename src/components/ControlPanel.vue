@@ -32,13 +32,13 @@
 <!-- Courses, History, Chart -->
         <span class="ml-4">Data to display</span>
 
-        <v-row class="mx-4 mt-4">
+        <v-row class="mt-4 mx-4">
             <v-col>Courses</v-col>
             <v-col>History</v-col>
             <v-col>Chart</v-col>
         </v-row>
 
-        <v-row class="mx-4">
+        <v-row class="mt-0 mx-4">
             <v-col v-for="dataType in ['courses', 'history', 'chart']" :key="dataType">
                 <v-switch
                     v-model="States[dataType]"
@@ -101,11 +101,11 @@
                             class=" ml-2"
                             color="grey"
                             size="small"
-                            title="Send"
+                            title="Submit"
                             @click="$emit('update-price')"
                             :disabled="elementDisabled"
                         >
-                            <span>Send</span>
+                            <span>Submit</span>
                         </v-btn>
                     </v-form>
                 </v-row>
