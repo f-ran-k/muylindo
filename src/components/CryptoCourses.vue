@@ -18,10 +18,10 @@
                     >
                     <thead>
                         <tr class="small-caps no-wrap">
-                            <th>Today</th>
-                            <th>Change (week)</th>
-                            <th>Change (month)</th>
-                            <th v-if="states.anytime">Change ({{ getTimeStamp('isoCut', 0, getDayDifference()) }})</th>
+                            <th><span>Today</span></th>
+                            <th><span v-if="states.week">Change (week)</span></th>
+                            <th><span v-if="states.month">Change (month)</span></th>
+                            <th><span v-if="states.anytime">Change ({{ getTimeStamp('isoCut', 0, getDayDifference()) }})</span></th>
                         </tr>
                     </thead>
 
