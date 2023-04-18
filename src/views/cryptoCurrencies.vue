@@ -108,7 +108,7 @@ export default {
         */
         getApiUrl(id = 'bitcoin', period = 0, range = []) {
             if (Array.isArray(range) && range.length) {
-                const [to, from] = range
+                const [from, to] = range
                 // replace url end to prevent appending the params everytime the function is called
                 return this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
             }
@@ -167,7 +167,7 @@ export default {
             const currentDate = new Date().getTime() / 1000
             const pastDate = new Date(document.getElementById('datetime').value).getTime() / 1000
 
-            return [Math.floor(currentDate), Math.floor(pastDate)]
+            return [Math.floor(pastDate), Math.floor(currentDate)]
         },
         /*
             fetch data from coinGecko
@@ -190,8 +190,6 @@ export default {
                     // get price history bulk data
                     if (range.length) {
                         this.history[id] = data.prices
-
-                        this.getChartPrices(id)
 
                         return
                     }
@@ -234,46 +232,38 @@ export default {
         /*
             rearrange data for the chart
             format: { timestamp: [bitcoinCourse, ethereumCourse] }
-
-            @param id <String>
         */
-        getChartPrices(id) {
-            if (id === 'bitcoin') {
-                let { bitcoin } = this.history
-                // limit the chart data to no. of records (default: 20)
-                bitcoin = bitcoin.slice(0, this.records)
+        getChartPrices() {
+            let { bitcoin, ethereum } = this.history
+            // limit the chart data to no. of records (default: 20)
+            bitcoin = bitcoin.slice(0, this.records)
+            ethereum = ethereum.slice(0, this.records)
 
-                Object.values(bitcoin).forEach(dateprice => {
-                    const [timestamp, price] = dateprice
-                    this.chartPrices[timestamp] = [price.toFixed(2)]
-                })
-            }
-            else if (id === 'ethereum') {
-                let { ethereum } = this.history
-                // limit the chart data to no. of records (default: 20)
-                ethereum = ethereum.slice(0, this.records)
-
-                Object.values(ethereum).forEach(dateprice => {
-                    const [timestamp, price] = dateprice
-
-                    if (this.chartPrices[timestamp]) {
-                        this.chartPrices[timestamp].push(price.toFixed(2))
-                    }
-                })
-            }
+            Object.values(bitcoin).forEach(dateprice => {
+                const [timestamp, price] = dateprice
+                this.chartPrices[timestamp] = [price.toFixed(2)]
+            })
+            Object.values(ethereum).forEach(dateprice => {
+                const [timestamp, price] = dateprice
+                this.chartPrices[timestamp].push(price.toFixed(2))
+            })
         },
         /*
             Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue
         */
         updatePrice() {
-            this.chartPrices = {}
-
             for (let currency of ['bitcoin', 'ethereum']) {
                 // update courses (anytime)
                 this.getPrices(currency, this.getDayDifference())
-                // update Price History and Chart
+                // update Price History
                 this.getPrices(currency, 100, this.getTimeRange())
             }
+
+            this.chartPrices = {}
+            // wait a second for the history data to be fetched
+            setTimeout(() => {
+                this.getChartPrices()
+            }, 1500)
         },
         // start out ...
         init() {
