@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-        <v-card v-if="states.chart && (states.bitcoin || states.ethereum)" class="ma-8" height="auto" width="auto">
+        <v-card v-if="states.chart && (states.bitcoin || states.ethereum)" class="ma-8">
 
             <v-card-title class="small-caps bg-grey">
                 <v-btn class="bg-grey" elevation="0">
