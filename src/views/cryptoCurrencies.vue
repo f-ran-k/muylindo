@@ -220,13 +220,13 @@ export default {
 
             switch (period) {
                 case 7:
-                    this.prices[id].week = eur.toFixed(2)
+                    this.prices[id].week = Math.round(eur)
                 break
                 case 30:
-                    this.prices[id].month = eur.toFixed(2)
+                    this.prices[id].month = Math.round(eur)
                 break
                 default:
-                    this.prices[id].anytime = eur.toFixed(2)
+                    this.prices[id].anytime = Math.round(eur)
             }
         },
         /*
