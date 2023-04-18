@@ -201,7 +201,7 @@ export default {
                             ? bitcoin
                             : ethereum
 
-                        this.prices[id].current = Math.round(eur)
+                        this.prices[id].current = eur.toFixed(2)
                     }
                     // ...or the past course according to the period given
                     else {
@@ -220,13 +220,13 @@ export default {
 
             switch (period) {
                 case 7:
-                    this.prices[id].week = Math.round(eur)
+                    this.prices[id].week = eur.toFixed(2)
                 break
                 case 30:
-                    this.prices[id].month = Math.round(eur)
+                    this.prices[id].month = eur.toFixed(2)
                 break
                 default:
-                    this.prices[id].anytime = Math.round(eur)
+                    this.prices[id].anytime = eur.toFixed(2)
             }
         },
         /*
