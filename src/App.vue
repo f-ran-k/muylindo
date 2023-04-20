@@ -17,7 +17,7 @@ import ComponentHeader from '@/components/ComponentHeader.vue'
 import ComponentFooter from '@/components/ComponentFooter.vue'
 
 export default {
-    name: 'CryptoCurrencies',
+    name: 'AppRoot',
     components: {
         ComponentHeader,
         ComponentFooter,

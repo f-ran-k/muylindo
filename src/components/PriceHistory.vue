@@ -70,8 +70,8 @@
 <!-- dateUnit === [<time in seconds>, <price>] -->
                 <tbody>
                     <tr v-for="dateUnit in history[currency]" :key="dateUnit[0]">
-                        <td>{{ getTimeStamp('isoCut', dateUnit[0]) }}</td>
-                        <td>{{ getTimeStamp('timeCut', dateUnit[0]) }}</td>
+                        <td>{{ getTimeStamp('isoHead', dateUnit[0]) }}</td>
+                        <td>{{ getTimeStamp('timeHead', dateUnit[0]) }}</td>
                         <td>{{ dateUnit[1].toFixed(2) }} €</td>
                     </tr>
                 </tbody>
