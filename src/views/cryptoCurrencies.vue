@@ -94,9 +94,6 @@ export default {
         dataFetched() {
             return Object.keys(this.history.bitcoin).length && Object.keys(this.history.ethereum).length
         },
-        showTabs() {
-            return (this.states.bitcoin || this.states.ethereum) && (this.states.courses || (this.states.history && this.dataFetched) || (this.states.chart && this.dataFetched))
-        },
     },
     methods: {
         /*
