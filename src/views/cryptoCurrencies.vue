@@ -9,11 +9,11 @@
         <v-container class="pa-0">
             <AppInfo v-show="!(states.bitcoin || states.ethereum)" />
 
-            <v-tabs v-if="showTabs" bg-color="black" class="mb-8" height="60" v-model="tab" grow>
-                <v-tab v-for="name in ['courses', 'history', 'chart']" :key="name" :disabled="!states[name]">
-                    {{ name }}
-                </v-tab>
-            </v-tabs>
+            <TabInterface
+                :states="states"
+                :tab="tab"
+                @update-tab="updateTab"
+            />
 
             <CryptoCourses v-if="tab === 0"
                 :prices="prices"
@@ -36,6 +36,7 @@
 <script>
 import AppInfo from '@/components/AppInfo.vue'
 import ControlPanel from '@/components/ControlPanel.vue'
+import TabInterface from '@/components/TabInterface.vue'
 import CryptoCourses from '@/components/CryptoCourses.vue'
 import PriceHistory from '@/components/PriceHistory.vue'
 import PriceChart from '@/components/PriceChart.vue'
@@ -45,6 +46,7 @@ export default {
     components: {
         AppInfo,
         ControlPanel,
+        TabInterface,
         CryptoCourses,
         PriceHistory,
         PriceChart,
@@ -60,14 +62,14 @@ export default {
             chartPrices: {},
             endpoints: {
                 bitcoin: {
-                    price: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
-                    history: 'https://api.coingecko.com/api/v3/coins/bitcoin/history?',
-                    range: 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=eur&',
+                    currentPrice: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
+                    date: 'https://api.coingecko.com/api/v3/coins/bitcoin/history?',
+                    history: 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=eur&',
                 },
                 ethereum: {
-                    price: 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=eur',
-                    history: 'https://api.coingecko.com/api/v3/coins/ethereum/history?',
-                    range: 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&',
+                    currentPrice: 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=eur',
+                    date: 'https://api.coingecko.com/api/v3/coins/ethereum/history?',
+                    history: 'https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&',
                 },
             },
             history: {
@@ -110,14 +112,14 @@ export default {
             if (Array.isArray(range) && range.length) {
                 const [from, to] = range
                 // replace url end to prevent appending the params everytime the function is called
-                return this.endpoints[id].range = `${this.endpoints[id].range.replace(/from=.*$/, '')}from=${from}&to=${to}`
+                return this.endpoints[id].history = `${this.endpoints[id].history.replace(/from=.*$/, '')}from=${from}&to=${to}`
             }
 
-            const date = this.getTimeStamp('url', 0, period)
+            const date = this.getTimeStamp('gecko', 0, period)
 
             return period === 0
-                ? this.endpoints[id].price
-                : this.endpoints[id].history = `${this.endpoints[id].history.replace(/date=.*$/, '')}date=${date}`
+                ? this.endpoints[id].currentPrice
+                : this.endpoints[id].date = `${this.endpoints[id].date.replace(/date=.*$/, '')}date=${date}`
         },
         /*
             @param format <String>; either of formats.keys()
@@ -134,40 +136,35 @@ export default {
             if (period !== 0) date.setDate(date.getDate() - period)
 
             const formats = {
-                isoCut: date.toISOString().slice(0, 10),
-                seconds: date.getTime(),
-                timeCut: date.toTimeString().slice(0, 8),
-                url: `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
+                isoHead: date.toISOString().slice(0, 10),
+                timeHead: date.toTimeString().slice(0, 8),
+                gecko: `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
             }
 
             return formats[format]
         },
         /*
-            calculate the time difference of two dates in days
+            either calculate the time difference of two dates in days or rather
+            the "range boundaries" (from, to) to assemble the endpoint for the history data: e.g. endpoints.<currency>.history
 
-            @return <Integer>
+            @param givenPeriod <Boolean>
+
+            @return <Array> || <Integer>
         */
-        getDayDifference() {
+        getDayDifference(givenPeriod = false) {
             const date = document.getElementById('datetime').value
 
             const currentDate = new Date()
             const pastDate = new Date(date)
 
-            const differenceSeconds = currentDate.getTime() - pastDate.getTime()
+            // get time in seconds
+            if (givenPeriod) {
+                return [Math.round(pastDate.getTime() / 1000), Math.round(currentDate.getTime() / 1000)]
+            }
+
+            const differenceMilliSeconds = currentDate.getTime() - pastDate.getTime()
             // calculate the number of days ==> ms * sec * min * h
-            return Math.round(differenceSeconds / (1000 * 60 * 60 * 24))
-        },
-        /*
-            get time in seconds
-            defines the "range boundaries" (from, to) to assemble the endpoint
-
-            @return <Array>
-        */
-        getTimeRange() {
-            const currentDate = new Date().getTime() / 1000
-            const pastDate = new Date(document.getElementById('datetime').value).getTime() / 1000
-
-            return [Math.floor(pastDate), Math.floor(currentDate)]
+            return Math.round(differenceMilliSeconds / (1000 * 60 * 60 * 24))
         },
         /*
             fetch data from coinGecko
@@ -182,7 +179,7 @@ export default {
             fetch(apiUrl)
                 .then((response) => {
                     if (!response.ok) {
-                        throw new Error(`HTTP error: code: ${response.status} type: ${response.type} url: ${response.url}`)
+                        throw new Error(`HTTP error: ${response}`)
                     }
                     return response.json()
                 })
@@ -240,35 +237,38 @@ export default {
             ethereum = ethereum.slice(0, this.records)
 
             Object.values(bitcoin).forEach(dateprice => {
-                const [timestamp, price] = dateprice
+                const [ timestamp, price ] = dateprice
                 this.chartPrices[timestamp] = [price.toFixed(2)]
             })
             Object.values(ethereum).forEach(dateprice => {
-                const [timestamp, price] = dateprice
+                const [ timestamp, price ] = dateprice
                 this.chartPrices[timestamp].push(price.toFixed(2))
             })
         },
         /*
-            Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue
+            Listener; invoked when 'update-price' is fired ==> @/components/ControlPanel.vue::<DatePicker>
         */
         updatePrice() {
             for (let currency of ['bitcoin', 'ethereum']) {
                 // update courses (anytime)
                 this.getPrices(currency, this.getDayDifference())
                 // update Price History
-                this.getPrices(currency, 100, this.getTimeRange())
+                this.getPrices(currency, 100, this.getDayDifference(true))
             }
 
             this.chartPrices = {}
             // wait a second for the history data to be fetched
             setTimeout(() => {
                 this.getChartPrices()
-            }, 1500)
+            }, 1000)
+        },
+        updateTab(Tab) {
+            this.tab = Tab
         },
         // start out ...
         init() {
             const periods = [0, 7, 30]
-
+            // get the current prices as well as the past ones (last week and last month)
             for (let period of periods) {
                 this.getPrices('bitcoin', period)
                 this.getPrices('ethereum', period)
