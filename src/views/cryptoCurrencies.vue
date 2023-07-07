@@ -29,6 +29,18 @@
                 :chartPrices="chartPrices"
                 :states="states"
             />
+
+        <!--
+            Dynamic components
+
+            NOTE: remember to comment the both components above <PriceHistory> and <PriceChart> when going with this approach
+
+            <Component v-if="dataFetched" :is="componentMap[tab]"
+                :chartPrices="chartPrices"
+                :history="history"
+                :states="states"
+            />
+        -->
         </v-container>
     </v-main>
 </template>
@@ -60,6 +72,10 @@ export default {
     data() {
         return {
             chartPrices: {},
+            // componentMap: {
+            //     1: 'PriceHistory',
+            //     2: 'PriceChart',
+            // },
             endpoints: {
                 bitcoin: {
                     currentPrice: 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur',
