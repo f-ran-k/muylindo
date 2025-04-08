@@ -25,11 +25,9 @@
                 :states="states"
             />
 
-            <PriceChart v-if="dataFetched && tab === 2"
-                :chartPrices="chartPrices"
-                :states="states"
+            <PriceChart v-if="tab === 2"
+                :history="history"
             />
-
         <!--
             Dynamic components
 

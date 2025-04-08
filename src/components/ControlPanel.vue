@@ -95,7 +95,7 @@
             <v-col cols="8" v-if="States.anytime">
                 <v-row class="mt-4 ml-4">
                     <v-form @submit.prevent :disabled="elementDisabled">
-                        <input id="datetime" type="date" value="2023-01-01" :disabled="elementDisabled" />
+                        <input id="datetime" type="date" value="2025-01-01" :disabled="elementDisabled" />
 
                         <v-btn
                             class=" ml-2"

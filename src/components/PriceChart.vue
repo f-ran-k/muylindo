@@ -1,89 +1,49 @@
 <template>
     <v-row justify="center">
-        <v-card v-if="states.chart && (states.bitcoin || states.ethereum)" class="ma-8">
-
-            <v-card-title class="small-caps bg-grey">
-                <v-btn class="bg-grey" elevation="0">
-                    <template v-slot:prepend>
-                        <img alt="Bitcoin" src="@/assets/icons/IconBitcoin.svg" height="40" width="40" />
-                            &nbsp;&nbsp;
-                        <img alt="Ethereum" src="@/assets/icons/IconEthereum.svg" height="40" width="40" />
-                    </template>
-                </v-btn>
-
-                <span>Price Chart</span>
-            </v-card-title>
-
-            <v-divider></v-divider>
-
-            <!-- vertical margins get exchanged due to rotation; e.g. mb === mt and vice versa -->
-            <v-row class="swap-vertical ma-4">
-                <div v-for="(values, index) in chartPrices" :key="index">
-                    <span v-for="currency in ['bitcoin', 'ethereum']" :key="currency"
-                        :class="[currencyProps.bar, currencyProps[currency].color, currencyProps.margin]"
-                        :style="{ height: getBarHeight(currency, values[currencyProps[currency].index]) + 'px' }"
-                        :title="getTitle(currency) + ': ' + getTimeStamp('isoHead', parseInt(index))"
-                        >
-                        <span class="rotate-text mt-4">{{ values[currencyProps[currency].index] }} €</span>
-                    </span>
-                </div>
-            </v-row>
-        </v-card>
+        <Scatter id="crypto-chart" :data="chartData" :options="chartOptions" />
     </v-row>
 </template>
 
 <script>
+import { Scatter } from 'vue-chartjs'
+import { Chart, LinearScale, LineElement, PointElement, Tooltip, Legend } from 'chart.js'
+
+Chart.register(LinearScale, LineElement, PointElement, Tooltip, Legend )
+
 export default {
     name: 'PriceChart',
-    inject: ['getTimeStamp'],
+    components: { Scatter },
     props: {
-        chartPrices: {
+        history: {
             type: Object,
-            required: true,
-        },
-        states: {
-            type: Object,
-            required: true,
+            required: false,
         },
     },
     data() {
         return {
-            currencyProps: {
-                bar: 'bar',
-                bitcoin: {
-                    color: 'bg-purple',
-                    index: 0,
-                },
-                ethereum: {
-                    color: 'bg-blue',
-                    index: 1,
-                },
-                margin: 'ml-2',
+            chartData: {
+                datasets: [
+                    {
+                        label: 'Bitcoin',
+                        backgroundColor: 'purple',
+                        data: [
+                            { x: -2, y: 4 }, { x: -1, y: 1 }, { x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 4 },
+                        ],
+                    },
+                    {
+                        label: 'Ethereum',
+                        backgroundColor: 'blue',
+                        data: [
+                            { x: -2, y: -4 }, { x: -1, y: -1 }, { x: 0, y: 1 }, { x: 1, y: -1 }, { x: 2, y: -4 },
+                        ],
+                    },
+                ]
             },
+            chartOptions: {
+                responsive: true
+            }
         }
     },
-    methods: {
-        /*
-            uppercase first letter; corresponds to PHP's ucfirst()
-
-            @param term <String>
-
-            @return <String>
-        */
-        getTitle(term) {
-            return term.charAt(0).toUpperCase() + term.slice(1)
-        },
-        /*
-            get individual bar heights in pixels
-
-            @param id <String> e.g 'bitcoin' || 'ethereum'
-            @param price <Integer>
-
-            @return <Integer>
-        */
-        getBarHeight(id, price) {
-            return 100 + (id === 'bitcoin' ? (price / 100) : (price / 10))
-        },
-    },
+    methods: {},
 }
 </script>
