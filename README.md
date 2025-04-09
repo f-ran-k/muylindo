@@ -74,7 +74,7 @@ Toggle either of the latter in turn to display the appropriate data.
 
 ## Data
 
-The Data displayed is provided by **CoinGecko**. If you are intrested, take a look at their [API Playground](https://www.coingecko.com/en/api/documentation).<br />
+The Data displayed is provided by **CoinGecko**. If you are intrested, take a look at their [API Playground](https://docs.coingecko.com/reference).<br />
 
 The following Rules apply when selecting a date from the **Date Picker**:<br />
 

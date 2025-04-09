@@ -8,7 +8,7 @@
 import { Scatter } from 'vue-chartjs'
 import { Chart, LinearScale, LineElement, PointElement, Tooltip, Legend } from 'chart.js'
 
-Chart.register(LinearScale, LineElement, PointElement, Tooltip, Legend )
+Chart.register(LinearScale, LineElement, PointElement, Tooltip, Legend)
 
 export default {
     name: 'PriceChart',

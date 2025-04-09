@@ -5,7 +5,7 @@
                 <v-col>
                     <span>CoinGecko</span>
 
-                    <a href="https://www.coingecko.com/en/api/documentation" target="_blank" class="mx-4">
+                    <a href="https://docs.coingecko.com/reference" target="_blank" class="mx-4">
                         <img title="CoinGecko API Playground" alt="CoinGecko" src="@/assets/icons/IconGecko.svg" height="30" width="30" />
                     </a>
 
