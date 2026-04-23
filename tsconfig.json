@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "jsx": "preserve",
+    "module": "esnext",
+    "target": "esnext",
+    "allowTemplate": true,
+    "plugins": [
+      {
+        "name": "@vue/typescript-plugin",
+        "location": "./node_modules/@vue/typescript-plugin",
+        "languages": ["vue"]
+      }
+    ]
+  },
+  "include": ["src/**/*.js", "src/**/*.ts", "src/**/*.vue"]
+}
